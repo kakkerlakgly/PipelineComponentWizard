@@ -140,7 +140,6 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		}
 
 		private string _bizTalkInstallPath;
-        private string _targetVsVersion;
 		private string _projectDirectory;
 		private string _projectName;
 
@@ -258,12 +257,10 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 
 			// retrieve the BizTalk Server installation folder
 			string bizTalkInstallRegistryKey = @"SOFTWARE\Microsoft\BizTalk Server\3.0";
-		    using (var regkey1 = Registry.LocalMachine.OpenSubKey(bizTalkInstallRegistryKey))
+		    using (var registryKey = Registry.LocalMachine.OpenSubKey(bizTalkInstallRegistryKey))
 		    {
-		        _bizTalkInstallPath = regkey1.GetValue("InstallPath").ToString();
+		        _bizTalkInstallPath = registryKey.GetValue("InstallPath").ToString();
 		    }
-		    // This is no longer present in the registry under the BizTalk Server key
-            _targetVsVersion = "14.0"; // regkey.GetValue("TargetVSVersion").ToString();
 
 			string projectTemplate;
 			string projectFileName;
