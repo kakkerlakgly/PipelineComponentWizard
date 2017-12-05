@@ -9,8 +9,8 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
     [ComVisible(false)]
     public partial class WzPageDesignerProperties : Microsoft.BizTalk.Wizard.WizardInteriorPage, IWizardControl
 	{
-		public event AddDesignerPropertyEvent _AddDesignerPropertyEvent; 
-		private bool _IsLoaded;
+		public event AddDesignerPropertyEvent AddDesignerPropertyEvent; 
+		private bool _isLoaded;
 
 
 
@@ -36,14 +36,14 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 
 		protected void AddDesignerProperty(string strName, string strValue)
 		{
-			PropertyPairEvent PropertyPair = new PropertyPairEvent(strName, strValue);
-			OnAddDesignerProperty(PropertyPair);
+			PropertyPairEvent propertyPair = new PropertyPairEvent(strName, strValue);
+			OnAddDesignerProperty(propertyPair);
 		}
 
 		protected void RemoveDesignerProperty(string strName)
 		{
-			PropertyPairEvent PropertyPair = new PropertyPairEvent(strName, null, true);
-			OnAddDesignerProperty(PropertyPair);
+			PropertyPairEvent propertyPair = new PropertyPairEvent(strName, null, true);
+			OnAddDesignerProperty(propertyPair);
 		}
 
 		// The protected OnAddReceiveHandlerProperty method raises the event by invoking 
@@ -54,7 +54,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 			if (e != null) 
 			{
 				// Invokes the delegates. 
-				_AddDesignerPropertyEvent(this, e);
+				AddDesignerPropertyEvent(this, e);
 			}
 		}
 		
@@ -85,7 +85,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		{
 			try
 			{
-				if(_IsLoaded)
+				if(_isLoaded)
 					return;
 
 				foreach(string strDataType in DesignerVariableType.ToArray())
@@ -95,7 +95,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 				//cmbDesignerPropertyDataType.Text = strDataTypes[0];
 				cmbDesignerPropertyDataType.SelectedIndex = 0;
 
-				_IsLoaded = true;
+				_isLoaded = true;
 			}
 			catch(Exception err)
 			{

@@ -10,7 +10,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
     [ComVisible(false)]
     public partial class WzPageGeneralProperties : Microsoft.BizTalk.Wizard.WizardInteriorPage, IWizardControl
 	{
-		public event AddWizardResultEvent _AddWizardResultEvent;
+		public event AddWizardResultEvent AddWizardResultEvent;
 
 		private const string ComponentVersionRegEx = @"[0-9]+\.[0-9]+$";
 		private const string ComponentNameRegEx = @"(?i)^[a-z]+[0-9a-z]*$";
@@ -21,10 +21,10 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 			InitializeComponent();
 		}
 
-		protected void AddWizardResult(string strName, object Value)
+		protected void AddWizardResult(string strName, object value)
 		{
-			PropertyPairEvent PropertyPair = new PropertyPairEvent(strName, Value);
-			OnAddWizardResult(PropertyPair);
+			PropertyPairEvent propertyPair = new PropertyPairEvent(strName, value);
+			OnAddWizardResult(propertyPair);
 		}
 
 		// The protected OnRaiseProperty method raises the event by invoking 
@@ -35,7 +35,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 			if (e != null) 
 			{
 				// Invokes the delegates. 
-				_AddWizardResultEvent(this,e);
+				AddWizardResultEvent(this,e);
 			}
 		}
 

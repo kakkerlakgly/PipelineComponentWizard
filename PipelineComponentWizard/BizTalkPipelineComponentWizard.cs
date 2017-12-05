@@ -76,7 +76,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 	/// defines the types of pipeline components we support
 	/// see SDK\Include\Pipeline_Int.idl
 	/// </summary>
-	internal enum componentTypes
+	internal enum ComponentTypes
 	{
 		/// <summary>
 		/// links to CATID_Decoder
@@ -113,10 +113,10 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 	/// <summary>
 	/// defines the supported languages we generate sourcecode for
 	/// </summary>
-	internal enum implementationLanguages
+	internal enum ImplementationLanguages
 	{
 		CSharp = 0,
-		VBNet = 1
+		VbNet = 1
 	}
 
 	/// <summary>
@@ -139,54 +139,54 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 			Silent
 		}
 
-		private string _BizTalkInstallPath;
-        private string _TargetVSVersion;
-		private string _ProjectDirectory;
-		private string _ProjectName;
+		private string _bizTalkInstallPath;
+        private string _targetVsVersion;
+		private string _projectDirectory;
+		private string _projectName;
 
-		private const string _ProjectNamespace = "MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard";
-		private DTE2 _Application;
+		private const string ProjectNamespace = "MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard";
+		private DTE2 _application;
 
-		bool _FExclusive;
-		private Solution2 _PipelineComponentSolution;
+		bool _fExclusive;
+		private Solution2 _pipelineComponentSolution;
 
-		private IDictionary<string, object> _WizardResults;
-		private IDictionary<string, object> _DesignerProperties;
+		private IDictionary<string, object> _wizardResults;
+		private IDictionary<string, object> _designerProperties;
 		
 		public BizTalkPipeLineWizard()
 		{
-			const string BizTalkKey = @"SOFTWARE\Microsoft\BizTalk Server\3.0";
-			RegistryKey BizTalkReg = Registry.LocalMachine.OpenSubKey(BizTalkKey);
-			_BizTalkInstallPath = BizTalkReg.GetValue("InstallPath").ToString();
-			BizTalkReg.Close();
+			const string bizTalkKey = @"SOFTWARE\Microsoft\BizTalk Server\3.0";
+			RegistryKey bizTalkReg = Registry.LocalMachine.OpenSubKey(bizTalkKey);
+			_bizTalkInstallPath = bizTalkReg.GetValue("InstallPath").ToString();
+			bizTalkReg.Close();
 		}
 
 		/// <summary>
 		/// Main function for wizard project. Calls the wizard-
 		/// form and then delegates control to the createsolution function
 		/// </summary>
-		/// <param name="Application"></param>
+		/// <param name="application"></param>
 		/// <param name="hwndOwner"></param>
-		/// <param name="ContextParams"></param>
-		/// <param name="CustomParams"></param>
+		/// <param name="contextParams"></param>
+		/// <param name="customParams"></param>
 		/// <param name="retval"></param>
-		public void Execute(object Application, int hwndOwner, ref object[] ContextParams, ref object[] CustomParams, ref wizardResult retval)
+		public void Execute(object application, int hwndOwner, ref object[] contextParams, ref object[] customParams, ref wizardResult retval)
 		{
-			_DTE IDEObject = (_DTE)Application;
-			_Application = (DTE2)Application;
+			_DTE ideObject = (_DTE)application;
+			_application = (DTE2)application;
 
 			try
 			{
-				PipeLineComponentWizardForm WizardForm = new PipeLineComponentWizardForm();
-				if (WizardForm.ShowDialog() == DialogResult.OK)
+				PipeLineComponentWizardForm wizardForm = new PipeLineComponentWizardForm();
+				if (wizardForm.ShowDialog() == DialogResult.OK)
 				{
 					//Retrieve the wizard data
-					_WizardResults = WizardForm.WizardResults;
+					_wizardResults = wizardForm.WizardResults;
 					//_TransmitHandlerProperties = WizardForm.TransmitHandlerProperties;
-					_DesignerProperties = WizardForm.DesignerProperties;
+					_designerProperties = wizardForm.DesignerProperties;
 
 					//Create the solution
-					CreateSolution(IDEObject,ContextParams);
+					CreateSolution(ideObject,contextParams);
 					retval = wizardResult.wizardResultSuccess;
 				}
 				else
@@ -206,43 +206,43 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		/// <summary>
 		/// Creates the solution and calls the functions to create the projects
 		/// </summary>
-		/// <param name="IDEObject"></param>
-		/// <param name="ContextParams"></param>
-		public void CreateSolution(_DTE IDEObject,object[] ContextParams)
+		/// <param name="ideObject"></param>
+		/// <param name="contextParams"></param>
+		public void CreateSolution(_DTE ideObject,object[] contextParams)
 		{
-			TraceAllValues(ContextParams);
+			TraceAllValues(contextParams);
 
 			//Get the "official" wizard results
-			_ProjectDirectory = ContextParams[(int)ContextOptions.LocalDirectory].ToString();
-			_ProjectName = ContextParams[(int)ContextOptions.ProjectName].ToString();
-			_FExclusive = bool.Parse(ContextParams[(int)ContextOptions.FExclusive].ToString());	
+			_projectDirectory = contextParams[(int)ContextOptions.LocalDirectory].ToString();
+			_projectName = contextParams[(int)ContextOptions.ProjectName].ToString();
+			_fExclusive = bool.Parse(contextParams[(int)ContextOptions.FExclusive].ToString());	
 
-			if (!_FExclusive)//New solution or existing?
+			if (!_fExclusive)//New solution or existing?
 			{
 				// Get a reference to the solution from the IDE Object
-                _PipelineComponentSolution = (Solution2)IDEObject.Solution;
+                _pipelineComponentSolution = (Solution2)ideObject.Solution;
 			}
 			else
 			{
 				// Use the solution class to create a new solution 
-                _PipelineComponentSolution = (Solution2)IDEObject.Solution;
-				_PipelineComponentSolution.Create(_ProjectDirectory, _ProjectName);
+                _pipelineComponentSolution = (Solution2)ideObject.Solution;
+				_pipelineComponentSolution.Create(_projectDirectory, _projectName);
 			}
 
             SaveSolution();
 
 			//Create the projects
-			CreateProject(_PipelineComponentSolution);
+			CreateProject(_pipelineComponentSolution);
 
             SaveSolution();
 		}
 
         private void SaveSolution()
         {
-            if (!Directory.Exists(_ProjectDirectory)) Directory.CreateDirectory(_ProjectDirectory);
+            if (!Directory.Exists(_projectDirectory)) Directory.CreateDirectory(_projectDirectory);
 
             // Save the solution file
-            _PipelineComponentSolution.SaveAs(_PipelineComponentSolution.FileName.Length == 0 ? (_ProjectDirectory + @"\" + _ProjectName + ".sln") : _PipelineComponentSolution.FileName);
+            _pipelineComponentSolution.SaveAs(_pipelineComponentSolution.FileName.Length == 0 ? (_projectDirectory + @"\" + _projectName + ".sln") : _pipelineComponentSolution.FileName);
         }
 
 		/// <summary>
@@ -261,14 +261,14 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 			string bizTalkInstallRegistryKey = @"SOFTWARE\Microsoft\BizTalk Server\3.0";
 			regkey = Registry.LocalMachine.OpenSubKey(bizTalkInstallRegistryKey);
 
-			_BizTalkInstallPath = regkey.GetValue("InstallPath").ToString();
+			_bizTalkInstallPath = regkey.GetValue("InstallPath").ToString();
             // This is no longer present in the registry under the BizTalk Server key
-            _TargetVSVersion = "14.0"; // regkey.GetValue("TargetVSVersion").ToString();
+            _targetVsVersion = "14.0"; // regkey.GetValue("TargetVSVersion").ToString();
 
 			regkey.Close();
 
 			// Visual studio installation folder
-            string vsInstallFolderRegistryKey = string.Format(@"SOFTWARE\Microsoft\VisualStudio\{0}_Config", _TargetVSVersion);
+            string vsInstallFolderRegistryKey = string.Format(@"SOFTWARE\Microsoft\VisualStudio\{0}_Config", _targetVsVersion);
 			regkey = Registry.CurrentUser.OpenSubKey(vsInstallFolderRegistryKey);
 
 			regkey.Close();
@@ -277,19 +277,19 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 			string projectFileName;
 			string classFileExtension;
 			
-			implementationLanguages language = (implementationLanguages) _WizardResults[WizardValues.ImplementationLanguage];
+			ImplementationLanguages language = (ImplementationLanguages) _wizardResults[WizardValues.ImplementationLanguage];
 
 			switch(language)
 			{
-				case implementationLanguages.CSharp:
+				case ImplementationLanguages.CSharp:
 					projectTemplate = mySolution.GetProjectTemplate("ClassLibrary.zip", "CSharp");
-                    projectFileName = _ProjectName + ".csproj";
+                    projectFileName = _projectName + ".csproj";
 					classFileExtension = ".cs";
 					
                     break;
-				case implementationLanguages.VBNet:
+				case ImplementationLanguages.VbNet:
                     projectTemplate = mySolution.GetProjectTemplate("ClassLibrary.zip", "VisualBasic");
-                    projectFileName = _ProjectName + ".vbproj";
+                    projectFileName = _projectName + ".vbproj";
 					classFileExtension = ".vb";
 					
                     break;
@@ -299,72 +299,72 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 			}
 
 
-            var startingProjects = _Application.Solution.Projects.Cast<Project>();
+            var startingProjects = _application.Solution.Projects.Cast<Project>();
 
             // add the specified project to the solution
-			mySolution.AddFromTemplate(projectTemplate, _ProjectDirectory, _ProjectName, _FExclusive);
+			mySolution.AddFromTemplate(projectTemplate, _projectDirectory, _projectName, _fExclusive);
 
             Project pipelineComponentProject;
 
             // Query for te added project
-            pipelineComponentProject = _Application.Solution.Projects
+            pipelineComponentProject = _application.Solution.Projects
                 .Cast<Project>().First(p => startingProjects.All(s => s.UniqueName != p.UniqueName));
 
             // delete the Class1.cs|vb|jsharp|... the template adds to the project
             pipelineComponentProject.ProjectItems.Item("Class1" + classFileExtension).Delete();
 
             // adjust project properties
-            pipelineComponentProject.Properties.Item("RootNameSpace").Value = (string)_WizardResults[WizardValues.Namespace];
-            pipelineComponentProject.Properties.Item("AssemblyName").Value = (string)_WizardResults[WizardValues.ClassName];
+            pipelineComponentProject.Properties.Item("RootNameSpace").Value = (string)_wizardResults[WizardValues.Namespace];
+            pipelineComponentProject.Properties.Item("AssemblyName").Value = (string)_wizardResults[WizardValues.ClassName];
 
 			// Get a reference to the Visual Studio Project and 
 			// use it to add a reference to the framework assemblies
-			VSProject PipelineComponentVSProject = (VSProject)pipelineComponentProject.Object;
+			VSProject pipelineComponentVsProject = (VSProject)pipelineComponentProject.Object;
 
       
-			PipelineComponentVSProject.References.Add("System.dll");
-			PipelineComponentVSProject.References.Add("System.Xml.dll");
-			PipelineComponentVSProject.References.Add("System.Drawing.dll");
-			PipelineComponentVSProject.References.Add(Path.Combine(_BizTalkInstallPath, @"Microsoft.BizTalk.Pipeline.dll"));
-			PipelineComponentVSProject.References.Add(Path.Combine(_BizTalkInstallPath, @"Microsoft.Biztalk.Messaging.dll"));
-            PipelineComponentVSProject.References.Add(Path.Combine(_BizTalkInstallPath, @"Microsoft.BizTalk.Streaming.dll"));
+			pipelineComponentVsProject.References.Add("System.dll");
+			pipelineComponentVsProject.References.Add("System.Xml.dll");
+			pipelineComponentVsProject.References.Add("System.Drawing.dll");
+			pipelineComponentVsProject.References.Add(Path.Combine(_bizTalkInstallPath, @"Microsoft.BizTalk.Pipeline.dll"));
+			pipelineComponentVsProject.References.Add(Path.Combine(_bizTalkInstallPath, @"Microsoft.Biztalk.Messaging.dll"));
+            pipelineComponentVsProject.References.Add(Path.Combine(_bizTalkInstallPath, @"Microsoft.BizTalk.Streaming.dll"));
 
 			// add our resource bundle
-			string resourceBundle = Path.Combine(_ProjectDirectory, ((string) _WizardResults[WizardValues.ClassName]) + ".resx");
+			string resourceBundle = Path.Combine(_projectDirectory, ((string) _wizardResults[WizardValues.ClassName]) + ".resx");
 			ResXResourceWriter resx = new ResXResourceWriter(resourceBundle);
-			resx.AddResource("COMPONENTNAME", _WizardResults[WizardValues.ComponentName] as string);
-			resx.AddResource("COMPONENTDESCRIPTION", _WizardResults[WizardValues.ComponentDescription] as string);
-			resx.AddResource("COMPONENTVERSION", _WizardResults[WizardValues.ComponentVersion] as string);
-			resx.AddResource("COMPONENTICON", _WizardResults[WizardValues.ComponentIcon]);
+			resx.AddResource("COMPONENTNAME", _wizardResults[WizardValues.ComponentName] as string);
+			resx.AddResource("COMPONENTDESCRIPTION", _wizardResults[WizardValues.ComponentDescription] as string);
+			resx.AddResource("COMPONENTVERSION", _wizardResults[WizardValues.ComponentVersion] as string);
+			resx.AddResource("COMPONENTICON", _wizardResults[WizardValues.ComponentIcon]);
 			resx.Close();
 
 			pipelineComponentProject.ProjectItems.AddFromFile(resourceBundle);
 
 			// get the enum value of our choosen component type
-		    componentTypes componentType;
-            Enum.TryParse( _WizardResults[WizardValues.ComponentStage] as string, out componentType);
+		    ComponentTypes componentType;
+            Enum.TryParse( _wizardResults[WizardValues.ComponentStage] as string, out componentType);
 
 			// create our actual class
-			string pipelineComponentSourceFile = Path.Combine(_ProjectDirectory, ((string) _WizardResults[WizardValues.ClassName]) + classFileExtension);
-			PipelineComponentCodeGenerator.generatePipelineComponent(
+			string pipelineComponentSourceFile = Path.Combine(_projectDirectory, ((string) _wizardResults[WizardValues.ClassName]) + classFileExtension);
+			PipelineComponentCodeGenerator.GeneratePipelineComponent(
 				pipelineComponentSourceFile,
-				_WizardResults[WizardValues.Namespace] as string,
-				_WizardResults[WizardValues.ClassName] as string,
-				(bool) _WizardResults[WizardValues.ImplementIProbeMessage],
-				_DesignerProperties,
+				_wizardResults[WizardValues.Namespace] as string,
+				_wizardResults[WizardValues.ClassName] as string,
+				(bool) _wizardResults[WizardValues.ImplementIProbeMessage],
+				_designerProperties,
 				componentType,
-				(implementationLanguages) _WizardResults[WizardValues.ImplementationLanguage]);
+				(ImplementationLanguages) _wizardResults[WizardValues.ImplementationLanguage]);
 
 			pipelineComponentProject.ProjectItems.AddFromFile(pipelineComponentSourceFile);
 
 			#region add the component utilities class, if needed
 			if(DesignerVariableType.SchemaListUsed)
 			{
-				string BizTalkUtilitiesFileName = "Microsoft.BizTalk.Component.Utilities.dll";
-				Stream stream = GetType().Assembly.GetManifestResourceStream(_ProjectNamespace  + "." + BizTalkUtilitiesFileName);
+				string bizTalkUtilitiesFileName = "Microsoft.BizTalk.Component.Utilities.dll";
+				Stream stream = GetType().Assembly.GetManifestResourceStream(ProjectNamespace  + "." + bizTalkUtilitiesFileName);
 				using(BinaryReader br = new BinaryReader(stream))
 				{
-					using(FileStream fs =  new FileStream(Path.Combine(_ProjectDirectory, BizTalkUtilitiesFileName), FileMode.Create))
+					using(FileStream fs =  new FileStream(Path.Combine(_projectDirectory, bizTalkUtilitiesFileName), FileMode.Create))
 					{
 						// temporary storage
 						byte[] b;
@@ -378,12 +378,12 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 					}
 				}
 
-				PipelineComponentVSProject.References.Add(Path.Combine(_ProjectDirectory, BizTalkUtilitiesFileName));
+				pipelineComponentVsProject.References.Add(Path.Combine(_projectDirectory, bizTalkUtilitiesFileName));
 			}
 			#endregion
 
 			// save the project file
-			PipelineComponentVSProject.Project.Save(Path.Combine(_ProjectDirectory, projectFileName));
+			pipelineComponentVsProject.Project.Save(Path.Combine(_projectDirectory, projectFileName));
 
             // only do this if we're creating a new solution, otherwise the user
             // might get distracted from his/her current work
@@ -392,7 +392,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
             {
 #endif
                 // retrieve the main code file from the added project
-                ProjectItem item = PipelineComponentVSProject.Project.ProjectItems.Item(Path.GetFileName(pipelineComponentSourceFile));
+                ProjectItem item = pipelineComponentVsProject.Project.ProjectItems.Item(Path.GetFileName(pipelineComponentSourceFile));
 
                 // let's open up the main code file and show it so the user can start editing
                 Window mainSourceFile = item.Open();
@@ -409,18 +409,18 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		/// and in the contextparams coll. to the debug window 
 		/// (or better: debugview).
 		/// </summary>
-		/// <param name="ContextParams"></param>
-		private void TraceAllValues(object[] ContextParams)
+		/// <param name="contextParams"></param>
+		private void TraceAllValues(object[] contextParams)
 		{
 			Trace.WriteLine("++ Start ContextParams");
-			foreach(object o in ContextParams)
+			foreach(object o in contextParams)
 			{
 				Trace.WriteLine(o.ToString());
 			}
 			Trace.WriteLine("-- End ContextParams");
 
 			Trace.WriteLine("++ Start _WizardResults");
-			foreach(var o in _WizardResults)
+			foreach(var o in _wizardResults)
 			{
                 // only trace strings
 			    Trace.WriteLine("Name:" + o.Key + " - Value = " + o.Value);
@@ -428,14 +428,14 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
             Trace.WriteLine("-- End _WizardResults");
 
 			Trace.WriteLine("++ Start _DesignerProperties");
-			foreach(var o in _DesignerProperties)
+			foreach(var o in _designerProperties)
 			{
 			    Trace.WriteLine("Name:" + o.Key + " - Value = " + o.Value);
 			}
             Trace.WriteLine("-- End _DesignerProperties");
 
 			Trace.WriteLine("++ Start _DesignerProperties");
-			foreach(var o in _DesignerProperties)
+			foreach(var o in _designerProperties)
 			{
         		Trace.WriteLine("Name:" + o.Key + " - Value = " + o.Value);
 			}
@@ -443,18 +443,18 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		}
 	}
 
-    public class DTEHandle
+    public class DteHandle
     {
         //EnvDTE.Project proj;
         //EnvDTE.Configuration config;
         //EnvDTE.Properties configProps;
         //EnvDTE.Property prop;
-        DTE DTE = Marshal.GetActiveObject("VisualStudio.DTE.14.0") as DTE;
-        public Project GetProject(String Name)
+        DTE _dte = Marshal.GetActiveObject("VisualStudio.DTE.14.0") as DTE;
+        public Project GetProject(String name)
         {
-            foreach (Project item in DTE.Solution.Projects)
+            foreach (Project item in _dte.Solution.Projects)
             {
-                if (item.Name == Name)
+                if (item.Name == name)
                 {
                     return item;
                 }

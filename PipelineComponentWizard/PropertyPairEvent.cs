@@ -9,16 +9,16 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 	/// </summary>
 	public class PropertyPairEvent : EventArgs
 	{
-	    public PropertyPairEvent(string strName, object Value)
+	    public PropertyPairEvent(string strName, object value)
 		{
 			Name = strName;
-			this.Value = Value;
+			this.Value = value;
 		}
 		
-		public PropertyPairEvent(string strName, object Value, bool remove)
+		public PropertyPairEvent(string strName, object value, bool remove)
 		{
 			Name = strName;
-			this.Value = Value;
+			this.Value = value;
 			Remove = remove;
 		}
 

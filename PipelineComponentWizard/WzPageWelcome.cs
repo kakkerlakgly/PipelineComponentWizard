@@ -15,11 +15,11 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
         /// <summary>
         /// defines the Registry hive our settings are located
         /// </summary>
-        const string ourSettingKey = @"Software\MartijnHoogendoorn\BizTalkPipelineComponentWizard";
+        const string OurSettingKey = @"Software\MartijnHoogendoorn\BizTalkPipelineComponentWizard";
         /// <summary>
         /// defines the Name of the Registry key which determines whether this page needs to be skipped
         /// </summary>
-        const string skipWelcome = "SkipWelcome";
+        const string SkipWelcome = "SkipWelcome";
 
         /// <summary>
         /// constructor, sets general settings for this instance
@@ -69,9 +69,9 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
             form1.ButtonNext.Focus();
 
             // open our private 'configuration' key, enable writing
-            using (var wizardKey = Registry.CurrentUser.OpenSubKey(ourSettingKey))
+            using (var wizardKey = Registry.CurrentUser.OpenSubKey(OurSettingKey))
             {
-                var currentWelcomeValue = wizardKey?.GetValue(skipWelcome) as string;
+                var currentWelcomeValue = wizardKey?.GetValue(SkipWelcome) as string;
 
                 // if we should skip this page,
                 if (currentWelcomeValue != null && bool.Parse(currentWelcomeValue))
@@ -93,9 +93,9 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
                 // the RegistryKey to query / update
 
                 // open our private 'configuration' key, enable writing
-                using (var wizardKey = Registry.CurrentUser.OpenSubKey(ourSettingKey, true) ?? Registry.CurrentUser.CreateSubKey(ourSettingKey))
+                using (var wizardKey = Registry.CurrentUser.OpenSubKey(OurSettingKey, true) ?? Registry.CurrentUser.CreateSubKey(OurSettingKey))
                 {
-                    wizardKey.SetValue(skipWelcome, checkBoxSkipWelcome.Checked);
+                    wizardKey.SetValue(SkipWelcome, checkBoxSkipWelcome.Checked);
                 }
             }
 
@@ -111,14 +111,14 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 	        string target = e.Link.LinkData as string;
 
 	        // spawn a *new* browser process to view the link
-	        Process.Start(new ProcessStartInfo(getDefaultBrowser(), target));
+	        Process.Start(new ProcessStartInfo(GetDefaultBrowser(), target));
 	    }
 
 	    /// <summary>
 	    /// 'borrowed from http://ryanfarley.com/blog/archive/2004/05/16/649.aspx
 	    /// </summary>
 	    /// <returns>the default registered browser, without arguments</returns>
-	    private string getDefaultBrowser()
+	    private string GetDefaultBrowser()
 	    {
 	        using (var key = Registry.ClassesRoot.OpenSubKey(@"HTTP\shell\open\command", false))
 	        {

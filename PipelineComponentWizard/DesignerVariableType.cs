@@ -15,31 +15,31 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
         /// <summary>
         /// represents the string primitive type
         /// </summary>
-        private const string dvtString = "string";
+        private const string DvtString = "string";
         /// <summary>
         /// represents the bool primitive type
         /// </summary>
-        private const string dvtBoolean = "bool";
+        private const string DvtBoolean = "bool";
         /// <summary>
         /// represents the int primitive type
         /// </summary>
-        private const string dvtInt = "int";
+        private const string DvtInt = "int";
         /// <summary>
         /// represents the long primitive type
         /// </summary>
-        private const string dvtLong = "long";
+        private const string DvtLong = "long";
         /// <summary>
         /// represents the short primitive type
         /// </summary>
-        private const string dvtShort = "short";
+        private const string DvtShort = "short";
         /// <summary>
         /// represents the Microsoft.BizTalk.Component.Utilities.SchemaList type
         /// </summary>
-        private const string dvtSchemaList = "SchemaList";
+        private const string DvtSchemaList = "SchemaList";
         /// <summary>
         /// represents the Microsoft.BizTalk.Component.Utilities.SchemaWithNone type
         /// </summary>
-        private const string dvtSchemaWithNone = "SchemaWithNone";
+        private const string DvtSchemaWithNone = "SchemaWithNone";
         /// <summary>
         /// determines whether a reference to Microsoft.BizTalk.Component.Utilities
         /// is needed within the generated project
@@ -63,39 +63,39 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
         /// <param name="dataType">the representation of the type</param>
         /// <returns>the actual type, if supported. returns typeof(object) if no
         /// match can be found</returns>
-        public static Type getType(string dataType)
+        public static Type GetType(string dataType)
         {
-            if (Regex.IsMatch(dataType, dvtBoolean, RegexOptions.IgnoreCase))
+            if (Regex.IsMatch(dataType, DvtBoolean, RegexOptions.IgnoreCase))
             {
                 return typeof(bool);
             }
-            else if (Regex.IsMatch(dataType, dvtInt, RegexOptions.IgnoreCase))
+            else if (Regex.IsMatch(dataType, DvtInt, RegexOptions.IgnoreCase))
             {
                 return typeof(int);
             }
-            else if (Regex.IsMatch(dataType, dvtLong, RegexOptions.IgnoreCase))
+            else if (Regex.IsMatch(dataType, DvtLong, RegexOptions.IgnoreCase))
             {
                 return typeof(long);
             }
-            else if (Regex.IsMatch(dataType, dvtSchemaList, RegexOptions.IgnoreCase))
+            else if (Regex.IsMatch(dataType, DvtSchemaList, RegexOptions.IgnoreCase))
             {
                 // Microsoft.BizTalk.Component.Utilities needs to be referenced
                 _schemaListUsed = true;
 
                 return typeof(SchemaList);
             }
-            else if (Regex.IsMatch(dataType, dvtSchemaWithNone, RegexOptions.IgnoreCase))
+            else if (Regex.IsMatch(dataType, DvtSchemaWithNone, RegexOptions.IgnoreCase))
             {
                 // Microsoft.BizTalk.Component.Utilities needs to be referenced
                 _schemaListUsed = true;
 
                 return typeof(SchemaWithNone);
             }
-            else if (Regex.IsMatch(dataType, dvtShort, RegexOptions.IgnoreCase))
+            else if (Regex.IsMatch(dataType, DvtShort, RegexOptions.IgnoreCase))
             {
                 return typeof(short);
             }
-            else if (Regex.IsMatch(dataType, dvtString, RegexOptions.IgnoreCase))
+            else if (Regex.IsMatch(dataType, DvtString, RegexOptions.IgnoreCase))
             {
                 return typeof(string);
             }
@@ -115,13 +115,13 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
         {
             return new []
             {
-                dvtString,
-                dvtBoolean,
-                dvtInt,
-                dvtLong,
-                dvtShort,
-                dvtSchemaList,
-                dvtSchemaWithNone
+                DvtString,
+                DvtBoolean,
+                DvtInt,
+                DvtLong,
+                DvtShort,
+                DvtSchemaList,
+                DvtSchemaWithNone
             };
         }
     }

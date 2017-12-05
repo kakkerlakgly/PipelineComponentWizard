@@ -11,7 +11,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 	{
 		private const string TransportRegEx = @"^[_a-zA-Z][_a-zA-Z0-9]*$";
 		private const string NamespaceRegEx = @"(?i)^([a-z].?)*$";
-		public event AddWizardResultEvent _AddWizardResultEvent;
+		public event AddWizardResultEvent AddWizardResultEvent;
 
         public WzPageGeneralSetup()
 		{
@@ -22,10 +22,10 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 			cboComponentStage.Items.Clear();
 		}
 
-        protected void AddWizardResult(string strName, object Value)
+        protected void AddWizardResult(string strName, object value)
 		{
-			PropertyPairEvent PropertyPair = new PropertyPairEvent(strName, Value);
-			OnAddWizardResult(PropertyPair);
+			PropertyPairEvent propertyPair = new PropertyPairEvent(strName, value);
+			OnAddWizardResult(propertyPair);
 		}
 
 		/// <summary>
@@ -39,7 +39,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 			if (e != null) 
 			{
 				// Invokes the delegates. 
-				_AddWizardResultEvent(this,e);
+				AddWizardResultEvent(this,e);
 			}
 		}
 
@@ -62,7 +62,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 				AddWizardResult(WizardValues.Namespace, txtNameSpace.Text);
 				AddWizardResult(WizardValues.PipelineType, cboPipelineType.Items[cboPipelineType.SelectedIndex].ToString());
 				AddWizardResult(WizardValues.ComponentStage, cboComponentStage.Items[cboComponentStage.SelectedIndex].ToString());
-				AddWizardResult(WizardValues.ImplementationLanguage, (implementationLanguages) cboImplementationLanguage.SelectedIndex);
+				AddWizardResult(WizardValues.ImplementationLanguage, (ImplementationLanguages) cboImplementationLanguage.SelectedIndex);
 				AddWizardResult(WizardValues.ImplementIProbeMessage, chkImplementIProbeMessage.Checked);
 			}
 			catch(Exception err)
@@ -123,25 +123,25 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 				case 0:
 					cboComponentStage.Items.AddRange(new object[] 
 					{
-						componentTypes.Decoder.ToString(),
-						componentTypes.DisassemblingParser.ToString(),
-						componentTypes.Validate.ToString(),
-						componentTypes.PartyResolver.ToString(),
-						componentTypes.Any.ToString()
+						ComponentTypes.Decoder.ToString(),
+						ComponentTypes.DisassemblingParser.ToString(),
+						ComponentTypes.Validate.ToString(),
+						ComponentTypes.PartyResolver.ToString(),
+						ComponentTypes.Any.ToString()
 					});
 					cboComponentStage.SelectedIndex = 0;
 					break;
 				case 1:
 					cboComponentStage.Items.AddRange(new object[] 
 					{
-						componentTypes.Encoder.ToString(),
-						componentTypes.AssemblingSerializer.ToString(),
-						componentTypes.Any.ToString()
+						ComponentTypes.Encoder.ToString(),
+						ComponentTypes.AssemblingSerializer.ToString(),
+						ComponentTypes.Any.ToString()
 					});
 					cboComponentStage.SelectedIndex = 0;
 					break;
 				case 2:
-					cboComponentStage.Items.Add(componentTypes.Any.ToString());
+					cboComponentStage.Items.Add(ComponentTypes.Any.ToString());
 					cboComponentStage.Enabled = false;
 					cboComponentStage.SelectedIndex = 0;
 					break;
@@ -169,7 +169,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		{
 			// do we have a disassembler selected?
 			// only disassemblers can implement IProbeMessage
-			if(cboComponentStage.Items[cboComponentStage.SelectedIndex].ToString() == componentTypes.DisassemblingParser.ToString())
+			if(cboComponentStage.Items[cboComponentStage.SelectedIndex].ToString() == ComponentTypes.DisassemblingParser.ToString())
 			{
 				chkImplementIProbeMessage.Visible = true;
 			}

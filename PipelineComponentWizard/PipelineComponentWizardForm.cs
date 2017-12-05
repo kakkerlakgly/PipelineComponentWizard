@@ -11,10 +11,10 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
     public partial class PipeLineComponentWizardForm : WizardForm
 	{
 		//private NameValueCollection _WizardResults = new NameValueCollection();
-		private IDictionary<string, object> _WizardResults = new Dictionary<string, object>();
+		private IDictionary<string, object> _wizardResults = new Dictionary<string, object>();
 
-		private IList<IWizardControl> _PageCollection = new List<IWizardControl>();
-		private int _PageCount;
+		private IList<IWizardControl> _pageCollection = new List<IWizardControl>();
+		private int _pageCount;
 
         /// <summary>
 		/// Constructor. Sets eventhandlers for inherited buttons and 
@@ -34,15 +34,15 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 			AddPage(WzPageDesignerProperties1,false);
 			AddPage(wzPageSummary1,false);
 
-			_PageCollection.Add(wzPageWelcome1);
-			_PageCollection.Add(wzPageGeneralSetup1);
-			_PageCollection.Add(WzPageGeneralProperties1);
-			_PageCollection.Add(WzPageDesignerProperties1);
-			_PageCollection.Add(wzPageSummary1);
+			_pageCollection.Add(wzPageWelcome1);
+			_pageCollection.Add(wzPageGeneralSetup1);
+			_pageCollection.Add(WzPageGeneralProperties1);
+			_pageCollection.Add(WzPageDesignerProperties1);
+			_pageCollection.Add(wzPageSummary1);
 
-			wzPageGeneralSetup1._AddWizardResultEvent += AddWizardResult;
-			WzPageDesignerProperties1._AddDesignerPropertyEvent +=AddDesignerProperty;
-			WzPageGeneralProperties1._AddWizardResultEvent += AddWizardResult;
+			wzPageGeneralSetup1.AddWizardResultEvent += AddWizardResult;
+			WzPageDesignerProperties1.AddDesignerPropertyEvent +=AddDesignerProperty;
+			WzPageGeneralProperties1.AddWizardResultEvent += AddWizardResult;
 
 			ButtonHelp.Enabled = false;
 		}
@@ -51,14 +51,14 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		{
 			try
 			{
-				PageEventArgs e2 = new PageEventArgs((WizardPage) _PageCollection[_PageCount], PageEventButton.Next);
-				_PageCount = AdjustPageCount(_PageCount, true);
-				if(_PageCollection[_PageCount].NeedSummary)
+				PageEventArgs e2 = new PageEventArgs((WizardPage) _pageCollection[_pageCount], PageEventButton.Next);
+				_pageCount = AdjustPageCount(_pageCount, true);
+				if(_pageCollection[_pageCount].NeedSummary)
 				{
-					((WzPageSummary) _PageCollection[_PageCount]).Summary = CreateSummary();
+					((WzPageSummary) _pageCollection[_pageCount]).Summary = CreateSummary();
 				}
-				SetCurrentPage((WizardPage) _PageCollection[_PageCount], e2);
-				ButtonNext.Enabled = _PageCollection[_PageCount].NextButtonEnabled;
+				SetCurrentPage((WizardPage) _pageCollection[_pageCount], e2);
+				ButtonNext.Enabled = _pageCollection[_pageCount].NextButtonEnabled;
 			}
 			catch(Exception exc)
 			{
@@ -74,9 +74,9 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		{
 			try
 			{
-				PageEventArgs e2 = new PageEventArgs((WizardPage)_PageCollection[_PageCount],PageEventButton.Back);
-				_PageCount = AdjustPageCount(_PageCount,false);
-				SetCurrentPage((WizardPage)_PageCollection[_PageCount],e2);
+				PageEventArgs e2 = new PageEventArgs((WizardPage)_pageCollection[_pageCount],PageEventButton.Back);
+				_pageCount = AdjustPageCount(_pageCount,false);
+				SetCurrentPage((WizardPage)_pageCollection[_pageCount],e2);
 			}
 			catch(Exception exc)
 			{
@@ -111,11 +111,11 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		/// <returns></returns>
 		private string CreateSummary()
 		{
-			string Summary = 
+			string summary = 
 				"The pipeline component wizard will create the following project:" + Environment.NewLine + Environment.NewLine;
 			
-			Summary += "- A project for the pipeline component" + Environment.NewLine;
-			return Summary;
+			summary += "- A project for the pipeline component" + Environment.NewLine;
+			return summary;
 		}
 		
 		private int AdjustPageCount(int pageCount,bool countingUp)
@@ -128,11 +128,11 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 			try
 			{
 				//Replace the value if it already exists
-				if(_WizardResults.ContainsKey(e.Name))
+				if(_wizardResults.ContainsKey(e.Name))
 				{
-					_WizardResults.Remove(e.Name);
+					_wizardResults.Remove(e.Name);
 				}
-				_WizardResults.Add(e.Name, e.Value);
+				_wizardResults.Add(e.Name, e.Value);
 			}
 			catch(Exception err)
 			{
@@ -178,7 +178,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 
 		public IDictionary<string, object> DesignerProperties { get; } = new Dictionary<string, object>();
 
-	    public IDictionary<string, object> WizardResults => _WizardResults;
+	    public IDictionary<string, object> WizardResults => _wizardResults;
 	}
 }
 

@@ -6,7 +6,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
     [ComVisible(false)]
     public partial class WzPageSummary : Microsoft.BizTalk.Wizard.WizardCompletionPage, IWizardControl
 	{
-		private string _Summary;
+		private string _summary;
 
 		public WzPageSummary()
 		{
@@ -28,10 +28,10 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 
 		public string Summary
 		{
-			get {	return _Summary;	}
+			get {	return _summary;	}
 			set 
 			{
-				_Summary = value;
+				_summary = value;
 				textBoxSubTitle.Text = Summary;
 			}
 

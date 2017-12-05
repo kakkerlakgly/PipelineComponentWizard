@@ -27,14 +27,14 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
         /// <summary>
         /// contains the options we use to generate the sourcecode
         /// </summary>
-		private static CodeGeneratorOptions cgo;
+		private static CodeGeneratorOptions _cgo;
 
 	    /// <summary>
         /// static constructor, sets general options for code generation.
         /// </summary>
 		static PipelineComponentCodeGenerator() 
 		{
-		    cgo = new CodeGeneratorOptions
+		    _cgo = new CodeGeneratorOptions
 		    {
 		        BracingStyle = "C",
 		        VerbatimOrder = true
@@ -57,17 +57,17 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
         /// <param name="language">the <see cref="C:implementationLanguages"/> value, defining which programming
         /// language the code should be generated in</param>
         /// <returns>the requested <see cref="C:ICodeGenerator"/> instance, if supported</returns>
-		private static ICodeGenerator retrieveCodeGenerator(StreamWriter sw, implementationLanguages language)
+		private static ICodeGenerator RetrieveCodeGenerator(StreamWriter sw, ImplementationLanguages language)
 		{
             // determine which language was requested
 			switch(language)
 			{
-				case implementationLanguages.CSharp:
+				case ImplementationLanguages.CSharp:
 					return new CSharpCodeProvider().CreateGenerator(sw);
-				case implementationLanguages.VBNet:
+				case ImplementationLanguages.VbNet:
 					return new VBCodeProvider().CreateGenerator(sw);
 				default:
-                    throw new NotImplementedException(string.Format("The requested language support ({0}) has not been implemented.", Enum.GetName(typeof(implementationLanguages), language)));
+                    throw new NotImplementedException(string.Format("The requested language support ({0}) has not been implemented.", Enum.GetName(typeof(ImplementationLanguages), language)));
 			}
 		}
 		#endregion
@@ -85,14 +85,14 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 	    /// <param name="designerProperties">any designer properties defined</param>
 	    /// <param name="componentCategory">the used component category</param>
 	    /// <param name="language"></param>
-	    internal static void generatePipelineComponent(
+	    internal static void GeneratePipelineComponent(
 			string fileName,
 			string clsNameSpace,
 			string clsClassName,
 			bool implementsIProbeMessage,
 			IDictionary<string, object> designerProperties,
-			componentTypes componentCategory,
-			implementationLanguages language)
+			ComponentTypes componentCategory,
+			ImplementationLanguages language)
 		{
 			#region variable definition
 			// the component GUID, used to represent the component uniquely
@@ -128,12 +128,12 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		    using (StreamWriter sw = new StreamWriter(fileName))
 		    {
 		        // codeGenerator will contain the generator for the choosen language
-		        ICodeGenerator codeGenerator = retrieveCodeGenerator(sw, language);
+		        ICodeGenerator codeGenerator = RetrieveCodeGenerator(sw, language);
 
 		        // create our namespace, in which our class will reside
 		        CodeNamespace cnsCodeNamespace = new CodeNamespace(clsNameSpace);
 
-		        CodeThisReferenceExpression _thisObject = new CodeThisReferenceExpression();
+		        CodeThisReferenceExpression thisObject = new CodeThisReferenceExpression();
 
 		        #region using clauses
 
@@ -214,7 +214,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		        foreach (var entry in designerProperties)
 		        {
 		            // try and lookup the type as the variable
-		            Type designerPropertyType = DesignerVariableType.getType(entry.Value as string);
+		            Type designerPropertyType = DesignerVariableType.GetType(entry.Value as string);
 
 		            // add a member variable using the suggested name
 		            cmf = new CodeMemberField(designerPropertyType, "_" + entry.Key) {Attributes = MemberAttributes.Private};
@@ -465,10 +465,10 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		                        new CodeVariableReferenceExpression("val"),
 		                        new CodeMethodInvokeExpression(
 		                            new CodeMethodReferenceExpression(
-		                                _thisObject, "ReadPropertyBag"), new CodeArgumentReferenceExpression("pb"), new CodeSnippetExpression("\"" + entry.Key + "\""))));
+		                                thisObject, "ReadPropertyBag"), new CodeArgumentReferenceExpression("pb"), new CodeSnippetExpression("\"" + entry.Key + "\""))));
 
 		                // typeof(variable)
-		                Type designerPropertyType = DesignerVariableType.getType(entry.Value as string);
+		                Type designerPropertyType = DesignerVariableType.GetType(entry.Value as string);
 		                CodeAssignStatement assignment;
 
 		                if (designerPropertyType == typeof(SchemaList))
@@ -484,7 +484,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		                    // this._property = new SchemaWithNone((string) val);
 		                    assignment =
 		                        new CodeAssignStatement(
-		                            new CodeFieldReferenceExpression(_thisObject, "_" + entry.Key),
+		                            new CodeFieldReferenceExpression(thisObject, "_" + entry.Key),
 		                            new CodeObjectCreateExpression(
 		                                designerPropertyType,
 		                                new CodeCastExpression(
@@ -505,8 +505,8 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		                    // this._property = (type) val;
 		                    assignment =
 		                        new CodeAssignStatement(
-		                            new CodeFieldReferenceExpression(_thisObject, "_" + entry.Key),
-		                            new CodeCastExpression(DesignerVariableType.getType(entry.Value as string),
+		                            new CodeFieldReferenceExpression(thisObject, "_" + entry.Key),
+		                            new CodeCastExpression(DesignerVariableType.GetType(entry.Value as string),
 		                                new CodeVariableReferenceExpression("val")));
 
 		                    // if(val != null)
@@ -556,7 +556,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 
 		        foreach (var entry in designerProperties)
 		        {
-		            Type designerPropertyType = DesignerVariableType.getType(entry.Value as string);
+		            Type designerPropertyType = DesignerVariableType.GetType(entry.Value as string);
 
 		            if (designerPropertyType == typeof(SchemaList))
 		            {
@@ -570,14 +570,14 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		            {
 		                clsMethod.Statements.Add(
 		                    new CodeMethodInvokeExpression(
-		                        _thisObject, "WritePropertyBag", new CodeArgumentReferenceExpression("pb"), new CodePrimitiveExpression(entry.Key), new CodeFieldReferenceExpression(
-		                            new CodeFieldReferenceExpression(_thisObject, entry.Key), "SchemaName")));
+		                        thisObject, "WritePropertyBag", new CodeArgumentReferenceExpression("pb"), new CodePrimitiveExpression(entry.Key), new CodeFieldReferenceExpression(
+		                            new CodeFieldReferenceExpression(thisObject, entry.Key), "SchemaName")));
 		            }
 		            else
 		            {
 		                clsMethod.Statements.Add(
 		                    new CodeMethodInvokeExpression(
-		                        _thisObject, "WritePropertyBag", new CodeArgumentReferenceExpression("pb"), new CodePrimitiveExpression(entry.Key), new CodeFieldReferenceExpression(_thisObject, entry.Key)));
+		                        thisObject, "WritePropertyBag", new CodeArgumentReferenceExpression("pb"), new CodePrimitiveExpression(entry.Key), new CodeFieldReferenceExpression(thisObject, entry.Key)));
 		            }
 		        }
 
@@ -730,7 +730,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		                    new CodeCastExpression(
 		                        typeof(Bitmap),
 		                        new CodeMethodInvokeExpression(
-		                            new CodeFieldReferenceExpression(_thisObject, "resourceManager"),
+		                            new CodeFieldReferenceExpression(thisObject, "resourceManager"),
 		                            "GetObject", new CodeSnippetExpression("\"COMPONENTICON\""), new CodeSnippetExpression("System.Globalization.CultureInfo.InvariantCulture"))),
 		                    "GetHicon")));
 
@@ -793,7 +793,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		        {
 		            #region AssemblingSerializer (IAssemblerComponent)
 
-		            case componentTypes.AssemblingSerializer:
+		            case ComponentTypes.AssemblingSerializer:
 		                // add another base type
 		                clsDecleration.BaseTypes.Add(typeof(IAssemblerComponent));
 
@@ -900,7 +900,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 
 		            #region DisassemblingParser (IDisassemblerComponent, IProbeMessage)
 
-		            case componentTypes.DisassemblingParser:
+		            case ComponentTypes.DisassemblingParser:
 		                clsDecleration.BaseTypes.Add(typeof(IDisassemblerComponent));
 
 		                // add a member variable to store the incoming message
@@ -1155,16 +1155,16 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		        cnsCodeNamespace.Types.Add(clsDecleration);
 
 		        // tell the code generator to generate our sourcecode
-		        codeGenerator.GenerateCodeFromNamespace(cnsCodeNamespace, sw, cgo);
+		        codeGenerator.GenerateCodeFromNamespace(cnsCodeNamespace, sw, _cgo);
 		    }
 
 
 		    // we're done, unless the user chose to implement the code in VB.NET...
-            if (language == implementationLanguages.VBNet)
+            if (language == ImplementationLanguages.VbNet)
             {
                 // remove unneeded Inherits ... code, move the ... to the Implements line
                 // as we have no base class we want to use
-                postFixVbCode(fileName);
+                PostFixVbCode(fileName);
             }
 		}
 		#endregion
@@ -1177,7 +1177,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
         /// inherit from any classes
         /// </summary>
         /// <param name="fileName">the file to modify</param>
-        private static void postFixVbCode(string fileName)
+        private static void PostFixVbCode(string fileName)
 		{
             // this will hold the entire sourcecode file contents
             StringBuilder buffer = new StringBuilder();
