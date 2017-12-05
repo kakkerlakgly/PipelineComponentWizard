@@ -68,35 +68,19 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
             // and set focus to it
             form1.ButtonNext.Focus();
 
-            RegistryKey wizardKey = null;
-
-            try
+            // open our private 'configuration' key, enable writing
+            using (var wizardKey = Registry.CurrentUser.OpenSubKey(ourSettingKey))
             {
-                // open our private 'configuration' key, enable writing
-                wizardKey = Registry.CurrentUser.OpenSubKey(ourSettingKey);
+                var currentWelcomeValue = wizardKey?.GetValue(skipWelcome) as string;
 
-                if (wizardKey != null)
+                // if we should skip this page,
+                if (currentWelcomeValue != null && bool.Parse(currentWelcomeValue))
                 {
-                    // try and retrieve the setting whether to skip this page
-                    string currentWelcomeValue = wizardKey.GetValue(skipWelcome) as string;
+                    // set the checkbox
+                    checkBoxSkipWelcome.Checked = true;
 
-                    // if we should skip this page,
-                    if (currentWelcomeValue != null && bool.Parse(currentWelcomeValue))
-                    {
-                        // set the checkbox
-                        checkBoxSkipWelcome.Checked = true;
-
-                        // programmatically click the Next button
-                        form1.ButtonNext.PerformClick();
-                    }
-                }
-            }
-            finally
-            {
-                // make sure the RegistryKey instance is closed
-                if (wizardKey != null)
-                {
-                    wizardKey.Close();
+                    // programmatically click the Next button
+                    form1.ButtonNext.PerformClick();
                 }
             }
         }
@@ -107,30 +91,11 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
             if (e.Button == Microsoft.BizTalk.Wizard.PageEventButton.Next)
             {
                 // the RegistryKey to query / update
-                RegistryKey wizardKey = null;
 
-                try
+                // open our private 'configuration' key, enable writing
+                using (var wizardKey = Registry.CurrentUser.OpenSubKey(ourSettingKey, true) ?? Registry.CurrentUser.CreateSubKey(ourSettingKey))
                 {
-                    // open our private 'configuration' key, enable writing
-                    wizardKey = Registry.CurrentUser.OpenSubKey(ourSettingKey, true);
-
-                    // if our key doesn't exist,
-                    if (wizardKey == null)
-                    {
-                        // create it
-                        wizardKey = Registry.CurrentUser.CreateSubKey(ourSettingKey);
-                    }
-
-                    // set the value the user selected regarding skipping this dialog
                     wizardKey.SetValue(skipWelcome, checkBoxSkipWelcome.Checked);
-                }
-                finally
-                {
-                    // make sure the RegistryKey instance is closed
-                    if(wizardKey != null)
-                    {
-                        wizardKey.Close();
-                    }
                 }
             }
 
@@ -155,24 +120,14 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 	    /// <returns>the default registered browser, without arguments</returns>
 	    private string getDefaultBrowser()
 	    {
-	        string browser;
-
-	        RegistryKey key = null;
-	        try
+	        using (var key = Registry.ClassesRoot.OpenSubKey(@"HTTP\shell\open\command", false))
 	        {
-	            key = Registry.ClassesRoot.OpenSubKey(@"HTTP\shell\open\command", false);
-
-	            //trim off quotes
-	            browser = key.GetValue(null).ToString().ToLower().Replace("\"", "");
+	            var browser = key.GetValue(null).ToString().ToLower().Replace("\"", "");
 
 	            //get rid of everything after the ".exe"
 	            browser = browser.Substring(0, browser.IndexOf(".exe") + 4);
-	        }
-	        finally
-	        {
-	            if (key != null) key.Close();
-	        }
-	        return browser;
+	            return browser;
+            }
 	    }
     }
 }

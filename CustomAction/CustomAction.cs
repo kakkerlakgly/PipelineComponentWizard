@@ -311,10 +311,12 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard.Installatio
 				regAsmArguments += " /codebase /s";
 
 				// create and run the command-line in the background
-				piInfo = new ProcessStartInfo(regAsmLocation, regAsmArguments);
-				piInfo.CreateNoWindow = true;
-				piInfo.WindowStyle = ProcessWindowStyle.Hidden;
-				process = Process.Start(piInfo);
+			    piInfo = new ProcessStartInfo(regAsmLocation, regAsmArguments)
+			    {
+			        CreateNoWindow = true,
+			        WindowStyle = ProcessWindowStyle.Hidden
+			    };
+			    process = Process.Start(piInfo);
 				process.WaitForExit();
 			}
 			catch (Exception e)

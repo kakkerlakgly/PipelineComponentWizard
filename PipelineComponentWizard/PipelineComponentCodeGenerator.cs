@@ -34,16 +34,18 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
         /// </summary>
 		static PipelineComponentCodeGenerator() 
 		{
-            cgo = new CodeGeneratorOptions();
+		    cgo = new CodeGeneratorOptions
+		    {
+		        BracingStyle = "C",
+		        VerbatimOrder = true
+		    };
 
-            // removed, this is the default value according to documentation
-            // cgo.BlankLinesBetweenMembers = true;
+		    // removed, this is the default value according to documentation
+		    // cgo.BlankLinesBetweenMembers = true;
 
-			cgo.BracingStyle = "C";
 
-            // we don't want CodeDOM to rearrange our defined members to do
-            // property-first aligment. this is to protect region directives we define
-            cgo.VerbatimOrder = true;
+		    // we don't want CodeDOM to rearrange our defined members to do
+		    // property-first aligment. this is to protect region directives we define
 		}
 
 		#region retrieveCodeGenerator, generates an instance of the requested ICodeGenerator class
@@ -153,10 +155,9 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 
 		        // create our class, this variable will entail the entire definition until
 		        // we write it out
-		        CodeTypeDeclaration clsDecleration = new CodeTypeDeclaration();
+		        CodeTypeDeclaration clsDecleration = new CodeTypeDeclaration {Name = clsClassName};
 
 		        // start by setting the name of the class
-		        clsDecleration.Name = clsClassName;
 
 		        #region class attributes
 
@@ -184,18 +185,20 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		        #region resource manager
 
 		        // add our ResourceManager instance
-		        CodeMemberField cmf = new CodeMemberField(typeof(ResourceManager), "resourceManager");
+		        CodeMemberField cmf = new CodeMemberField(typeof(ResourceManager), "resourceManager")
+		        {
+		            InitExpression = new CodeObjectCreateExpression(
+		                typeof(ResourceManager), new CodeSnippetExpression("\"" + clsNameSpace + "." + clsClassName + "\""),
+		                new CodeMethodInvokeExpression(
+		                    new CodeVariableReferenceExpression("Assembly"),
+		                    "GetExecutingAssembly")),
+		            Attributes = MemberAttributes.Private
+		        };
 
 		        // initialize the resourceManager by calling it's default constructor,
 		        // passing Assembly.GetExecutingAssembly
-		        cmf.InitExpression =
-		            new CodeObjectCreateExpression(
-		                typeof(ResourceManager), new CodeSnippetExpression("\"" + clsNameSpace + "." + clsClassName + "\""), new CodeMethodInvokeExpression(
-		                    new CodeVariableReferenceExpression("Assembly"),
-		                    "GetExecutingAssembly"));
 
 		        // set the accessor visibility
-		        cmf.Attributes = MemberAttributes.Private;
 
 		        // finally, add the statement to the class
 		        clsDecleration.Members.Add(cmf);
@@ -214,10 +217,9 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		            Type designerPropertyType = DesignerVariableType.getType(entry.Value as string);
 
 		            // add a member variable using the suggested name
-		            cmf = new CodeMemberField(designerPropertyType, "_" + entry.Key);
+		            cmf = new CodeMemberField(designerPropertyType, "_" + entry.Key) {Attributes = MemberAttributes.Private};
 
 		            // set the visibility scope
-		            cmf.Attributes = MemberAttributes.Private;
 
 		            // SchemaList has special needs because it's not a native variable type,
 		            // it needs an instance
@@ -238,15 +240,17 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		            clsDecleration.Members.Add(cmf);
 
 		            // instantiate a new CodeMemberProperty, which defines a getter/setter combination
-		            clsProperty = new CodeMemberProperty();
+		            clsProperty = new CodeMemberProperty
+		            {
+		                Name = entry.Key,
+		                Attributes = MemberAttributes.Public,
+		                Type = new CodeTypeReference(designerPropertyType),
+		                HasGet = true
+		            };
 		            // set the name to reflect the designer property currently being iterated
-		            clsProperty.Name = entry.Key;
 		            // set it's visibility to public to allow the VS.NET designer to reflect upon it
-		            clsProperty.Attributes = MemberAttributes.Public;
 		            // set it's "return" type to reflect the Type we looked up earlier
-		            clsProperty.Type = new CodeTypeReference(designerPropertyType);
 		            // indicate the Property has a Getter
-		            clsProperty.HasGet = true;
 		            // add a simple Getter implementation to the getter (get { return <variableName>; ))
 		            clsProperty.GetStatements.Add(
 		                new CodeMethodReturnStatement(new CodeVariableReferenceExpression("_" + entry.Key)));
@@ -336,10 +340,12 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		        #region IBaseComponent.Version
 
 		        // next, add IBaseComponent.Version
-		        clsProperty = new CodeMemberProperty();
-		        clsProperty.Name = "Version";
-		        clsProperty.HasSet = false;
-		        clsProperty.HasGet = true;
+		        clsProperty = new CodeMemberProperty
+		        {
+		            Name = "Version",
+		            HasSet = false,
+		            HasGet = true
+		        };
 		        clsProperty.GetStatements.Add(new CodeMethodReturnStatement(new CodeSnippetExpression(
 		            "resourceManager.GetString(\"COMPONENTVERSION\", System.Globalization.CultureInfo.InvariantCulture)")));
 		        clsProperty.Type = new CodeTypeReference(typeof(String));
@@ -360,10 +366,12 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		        #region IBaseComponent.Description
 
 		        // next, add IBaseComponent.Description
-		        clsProperty = new CodeMemberProperty();
-		        clsProperty.Name = "Description";
-		        clsProperty.HasSet = false;
-		        clsProperty.HasGet = true;
+		        clsProperty = new CodeMemberProperty
+		        {
+		            Name = "Description",
+		            HasSet = false,
+		            HasGet = true
+		        };
 		        clsProperty.GetStatements.Add(new CodeMethodReturnStatement(new CodeSnippetExpression(
 		            "resourceManager.GetString(\"COMPONENTDESCRIPTION\", System.Globalization.CultureInfo.InvariantCulture)")));
 		        clsProperty.Type = new CodeTypeReference(typeof(String));
@@ -426,8 +434,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		        #region IPersistPropertyBag.InitNew
 
 		        // next, implement IPersistPropertyBag.InitNew
-		        clsMethod = new CodeMemberMethod();
-		        clsMethod.Name = "InitNew";
+		        clsMethod = new CodeMemberMethod {Name = "InitNew"};
 		        clsMethod.Comments.Add(new CodeCommentStatement("<summary>", true));
 		        clsMethod.Comments.Add(new CodeCommentStatement("not implemented", true));
 		        clsMethod.Comments.Add(new CodeCommentStatement("</summary>", true));
@@ -441,8 +448,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		        #region IPersistPropertyBag.Load
 
 		        // next, implement IPersistPropertyBag.Load
-		        clsMethod = new CodeMemberMethod();
-		        clsMethod.Name = "Load";
+		        clsMethod = new CodeMemberMethod {Name = "Load"};
 		        clsMethod.Parameters.Add(new CodeParameterDeclarationExpression(typeof(IPropertyBag), "pb"));
 		        clsMethod.Parameters.Add(new CodeParameterDeclarationExpression(typeof(int), "errlog"));
 
@@ -531,8 +537,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		        #region IPersistPropertyBag.Save
 
 		        // next, implement IPersistPropertyBag.Save
-		        clsMethod = new CodeMemberMethod();
-		        clsMethod.Name = "Save";
+		        clsMethod = new CodeMemberMethod {Name = "Save"};
 		        clsMethod.Parameters.Add(new CodeParameterDeclarationExpression(typeof(IPropertyBag), "pb"));
 		        clsMethod.Parameters.Add(new CodeParameterDeclarationExpression(typeof(bool), "fClearDirty"));
 		        clsMethod.Parameters.Add(new CodeParameterDeclarationExpression(typeof(bool), "fSaveAllProperties"));
@@ -611,8 +616,8 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		        {
 		            CodeTryCatchFinallyStatement tryCatch = new CodeTryCatchFinallyStatement();
 		            tryCatch.TryStatements.Add(pbRead);
-		            CodeCatchClause catchArgumentException = new CodeCatchClause();
-		            catchArgumentException.CatchExceptionType = new CodeTypeReference(typeof(ArgumentException));
+		            CodeCatchClause catchArgumentException =
+		                new CodeCatchClause {CatchExceptionType = new CodeTypeReference(typeof(ArgumentException))};
 		            catchArgumentException.Statements.Add(retVal);
 		            tryCatch.CatchClauses.Add(catchArgumentException);
 
@@ -650,8 +655,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		        #region safe version of WritePropertyBag
 
 		        // next, implement a safe version of WritePropertyBag
-		        clsMethod = new CodeMemberMethod();
-		        clsMethod.Name = "WritePropertyBag";
+		        clsMethod = new CodeMemberMethod {Name = "WritePropertyBag"};
 		        clsMethod.Parameters.Add(new CodeParameterDeclarationExpression(typeof(IPropertyBag), "pb"));
 		        clsMethod.Parameters.Add(new CodeParameterDeclarationExpression(typeof(string), "propName"));
 		        clsMethod.Parameters.Add(new CodeParameterDeclarationExpression(typeof(object), "val"));
@@ -748,8 +752,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		        #region IComponentUI.Validate
 
 		        // finally, implement IComponentUI.Validate
-		        clsMethod = new CodeMemberMethod();
-		        clsMethod.Name = "Validate";
+		        clsMethod = new CodeMemberMethod {Name = "Validate"};
 		        clsMethod.Parameters.Add(new CodeParameterDeclarationExpression(typeof(object), "obj"));
 
 		        // add sample code for the IComponentUI.Validate method

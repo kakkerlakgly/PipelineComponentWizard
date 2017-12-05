@@ -12,11 +12,8 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 	{
 		//private NameValueCollection _WizardResults = new NameValueCollection();
 		private IDictionary<string, object> _WizardResults = new Dictionary<string, object>();
-		private IDictionary<string, object> _TransmitHandlerProperties = new Dictionary<string, object>();
-		private IDictionary<string, object> _TransmitEndpointProperties = new Dictionary<string, object>();
-		private IDictionary<string, object> _DesignerProperties = new Dictionary<string, object>();
-		private IDictionary<string, object> _ReceiveEndpointProperties = new Dictionary<string, object>();
-		private HelpProvider _HelpProvider = new HelpProvider();
+
+	    private HelpProvider _HelpProvider = new HelpProvider();
 
 		private IList<IWizardControl> _PageCollection = new List<IWizardControl>();
 		private int _PageCount = 0;
@@ -186,30 +183,15 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		
 		}
 
-		public IDictionary<string, object> DesignerProperties
-		{
-			get { return _DesignerProperties; }
-		}
+		public IDictionary<string, object> DesignerProperties { get; } = new Dictionary<string, object>();
 
-		public IDictionary<string, object> WizardResults
-		{
-			get { return _WizardResults; }
-		}
+	    public IDictionary<string, object> WizardResults => _WizardResults;
 
-		public IDictionary<string, object> TransmitEndpointProperties
-		{
-			get { return _TransmitEndpointProperties; }
-		}
+	    public IDictionary<string, object> TransmitEndpointProperties { get; } = new Dictionary<string, object>();
 
-		public IDictionary<string, object> ReceiveEndpointProperties
-		{
-			get { return _ReceiveEndpointProperties; }
-		}
+	    public IDictionary<string, object> ReceiveEndpointProperties { get; } = new Dictionary<string, object>();
 
-		public IDictionary<string, object> TransmitHandlerProperties
-		{
-			get { return _TransmitHandlerProperties; }
-		}
+	    public IDictionary<string, object> TransmitHandlerProperties { get; } = new Dictionary<string, object>();
 	}
 }
 
