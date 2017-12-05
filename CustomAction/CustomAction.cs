@@ -73,53 +73,53 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard.Installatio
 
 				try
 				{
-					this._BizTalkInstallPath = regkey.GetValue("InstallPath").ToString();
-                    this._TargetVSVersion = "14.0"; //regkey.GetValue("TargetVSVersion").ToString();
-                    this._BizTalkVszFileLocation = Path.Combine(this._BizTalkInstallPath, string.Format(@"Developer Tools\BizTalkProjects\{0}", vszFile));
+					_BizTalkInstallPath = regkey.GetValue("InstallPath").ToString();
+                    _TargetVSVersion = "14.0"; //regkey.GetValue("TargetVSVersion").ToString();
+                    _BizTalkVszFileLocation = Path.Combine(_BizTalkInstallPath, string.Format(@"Developer Tools\BizTalkProjects\{0}", vszFile));
 
 					regkey.Close();
 				}
 				catch
 				{
-                    base.Context.LogMessage(string.Format(@"Unable to locate BizTalk installation folder from registry. Tried InstallPath (2006/2009/2010/2013/2013 R2/2016) in HKLM\{0}", bizTalkInstallRegistryKey));
+                    Context.LogMessage(string.Format(@"Unable to locate BizTalk installation folder from registry. Tried InstallPath (2006/2009/2010/2013/2013 R2/2016) in HKLM\{0}", bizTalkInstallRegistryKey));
 				}
 
 				// Visual studio installation folder
-				this._VsDirPath = Path.Combine(this._BizTalkInstallPath, @"Developer Tools\BizTalkProjects\BTSProjects.vsdir");
-				string vsInstallFolderRegistryKey = string.Format(@"SOFTWARE\Microsoft\VisualStudio\{0}_Config", this._TargetVSVersion);
+				_VsDirPath = Path.Combine(_BizTalkInstallPath, @"Developer Tools\BizTalkProjects\BTSProjects.vsdir");
+				string vsInstallFolderRegistryKey = string.Format(@"SOFTWARE\Microsoft\VisualStudio\{0}_Config", _TargetVSVersion);
 
 				try
 				{
 					regkey = Registry.CurrentUser.OpenSubKey(vsInstallFolderRegistryKey);
 
 					// set the actual Visual Studio installation folder for later use
-					this._VisualStudioInstallPath = regkey.GetValue("InstallDir").ToString();
+					_VisualStudioInstallPath = regkey.GetValue("InstallDir").ToString();
 
 					regkey.Close();
 				}
 				catch
 				{
-					base.Context.LogMessage(string.Format("Unable to find Visual Studio installation path for version {0}", this._TargetVSVersion));
+					Context.LogMessage(string.Format("Unable to find Visual Studio installation path for version {0}", _TargetVSVersion));
 				}
 
 				// .NET framework installation folder
 				regkey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\.NETFramework");
-				this._DotNetFrameworkPath = regkey.GetValue("InstallRoot").ToString();
+				_DotNetFrameworkPath = regkey.GetValue("InstallRoot").ToString();
 				string frameworkVersion = string.Format("v{0}.{1}.{2}", Environment.Version.Major, Environment.Version.Minor, Environment.Version.Build);
 
 				// the path to the .NET framework folder is in the form vx.y.z, where x.y.z is Major, Minor and Build
 				// version of the framework. within the folder defined in HKLM\SOFTWARE\Microsoft\.NETFramework
-				this._DotNetFrameworkPath = Path.Combine(this._DotNetFrameworkPath, frameworkVersion);
+				_DotNetFrameworkPath = Path.Combine(_DotNetFrameworkPath, frameworkVersion);
 
 				regkey.Close();
 
 			}
 			catch(Exception e)
 			{
-				base.Context.LogMessage(e.Message);
+				Context.LogMessage(e.Message);
 
-				this._Exception = e;
-				this._GeneralError = true;
+				_Exception = e;
+				_GeneralError = true;
 			}
 		}
 
@@ -129,19 +129,19 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard.Installatio
 		/// <returns>whether the action actually succeeded</returns>
 		private bool AddVsDirLine(bool removeLine = false)
         {
-            string vsDirLine = null;
-            string definitionBuffer = null;
+            string vsDirLine;
+            string definitionBuffer;
 
             try
             {
 
                 vsDirLine = vszFile + "| |Pipeline Component Project|300|Creates a BizTalk Server Pipeline Component|{7a51b143-7eea-450d-baef-827253c52e43}|400| |PipelineComponent";
                 // reset file attributes
-                if ((File.GetAttributes(this._VsDirPath) & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
+                if ((File.GetAttributes(_VsDirPath) & FileAttributes.ReadOnly) == FileAttributes.ReadOnly)
                 {
-                    File.SetAttributes(this._VsDirPath, FileAttributes.Normal);
+                    File.SetAttributes(_VsDirPath, FileAttributes.Normal);
                 }
-                using (StreamReader reader = new StreamReader(this._VsDirPath))
+                using (StreamReader reader = new StreamReader(_VsDirPath))
                 {
                     definitionBuffer = reader.ReadToEnd().TrimEnd();
                 }
@@ -169,11 +169,11 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard.Installatio
                 File.Delete(tempFile);
 
                 // set the RO flag to the file
-                File.SetAttributes(this._VsDirPath, FileAttributes.ReadOnly);
+                File.SetAttributes(_VsDirPath, FileAttributes.ReadOnly);
             }
             catch (Exception e)
             {
-                return this.HandleError("AddVsDirLine", e);
+                return HandleError("AddVsDirLine", e);
             }
 
             return true;
@@ -188,9 +188,9 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard.Installatio
 		{
 			try
 			{
-				this.RemoveVszFile();
+				RemoveVszFile();
 
-				using (TextWriter writer = new StreamWriter(this._BizTalkVszFileLocation, false))
+				using (TextWriter writer = new StreamWriter(_BizTalkVszFileLocation, false))
 				{
 					writer.WriteLine("VSWIZARD 7.0");
 					writer.WriteLine("Wizard=VSWizard.BizTalkPipeLineComponentWizard");
@@ -201,7 +201,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard.Installatio
 			}
 			catch (Exception e)
 			{
-				return this.HandleError("AddVszFile", e);
+				return HandleError("AddVszFile", e);
 			}
 			return true;
 		}
@@ -212,15 +212,15 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard.Installatio
 
 			try
 			{
-				if (!this._GeneralError)
+				if (!_GeneralError)
 				{
 					return;
 				}
-				throw this._Exception;
+				throw _Exception;
 			}
 			catch (Exception e)
 			{
-				base.Context.LogMessage(e.Message);
+				Context.LogMessage(e.Message);
 
 				throw;
 			}
@@ -228,7 +228,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard.Installatio
 
 		private bool HandleError(string functionName, Exception e)
 		{
-			base.Context.LogMessage(e.Message);
+			Context.LogMessage(e.Message);
 
 			DialogResult result2 = MessageBox.Show(e.ToString(), "PipelineComponentWizard Installer", MessageBoxButtons.AbortRetryIgnore, MessageBoxIcon.Hand, MessageBoxDefaultButton.Button1);
 
@@ -261,23 +261,23 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard.Installatio
 			
 			try
 			{
-				if (this._GeneralError)
+				if (_GeneralError)
 				{
-					throw this._Exception;
+					throw _Exception;
 				}
-				while (!this.AddVszFile())
-				{
-				}
-				while (!this.AddVsDirLine())
+				while (!AddVszFile())
 				{
 				}
-				while (!this.RegisterPipelineComponentWizard(false))
+				while (!AddVsDirLine())
+				{
+				}
+				while (!RegisterPipelineComponentWizard(false))
 				{
 				}
 			}
 			catch (Exception e)
 			{
-				base.Context.LogMessage(e.Message);
+				Context.LogMessage(e.Message);
 
 				throw;
 			}
@@ -298,7 +298,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard.Installatio
 			try
 			{
 				// we use RegAsm.exe by spawning it just like the command-line would
-				regAsmLocation = Path.Combine(this._DotNetFrameworkPath, "RegAsm.exe");
+				regAsmLocation = Path.Combine(_DotNetFrameworkPath, "RegAsm.exe");
 
 				// append /u if we're removing
 				if (unregister)
@@ -307,7 +307,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard.Installatio
 				}
 
 				// format the RegAsm arguments
-				regAsmArguments = string.Format("\"{0}\"", Path.Combine(base.Context.Parameters["ApplicationPath"], "PipelineComponentWizard.dll"));
+				regAsmArguments = string.Format("\"{0}\"", Path.Combine(Context.Parameters["ApplicationPath"], "PipelineComponentWizard.dll"));
 				regAsmArguments += " /codebase /s";
 
 				// create and run the command-line in the background
@@ -321,7 +321,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard.Installatio
 			{
 				if (!unregister)
 				{
-					return this.HandleError("RegisterPipelineComponentWizard", e);
+					return HandleError("RegisterPipelineComponentWizard", e);
 				}
 
 				return true;
@@ -338,7 +338,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard.Installatio
 			FileInfo fi;
 			try
 			{
-				fi = new FileInfo(this._BizTalkVszFileLocation);
+				fi = new FileInfo(_BizTalkVszFileLocation);
 				if (!fi.Exists)
 				{
 					return;
@@ -347,7 +347,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard.Installatio
 			}
 			catch (Exception e)
 			{
-				base.Context.LogMessage(e.Message);
+				Context.LogMessage(e.Message);
 			}
 		}
 
@@ -355,16 +355,16 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard.Installatio
 		{
 			try
 			{
-				if (this._GeneralError)
+				if (_GeneralError)
 				{
-					throw this._Exception;
+					throw _Exception;
 				}
 
-				this.RemoveVszFile();
+				RemoveVszFile();
 			}
 			catch (Exception e)
 			{
-				base.Context.LogMessage(e.Message);
+				Context.LogMessage(e.Message);
 			}
 			base.Rollback(savedState);
 		}
@@ -373,17 +373,17 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard.Installatio
 		{
 			try
 			{
-				if (this._GeneralError)
+				if (_GeneralError)
 				{
-					throw this._Exception;
+					throw _Exception;
 				}
 
-				this.RemoveVszFile();
-				this.RegisterPipelineComponentWizard(true);
+				RemoveVszFile();
+				RegisterPipelineComponentWizard(true);
 			}
 			catch (Exception e)
 			{
-				base.Context.LogMessage(e.Message);
+				Context.LogMessage(e.Message);
 			}
 			base.Uninstall(savedState);
 		}

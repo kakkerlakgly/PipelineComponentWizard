@@ -1,9 +1,4 @@
-using System;
-using System.IO;
 using Microsoft.Win32;
-using System.Collections;
-using System.ComponentModel;
-using System.Drawing;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
@@ -34,8 +29,8 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 			// This call is required by the Windows Form Designer.
 			InitializeComponent();
 
-            this.labelNavigation.Links.Clear();
-            this.labelNavigation.Links.Add(0, this.labelNavigation.Text.Length - 1, "http://blogs.msdn.com/martijnh/");
+            labelNavigation.Links.Clear();
+            labelNavigation.Links.Add(0, labelNavigation.Text.Length - 1, "http://blogs.msdn.com/martijnh/");
         }
 
         /// <summary>
@@ -57,7 +52,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
         public override void OnEnterPage(object sender, Microsoft.BizTalk.Wizard.PageEventArgs e)
         {
             // retrieve the WizardForm which hosts our page
-            Microsoft.BizTalk.Wizard.WizardForm form1 = base.WizardForm;
+            Microsoft.BizTalk.Wizard.WizardForm form1 = WizardForm;
 
             // enable the buttons as we see fit
             form1.ButtonBack.Enabled = false;
@@ -145,13 +140,13 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 	    void labelNavigation_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
 	    {
 	        // set the visited state for the clicked link
-	        this.labelNavigation.Links[this.labelNavigation.Links.IndexOf(e.Link)].Visited = true;
+	        labelNavigation.Links[labelNavigation.Links.IndexOf(e.Link)].Visited = true;
 
 	        // get the target of the link
 	        string target = e.Link.LinkData as string;
 
 	        // spawn a *new* browser process to view the link
-	        System.Diagnostics.Process.Start(new ProcessStartInfo(getDefaultBrowser(), target));
+	        Process.Start(new ProcessStartInfo(getDefaultBrowser(), target));
 	    }
 
 	    /// <summary>
@@ -160,7 +155,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 	    /// <returns>the default registered browser, without arguments</returns>
 	    private string getDefaultBrowser()
 	    {
-	        string browser = string.Empty;
+	        string browser;
 
 	        RegistryKey key = null;
 	        try

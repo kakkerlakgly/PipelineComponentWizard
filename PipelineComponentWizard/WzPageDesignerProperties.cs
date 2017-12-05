@@ -1,7 +1,4 @@
 using System;
-using System.Collections;
-using System.ComponentModel;
-using System.Drawing;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
@@ -61,7 +58,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 			}
 		}
 		
-		private void WzPageDesignerProperties_Leave(object sender, System.EventArgs e)
+		private void WzPageDesignerProperties_Leave(object sender, EventArgs e)
 		{
 			try
 			{
@@ -84,7 +81,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 			}		
 		}
 
-		private void WzPageDesignerProperties_Load(object sender, System.EventArgs e)
+		private void WzPageDesignerProperties_Load(object sender, EventArgs e)
 		{
 			try
 			{
@@ -125,13 +122,13 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		/// </summary>
 		private void ResetAllErrProviders()
 		{
-			foreach(Control ctl in this.Controls)
+			foreach(Control ctl in Controls)
 			{
 				errorProvider.SetError(ctl, "");
 			}
 		}
 
-		private void cmdRecvHandlerDel_Click(object sender, System.EventArgs e)
+		private void cmdRecvHandlerDel_Click(object sender, EventArgs e)
 		{
 			try
 			{
@@ -159,7 +156,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 
 
 
-		private void cmdDesignerPropertyAdd_Click(object sender, System.EventArgs e)
+		private void cmdDesignerPropertyAdd_Click(object sender, EventArgs e)
 		{
 			try
 			{
@@ -189,7 +186,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		
 		}
 
-		private void cmbDesignerPropertyDataType_Changed(object sender, System.EventArgs e)
+		private void cmbDesignerPropertyDataType_Changed(object sender, EventArgs e)
 		{
 			string currentSelection = cmbDesignerPropertyDataType.Items[cmbDesignerPropertyDataType.SelectedIndex].ToString();
 			if(currentSelection == "SchemaList")

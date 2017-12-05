@@ -190,14 +190,9 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		        // passing Assembly.GetExecutingAssembly
 		        cmf.InitExpression =
 		            new CodeObjectCreateExpression(
-		                typeof(ResourceManager),
-		                new CodeExpression[]
-		                {
-		                    new CodeSnippetExpression("\"" + clsNameSpace + "." + clsClassName + "\""),
-		                    new CodeMethodInvokeExpression(
-		                        new CodeVariableReferenceExpression("Assembly"),
-		                        "GetExecutingAssembly")
-		                });
+		                typeof(ResourceManager), new CodeSnippetExpression("\"" + clsNameSpace + "." + clsClassName + "\""), new CodeMethodInvokeExpression(
+		                    new CodeVariableReferenceExpression("Assembly"),
+		                    "GetExecutingAssembly"));
 
 		        // set the accessor visibility
 		        cmf.Attributes = MemberAttributes.Private;
@@ -210,7 +205,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		        #region designer properties
 
 		        // process all properties of the class which will be exposed inside the designer
-		        CodeMemberProperty clsProperty = null;
+		        CodeMemberProperty clsProperty;
 
 		        // iterate all defined properties
 		        foreach (var entry in designerProperties)
@@ -229,14 +224,14 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		            if (designerPropertyType == typeof(SchemaList))
 		            {
 		                cmf.InitExpression = new CodeObjectCreateExpression(
-		                    typeof(SchemaList), new CodeExpression[] { });
+		                    typeof(SchemaList));
 		            }
 		            // SchemaWithNone also has special needs because it's not a native variable type,
 		            // it too needs an instance and a default parameter (empty selection string)
 		            else if (designerPropertyType == typeof(SchemaWithNone))
 		            {
 		                cmf.InitExpression = new CodeObjectCreateExpression(
-		                    typeof(SchemaWithNone), new CodeExpression[] {new CodePrimitiveExpression(String.Empty)});
+		                    typeof(SchemaWithNone), new CodePrimitiveExpression(String.Empty));
 		            }
 
 		            // add the member variable to the class definition
@@ -245,7 +240,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		            // instantiate a new CodeMemberProperty, which defines a getter/setter combination
 		            clsProperty = new CodeMemberProperty();
 		            // set the name to reflect the designer property currently being iterated
-		            clsProperty.Name = entry.Key as string;
+		            clsProperty.Name = entry.Key;
 		            // set it's visibility to public to allow the VS.NET designer to reflect upon it
 		            clsProperty.Attributes = MemberAttributes.Public;
 		            // set it's "return" type to reflect the Type we looked up earlier
@@ -254,14 +249,14 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		            clsProperty.HasGet = true;
 		            // add a simple Getter implementation to the getter (get { return <variableName>; ))
 		            clsProperty.GetStatements.Add(
-		                new CodeMethodReturnStatement(new CodeVariableReferenceExpression("_" + entry.Key as string)));
+		                new CodeMethodReturnStatement(new CodeVariableReferenceExpression("_" + entry.Key)));
 		            // indicate the Property also has a Setter
 		            clsProperty.HasSet = true;
 		            if (designerPropertyType == typeof(SchemaList))
 		            {
 		                var setStatementList = new List<CodeStatement>();
 
-		                string varName = "_" + entry.Key as string;
+		                string varName = "_" + entry.Key;
 
 		                // this._property = value;
 		                setStatementList.Add(new CodeAssignStatement(new CodeVariableReferenceExpression(varName),
@@ -275,7 +270,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
                          * */
 		                setStatementList.AddRange(
 		                    new CodeCommentStatementCollection(
-		                        new CodeCommentStatement[]
+		                        new[]
 		                        {
 		                            new CodeCommentStatement("As CodeDOM is limited in it's implementation"),
 		                            new CodeCommentStatement(
@@ -303,7 +298,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		        #endregion
 
 		        // used to define #region elements to group output code
-		        CodeRegionDirective crDirective = null;
+		        CodeRegionDirective crDirective;
 		        // used to define #endregion directive
 		        CodeRegionDirective crEndDirective = new CodeRegionDirective(CodeRegionMode.End, null);
 
@@ -324,7 +319,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		        clsProperty.HasGet = true;
 		        clsProperty.GetStatements.Add(new CodeMethodReturnStatement(new CodeSnippetExpression(
 		            "resourceManager.GetString(\"COMPONENTNAME\", System.Globalization.CultureInfo.InvariantCulture)")));
-		        clsProperty.Type = new CodeTypeReference(typeof(System.String));
+		        clsProperty.Type = new CodeTypeReference(typeof(String));
 		        clsProperty.CustomAttributes.Add(new CodeAttributeDeclaration("Browsable",
 		            new CodeAttributeArgument(new CodePrimitiveExpression(false))));
 		        clsProperty.Comments.Add(new CodeCommentStatement("<summary>", true));
@@ -347,7 +342,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		        clsProperty.HasGet = true;
 		        clsProperty.GetStatements.Add(new CodeMethodReturnStatement(new CodeSnippetExpression(
 		            "resourceManager.GetString(\"COMPONENTVERSION\", System.Globalization.CultureInfo.InvariantCulture)")));
-		        clsProperty.Type = new CodeTypeReference(typeof(System.String));
+		        clsProperty.Type = new CodeTypeReference(typeof(String));
 		        clsProperty.CustomAttributes.Add(
 		            new CodeAttributeDeclaration(
 		                "Browsable", new CodeAttributeArgument(new CodePrimitiveExpression(false))));
@@ -371,7 +366,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		        clsProperty.HasGet = true;
 		        clsProperty.GetStatements.Add(new CodeMethodReturnStatement(new CodeSnippetExpression(
 		            "resourceManager.GetString(\"COMPONENTDESCRIPTION\", System.Globalization.CultureInfo.InvariantCulture)")));
-		        clsProperty.Type = new CodeTypeReference(typeof(System.String));
+		        clsProperty.Type = new CodeTypeReference(typeof(String));
 		        clsProperty.CustomAttributes.Add(
 		            new CodeAttributeDeclaration(
 		                "Browsable", new CodeAttributeArgument(new CodePrimitiveExpression(false))));
@@ -412,8 +407,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		        clsMethod.Parameters.Add(new CodeParameterDeclarationExpression(typeof(Guid), "classid"));
 		        clsMethod.Parameters[0].Direction = FieldDirection.Out;
 		        clsMethod.Statements.Add(new CodeAssignStatement(new CodeArgumentReferenceExpression("classid"),
-		            new CodeObjectCreateExpression(typeof(Guid),
-		                new CodeExpression[] {new CodeSnippetExpression("\"" + componentGuid.ToString() + "\"")})));
+		            new CodeObjectCreateExpression(typeof(Guid), new CodeSnippetExpression("\"" + componentGuid.ToString() + "\""))));
 		        clsMethod.ReturnType = new CodeTypeReference(typeof(void));
 		        clsMethod.Comments.Add(new CodeCommentStatement("<summary>", true));
 		        clsMethod.Comments.Add(new CodeCommentStatement("Gets class ID of component for usage from unmanaged code.",
@@ -465,16 +459,11 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		                        new CodeVariableReferenceExpression("val"),
 		                        new CodeMethodInvokeExpression(
 		                            new CodeMethodReferenceExpression(
-		                                _thisObject, "ReadPropertyBag"),
-		                            new CodeExpression[]
-		                            {
-		                                new CodeArgumentReferenceExpression("pb"),
-		                                new CodeSnippetExpression("\"" + entry.Key + "\"")
-		                            })));
+		                                _thisObject, "ReadPropertyBag"), new CodeArgumentReferenceExpression("pb"), new CodeSnippetExpression("\"" + entry.Key + "\""))));
 
 		                // typeof(variable)
 		                Type designerPropertyType = DesignerVariableType.getType(entry.Value as string);
-		                CodeAssignStatement assignment = null;
+		                CodeAssignStatement assignment;
 
 		                if (designerPropertyType == typeof(SchemaList))
 		                {
@@ -576,24 +565,14 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		            {
 		                clsMethod.Statements.Add(
 		                    new CodeMethodInvokeExpression(
-		                        _thisObject, "WritePropertyBag",
-		                        new CodeExpression[]
-		                        {
-		                            new CodeArgumentReferenceExpression("pb"), new CodePrimitiveExpression(entry.Key),
-		                            new CodeFieldReferenceExpression(
-		                                new CodeFieldReferenceExpression(_thisObject, entry.Key as string), "SchemaName")
-		                        }));
+		                        _thisObject, "WritePropertyBag", new CodeArgumentReferenceExpression("pb"), new CodePrimitiveExpression(entry.Key), new CodeFieldReferenceExpression(
+		                            new CodeFieldReferenceExpression(_thisObject, entry.Key), "SchemaName")));
 		            }
 		            else
 		            {
 		                clsMethod.Statements.Add(
 		                    new CodeMethodInvokeExpression(
-		                        _thisObject, "WritePropertyBag",
-		                        new CodeExpression[]
-		                        {
-		                            new CodeArgumentReferenceExpression("pb"), new CodePrimitiveExpression(entry.Key),
-		                            new CodeFieldReferenceExpression(_thisObject, entry.Key as string)
-		                        }));
+		                        _thisObject, "WritePropertyBag", new CodeArgumentReferenceExpression("pb"), new CodePrimitiveExpression(entry.Key), new CodeFieldReferenceExpression(_thisObject, entry.Key)));
 		            }
 		        }
 
@@ -623,14 +602,8 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		        CodeMethodInvokeExpression pbRead =
 		            new CodeMethodInvokeExpression(
 		                new CodeMethodReferenceExpression(
-		                    new CodeArgumentReferenceExpression("pb"), "Read"),
-		                new CodeExpression[]
-		                {
-		                    new CodeArgumentReferenceExpression("propName"),
-		                    new CodeDirectionExpression(FieldDirection.Out,
-		                        new CodeVariableReferenceExpression("val")),
-		                    new CodePrimitiveExpression(0)
-		                });
+		                    new CodeArgumentReferenceExpression("pb"), "Read"), new CodeArgumentReferenceExpression("propName"), new CodeDirectionExpression(FieldDirection.Out,
+		                    new CodeVariableReferenceExpression("val")), new CodePrimitiveExpression(0));
 
 		        CodeMethodReturnStatement retVal = new CodeMethodReturnStatement(new CodeVariableReferenceExpression("val"));
 		        // if the choosen language supports try/catch blocks
@@ -649,8 +622,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		            catchException.Statements.Add(
 		                new CodeThrowExceptionStatement(
 		                    new CodeObjectCreateExpression(
-		                        new CodeTypeReference(typeof(ApplicationException)),
-		                        new CodeExpression[] {new CodeVariableReferenceExpression("e.Message")})));
+		                        new CodeTypeReference(typeof(ApplicationException)), new CodeVariableReferenceExpression("e.Message"))));
 
 		            // add the exception handling to the try/catch block
 		            tryCatch.CatchClauses.Add(catchException);
@@ -687,13 +659,8 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		        CodeMethodInvokeExpression pbWrite =
 		            new CodeMethodInvokeExpression(
 		                new CodeMethodReferenceExpression(
-		                    new CodeArgumentReferenceExpression("pb"), "Write"),
-		                new CodeExpression[]
-		                {
-		                    new CodeArgumentReferenceExpression("propName"),
-		                    new CodeDirectionExpression(FieldDirection.Ref,
-		                        new CodeVariableReferenceExpression("val"))
-		                });
+		                    new CodeArgumentReferenceExpression("pb"), "Write"), new CodeArgumentReferenceExpression("propName"), new CodeDirectionExpression(FieldDirection.Ref,
+		                    new CodeVariableReferenceExpression("val")));
 
 		        if (codeGenerator.Supports(GeneratorSupport.TryCatchStatements))
 		        {
@@ -705,8 +672,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		            catchException.Statements.Add(
 		                new CodeThrowExceptionStatement(
 		                    new CodeObjectCreateExpression(
-		                        new CodeTypeReference(typeof(ApplicationException)),
-		                        new CodeExpression[] {new CodeVariableReferenceExpression("e.Message")})));
+		                        new CodeTypeReference(typeof(ApplicationException)), new CodeVariableReferenceExpression("e.Message"))));
 
 		            // add the exception handling to the try/catch block
 		            tryCatch.CatchClauses.Add(catchException);
@@ -761,13 +727,8 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		                        typeof(Bitmap),
 		                        new CodeMethodInvokeExpression(
 		                            new CodeFieldReferenceExpression(_thisObject, "resourceManager"),
-		                            "GetObject",
-		                            new CodeExpression[]
-		                            {
-		                                new CodeSnippetExpression("\"COMPONENTICON\""),
-		                                new CodeSnippetExpression("System.Globalization.CultureInfo.InvariantCulture")
-		                            })),
-		                    "GetHicon", new CodeExpression[] { })));
+		                            "GetObject", new CodeSnippetExpression("\"COMPONENTICON\""), new CodeSnippetExpression("System.Globalization.CultureInfo.InvariantCulture"))),
+		                    "GetHicon")));
 
 		        clsProperty.Type = new CodeTypeReference("IntPtr");
 		        clsProperty.CustomAttributes.Add(
@@ -799,7 +760,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 
 		        clsMethod.Statements.Add(new CodeMethodReturnStatement(new CodePrimitiveExpression(null)));
 
-		        clsMethod.ReturnType = new CodeTypeReference(typeof(System.Collections.IEnumerator));
+		        clsMethod.ReturnType = new CodeTypeReference(typeof(IEnumerator));
 
 		        clsMethod.Comments.Add(new CodeCommentStatement("<summary>", true));
 		        clsMethod.Comments.Add(
@@ -837,8 +798,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		                cmf = new CodeMemberField(typeof(ArrayList), "_inmsgs");
 		                cmf.InitExpression =
 		                    new CodeObjectCreateExpression(
-		                        typeof(ArrayList),
-		                        new CodeExpression[] { }); // no parameters
+		                        typeof(ArrayList)); // no parameters
 
 		                cmf.Attributes = MemberAttributes.Private;
 		                clsDecleration.Members.Add(cmf);
@@ -863,8 +823,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		                clsMethod.Statements.Add(
 		                    new CodeMethodInvokeExpression(
 		                        new CodeMethodReferenceExpression(
-		                            new CodeVariableReferenceExpression("_inmsgs"), "Add"),
-		                        new CodeExpression[] {new CodeArgumentReferenceExpression("inmsg")}));
+		                            new CodeVariableReferenceExpression("_inmsgs"), "Add"), new CodeArgumentReferenceExpression("inmsg")));
 
 		                clsMethod.Comments.Add(new CodeCommentStatement("<summary>", true));
 		                clsMethod.Comments.Add(
@@ -943,7 +902,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 
 		                // add a member variable to store the incoming message
 		                cmf = new CodeMemberField(typeof(Queue), "_msgs");
-		                cmf.InitExpression = new CodeObjectCreateExpression(typeof(Queue), new CodeExpression[] { });
+		                cmf.InitExpression = new CodeObjectCreateExpression(typeof(Queue));
 		                cmf.Attributes = MemberAttributes.Private;
 		                cmf.Comments.Add(new CodeCommentStatement("<summary>", true));
 		                cmf.Comments.Add(new CodeCommentStatement(
@@ -1000,7 +959,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		                            new CodeCastExpression(
 		                                typeof(IBaseMessage),
 		                                new CodeMethodInvokeExpression(new CodeVariableReferenceExpression("_msgs"),
-		                                    "Dequeue", new CodeExpression[] { })))));
+		                                    "Dequeue")))));
 
 		                // return msg;
 		                clsMethod.Statements.Add(
@@ -1225,7 +1184,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
             using (StreamReader sr = new StreamReader(fileName))
             {
                 // just a simple buffer
-                string tmp = null;
+                string tmp;
 
                 // read until we have no more input
                 while ((tmp = sr.ReadLine()) != null)
@@ -1270,7 +1229,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
             // write out the correct definition
             using (StreamWriter sw = new StreamWriter(fileName))
 			{
-				sw.Write(replacement.ToString());
+				sw.Write(replacement);
 			}
 		}
 		#endregion

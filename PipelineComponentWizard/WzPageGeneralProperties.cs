@@ -1,10 +1,8 @@
 using System;
-using System.Collections;
 using System.ComponentModel;
 using System.Drawing;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
-using System.Diagnostics;
 using System.Runtime.InteropServices;
 
 namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
@@ -57,7 +55,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 				Regex.IsMatch(txtComponentName.Text, ComponentNameRegEx));
 		}
 
-		private void WzPageGeneralProperties_Leave(object sender, System.EventArgs e)
+		private void WzPageGeneralProperties_Leave(object sender, EventArgs e)
 		{
 			AddWizardResult(WizardValues.ComponentName, txtComponentName.Text);
 			AddWizardResult(WizardValues.ComponentDescription, txtComponentDescription.Text);
@@ -65,23 +63,23 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 			AddWizardResult(WizardValues.ComponentVersion, txtComponentVersion.Text);
 		}
 	
-		private void ComponentIcon_DoubleClick(object sender, System.EventArgs e)
+		private void ComponentIcon_DoubleClick(object sender, EventArgs e)
 		{
-			if(openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK) 
+			if(openFileDialog1.ShowDialog() == DialogResult.OK) 
 			{
 				ComponentIcon.Image = Image.FromFile(openFileDialog1.FileName);
 				AddWizardResult(WizardValues.ComponentIcon, ComponentIcon.Image);
 			}
 		}
 
-		private void ComponentIcon_Click(object sender, System.EventArgs e)
+		private void ComponentIcon_Click(object sender, EventArgs e)
 		{
 			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(WzPageGeneralProperties));
-			this.ComponentIcon.Image = ((System.Drawing.Image)(resources.GetObject("ComponentIcon.Image")));
+			ComponentIcon.Image = ((Image)(resources.GetObject("ComponentIcon.Image")));
 			AddWizardResult(WizardValues.ComponentIcon, ComponentIcon.Image);
 		}
 
-		private void txtComponentVersion_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+		private void txtComponentVersion_Validating(object sender, CancelEventArgs e)
 		{
 			if(!Regex.IsMatch(txtComponentVersion.Text, ComponentVersionRegEx) && txtComponentVersion.Text.Length > 0)
 			{
@@ -95,7 +93,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 			}		
 		}
 
-		private void txtComponentName_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+		private void txtComponentName_Validating(object sender, CancelEventArgs e)
 		{
 			if(!Regex.IsMatch(txtComponentName.Text, ComponentNameRegEx) && txtComponentName.Text.Length > 0)
 			{
@@ -109,7 +107,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 			}		
 		}
 
-		private void Element_Changed(object sender, System.EventArgs e)
+		private void Element_Changed(object sender, EventArgs e)
 		{
 			EnableNext(GetAllStates());
 		}

@@ -1,19 +1,14 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.ComponentModel;
-using System.Drawing;
 using System.Windows.Forms;
 using Microsoft.BizTalk.Wizard;
 using System.Diagnostics;
-using System.Reflection;
 using System.Runtime.InteropServices;
 
 namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 {
     [ComVisible(false)]
-    public partial class PipeLineComponentWizardForm : Microsoft.BizTalk.Wizard.WizardForm
+    public partial class PipeLineComponentWizardForm : WizardForm
 	{
 		//private NameValueCollection _WizardResults = new NameValueCollection();
 		private IDictionary<string, object> _WizardResults = new Dictionary<string, object>();
@@ -35,8 +30,8 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 			// This call is required by the Windows Form Designer.
 			InitializeComponent();
 
-			this.ButtonNext.Click += new System.EventHandler(buttonNext_Click);
-			this.ButtonBack.Click += new System.EventHandler(buttonBack_Click);
+			ButtonNext.Click += buttonNext_Click;
+			ButtonBack.Click += buttonBack_Click;
 
 			AddPage(wzPageWelcome1,false);
 			AddPage(wzPageGeneralSetup1,false);
@@ -50,14 +45,14 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 			_PageCollection.Add(WzPageDesignerProperties1);
 			_PageCollection.Add(wzPageSummary1);
 
-			wzPageGeneralSetup1._AddWizardResultEvent += new AddWizardResultEvent(AddWizardResult);
-			WzPageDesignerProperties1._AddDesignerPropertyEvent +=new AddDesignerPropertyEvent(AddDesignerProperty);
-			WzPageGeneralProperties1._AddWizardResultEvent += new AddWizardResultEvent(AddWizardResult);
+			wzPageGeneralSetup1._AddWizardResultEvent += AddWizardResult;
+			WzPageDesignerProperties1._AddDesignerPropertyEvent +=AddDesignerProperty;
+			WzPageGeneralProperties1._AddWizardResultEvent += AddWizardResult;
 
 			ButtonHelp.Enabled = false;
 		}
 
-        private void buttonNext_Click(object sender, System.EventArgs e)
+        private void buttonNext_Click(object sender, EventArgs e)
 		{
 			try
 			{
@@ -75,12 +70,12 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 #if DEBUG
 				MessageBox.Show(this, exc.ToString(), this.Text,MessageBoxButtons.OK, MessageBoxIcon.Error);
 #else
-				MessageBox.Show(this, exc.Message, this.Text,MessageBoxButtons.OK, MessageBoxIcon.Error);
+				MessageBox.Show(this, exc.Message, Text,MessageBoxButtons.OK, MessageBoxIcon.Error);
 #endif
 			}
 		}
 
-		private void buttonBack_Click(object sender, System.EventArgs e)
+		private void buttonBack_Click(object sender, EventArgs e)
 		{
 			try
 			{
@@ -93,7 +88,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 #if DEBUG
 				MessageBox.Show(this, exc.ToString(), this.Text,MessageBoxButtons.OK, MessageBoxIcon.Error);
 #else
-				MessageBox.Show(this,exc.Message,this.Text,MessageBoxButtons.OK,MessageBoxIcon.Error);
+				MessageBox.Show(this,exc.Message,Text,MessageBoxButtons.OK,MessageBoxIcon.Error);
 #endif
 			}
 		}
@@ -109,7 +104,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 #if DEBUG
 				MessageBox.Show(this, exc.ToString(), this.Text,MessageBoxButtons.OK, MessageBoxIcon.Error);
 #else
-				MessageBox.Show(this,exc.Message,this.Text,MessageBoxButtons.OK,MessageBoxIcon.Error);
+				MessageBox.Show(this,exc.Message,Text,MessageBoxButtons.OK,MessageBoxIcon.Error);
 #endif
 			}
 		}
@@ -186,34 +181,34 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 			}
 		}
 
-		private void wzPageSummary1_Load(object sender, System.EventArgs e)
+		private void wzPageSummary1_Load(object sender, EventArgs e)
 		{
 		
 		}
 
 		public IDictionary<string, object> DesignerProperties
 		{
-			get { return this._DesignerProperties; }
+			get { return _DesignerProperties; }
 		}
 
 		public IDictionary<string, object> WizardResults
 		{
-			get { return this._WizardResults; }
+			get { return _WizardResults; }
 		}
 
 		public IDictionary<string, object> TransmitEndpointProperties
 		{
-			get { return this._TransmitEndpointProperties; }
+			get { return _TransmitEndpointProperties; }
 		}
 
 		public IDictionary<string, object> ReceiveEndpointProperties
 		{
-			get { return this._ReceiveEndpointProperties; }
+			get { return _ReceiveEndpointProperties; }
 		}
 
 		public IDictionary<string, object> TransmitHandlerProperties
 		{
-			get { return this._TransmitHandlerProperties; }
+			get { return _TransmitHandlerProperties; }
 		}
 	}
 }

@@ -1,8 +1,5 @@
 using System;
-using System.Collections;
 using System.ComponentModel;
-using System.Drawing;
-using System.Windows.Forms;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
@@ -57,7 +54,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 				cboComponentStage.SelectedIndex > -1 && cboPipelineType.SelectedIndex > -1);
 		}
 
-		private void WzPageGeneralSetup_Leave(object sender, System.EventArgs e)
+		private void WzPageGeneralSetup_Leave(object sender, EventArgs e)
 		{
 			try
 			{
@@ -77,7 +74,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 			}
 		}
 
-		private void txtClassName_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+		private void txtClassName_Validating(object sender, CancelEventArgs e)
 		{
 			if (!Regex.IsMatch(txtClassName.Text,TransportRegEx) && txtClassName.Text.Length > 0)
 			{
@@ -91,7 +88,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 			EnableNext(GetAllStates());	
 		}
 
-		private void txtNamespace_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+		private void txtNamespace_Validating(object sender, CancelEventArgs e)
 		{
 			if (!Regex.IsMatch(txtNameSpace.Text, NamespaceRegEx) && txtNameSpace.Text.Length > 0)
 			{
@@ -115,18 +112,18 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 			get {	return false;	}
 		}
         
-		private void PipelineType_Changed(object sender, System.EventArgs e)
+		private void PipelineType_Changed(object sender, EventArgs e)
 		{
 			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(WzPageGeneralSetup));
 
-			this.cboComponentStage.Items.Clear();
-			this.cboComponentStage.Enabled = true;
+			cboComponentStage.Items.Clear();
+			cboComponentStage.Enabled = true;
 
 			switch(cboPipelineType.SelectedIndex)
 			{
 				// do we have a receive pipeline component selected?
 				case 0:
-					this.cboComponentStage.Items.AddRange(new object[] 
+					cboComponentStage.Items.AddRange(new object[] 
 					{
 						componentTypes.Decoder.ToString(),
 						componentTypes.DisassemblingParser.ToString(),
@@ -134,43 +131,43 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 						componentTypes.PartyResolver.ToString(),
 						componentTypes.Any.ToString()
 					});
-					this.cboComponentStage.SelectedIndex = 0;
+					cboComponentStage.SelectedIndex = 0;
 					break;
 				case 1:
-					this.cboComponentStage.Items.AddRange(new object[] 
+					cboComponentStage.Items.AddRange(new object[] 
 					{
 						componentTypes.Encoder.ToString(),
 						componentTypes.AssemblingSerializer.ToString(),
 						componentTypes.Any.ToString()
 					});
-					this.cboComponentStage.SelectedIndex = 0;
+					cboComponentStage.SelectedIndex = 0;
 					break;
 				case 2:
-					this.cboComponentStage.Items.Add(componentTypes.Any.ToString());
-					this.cboComponentStage.Enabled = false;
-					this.cboComponentStage.SelectedIndex = 0;
+					cboComponentStage.Items.Add(componentTypes.Any.ToString());
+					cboComponentStage.Enabled = false;
+					cboComponentStage.SelectedIndex = 0;
 					break;
 				default:
 					throw new ApplicationException("Unsupported pipeline type selected");
 			}
 		}
 
-		private void cboPipelineType_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+		private void cboPipelineType_Validating(object sender, CancelEventArgs e)
 		{
 			EnableNext(GetAllStates());
 		}
 
-		private void cboComponentStage_Validating(object sender, System.ComponentModel.CancelEventArgs e)
+		private void cboComponentStage_Validating(object sender, CancelEventArgs e)
 		{
 			EnableNext(GetAllStates());
 		}
 
-		private void Element_Changed(object sender, System.EventArgs e)
+		private void Element_Changed(object sender, EventArgs e)
 		{
 			EnableNext(GetAllStates());
 		}
 
-		private void cboComponentStage_Changed(object sender, System.EventArgs e)
+		private void cboComponentStage_Changed(object sender, EventArgs e)
 		{
 			// do we have a disassembler selected?
 			// only disassemblers can implement IProbeMessage

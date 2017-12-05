@@ -1,9 +1,4 @@
 using System;
-using System.Collections;
-using System.ComponentModel;
-using System.Drawing;
-using System.Windows.Forms;
-using System.Diagnostics;
 using System.Runtime.InteropServices;
 
 namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
@@ -42,11 +37,11 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 
 		}
 
-		private void WzPageSummary_Load(object sender, System.EventArgs e)
+		private void WzPageSummary_Load(object sender, EventArgs e)
 		{
 		}
 
-		private void WzPageSummary_VisibleChanged(object sender, System.EventArgs e)
+		private void WzPageSummary_VisibleChanged(object sender, EventArgs e)
 		{
 		}
 	}

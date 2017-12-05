@@ -1,9 +1,7 @@
 using EnvDTE;
 using EnvDTE80;
-using Microsoft.BizTalk.Wizard;
 using Microsoft.Win32;
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
@@ -180,7 +178,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		/// <param name="ContextParams"></param>
 		/// <param name="CustomParams"></param>
 		/// <param name="retval"></param>
-		public void Execute(object Application, int hwndOwner, ref object[] ContextParams, ref object[] CustomParams, ref EnvDTE.wizardResult retval)
+		public void Execute(object Application, int hwndOwner, ref object[] ContextParams, ref object[] CustomParams, ref wizardResult retval)
 		{
 			_DTE IDEObject = (_DTE)Application;
 			_Application = (DTE2)Application;
@@ -201,8 +199,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 				}
 				else
 				{
-					retval = wizardResult.wizardResultCancel;					
-					return;
+					retval = wizardResult.wizardResultCancel;
 				}
 
 			}
@@ -279,37 +276,37 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 			string bizTalkInstallRegistryKey = @"SOFTWARE\Microsoft\BizTalk Server\3.0";
 			regkey = Registry.LocalMachine.OpenSubKey(bizTalkInstallRegistryKey);
 
-			this._BizTalkInstallPath = regkey.GetValue("InstallPath").ToString();
+			_BizTalkInstallPath = regkey.GetValue("InstallPath").ToString();
             // This is no longer present in the registry under the BizTalk Server key
-            this._TargetVSVersion = "14.0"; // regkey.GetValue("TargetVSVersion").ToString();
+            _TargetVSVersion = "14.0"; // regkey.GetValue("TargetVSVersion").ToString();
 
 			regkey.Close();
 
 			// Visual studio installation folder
-            string vsInstallFolderRegistryKey = string.Format(@"SOFTWARE\Microsoft\VisualStudio\{0}_Config", this._TargetVSVersion);
+            string vsInstallFolderRegistryKey = string.Format(@"SOFTWARE\Microsoft\VisualStudio\{0}_Config", _TargetVSVersion);
 			regkey = Registry.CurrentUser.OpenSubKey(vsInstallFolderRegistryKey);
 
 			// set the actual Visual Studio installation folder for later use
-			this._VisualStudioInstallPath = regkey.GetValue("InstallDir").ToString();
+			_VisualStudioInstallPath = regkey.GetValue("InstallDir").ToString();
 
 			regkey.Close();
 
-			string projectTemplate = null;
-			string projectFileName = null;
-			string classFileExtension = null;
+			string projectTemplate;
+			string projectFileName;
+			string classFileExtension;
 			
 			implementationLanguages language = (implementationLanguages) _WizardResults[WizardValues.ImplementationLanguage];
 
 			switch(language)
 			{
 				case implementationLanguages.CSharp:
-					projectTemplate = (mySolution as Solution2).GetProjectTemplate("ClassLibrary.zip", "CSharp");
+					projectTemplate = mySolution.GetProjectTemplate("ClassLibrary.zip", "CSharp");
                     projectFileName = _ProjectName + ".csproj";
 					classFileExtension = ".cs";
 					
                     break;
 				case implementationLanguages.VBNet:
-                    projectTemplate = (mySolution as Solution2).GetProjectTemplate("ClassLibrary.zip", "VisualBasic");
+                    projectTemplate = mySolution.GetProjectTemplate("ClassLibrary.zip", "VisualBasic");
                     projectFileName = _ProjectName + ".vbproj";
 					classFileExtension = ".vb";
 					
@@ -323,18 +320,18 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
             var startingProjects = _Application.Solution.Projects.Cast<Project>();
 
             // add the specified project to the solution
-			mySolution.AddFromTemplate(projectTemplate, _ProjectDirectory, _ProjectName, this._FExclusive);
+			mySolution.AddFromTemplate(projectTemplate, _ProjectDirectory, _ProjectName, _FExclusive);
 
-            Project pipelineComponentProject = null;
+            Project pipelineComponentProject;
 
             // Query for te added project
             pipelineComponentProject = _Application.Solution.Projects
                 .Cast<Project>().First(p => startingProjects.All(s => s.UniqueName != p.UniqueName));
 
             //get version
-            EnvDTE.DTE DTE = Marshal.GetActiveObject("VisualStudio.DTE.14.0") as EnvDTE.DTE;
+            DTE DTE = Marshal.GetActiveObject("VisualStudio.DTE.14.0") as DTE;
             DTEHandle h = new DTEHandle();
-            EnvDTE.Project proj = pipelineComponentProject;
+            Project proj = pipelineComponentProject;
             string s1 = Convert.ToString(proj.Properties.Item("TargetFramework").Value);
 
             // delete the Class1.cs|vb|jsharp|... the template adds to the project
@@ -388,13 +385,13 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 			if(DesignerVariableType.SchemaListUsed)
 			{
 				string BizTalkUtilitiesFileName = "Microsoft.BizTalk.Component.Utilities.dll";
-				Stream stream = this.GetType().Assembly.GetManifestResourceStream(_ProjectNamespace  + "." + BizTalkUtilitiesFileName);
+				Stream stream = GetType().Assembly.GetManifestResourceStream(_ProjectNamespace  + "." + BizTalkUtilitiesFileName);
 				using(BinaryReader br = new BinaryReader(stream))
 				{
 					using(FileStream fs =  new FileStream(Path.Combine(_ProjectDirectory, BizTalkUtilitiesFileName), FileMode.Create))
 					{
 						// temporary storage
-						byte[] b = null;
+						byte[] b;
 
 						// read the stream in blocks of ushort.MaxValue
 						while((b = br.ReadBytes(ushort.MaxValue)).Length > 0)
@@ -422,7 +419,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
                 ProjectItem item = PipelineComponentVSProject.Project.ProjectItems.Item(Path.GetFileName(pipelineComponentSourceFile));
 
                 // let's open up the main code file and show it so the user can start editing
-                Window mainSourceFile = item.Open(Constants.vsViewKindPrimary);
+                Window mainSourceFile = item.Open();
 
                 // set the editor to the newly created sourcecode
                 mainSourceFile.Activate();
@@ -479,10 +476,10 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 			string value = null;
 			if (null != resource) 
 			{
-				Assembly assem = this.GetType().Assembly;
+				Assembly assem = GetType().Assembly;
 				Stream stream = assem.GetManifestResourceStream(resource);
 				Trace.WriteLine(resource);
-				StreamReader reader = null;
+				StreamReader reader;
 
 				using (reader = new StreamReader(stream)) 
 				{
@@ -500,10 +497,10 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
         //EnvDTE.Configuration config;
         //EnvDTE.Properties configProps;
         //EnvDTE.Property prop;
-        EnvDTE.DTE DTE = Marshal.GetActiveObject("VisualStudio.DTE.14.0") as EnvDTE.DTE;
-        public EnvDTE.Project GetProject(String Name)
+        DTE DTE = Marshal.GetActiveObject("VisualStudio.DTE.14.0") as DTE;
+        public Project GetProject(String Name)
         {
-            foreach (EnvDTE.Project item in DTE.Solution.Projects)
+            foreach (Project item in DTE.Solution.Projects)
             {
                 if (item.Name == Name)
                 {
