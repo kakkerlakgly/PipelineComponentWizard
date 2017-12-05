@@ -15,7 +15,6 @@ using System.Linq;
 namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 {
 	public delegate void AddWizardResultEvent(object sender,PropertyPairEvent e);
-	public delegate void AddTransmitHandlerPropertyEvent(object sender,PropertyPairEvent e);
 	public delegate void AddDesignerPropertyEvent(object sender,PropertyPairEvent e);
 	
 	/// <summary>
@@ -129,7 +128,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 	public class BizTalkPipeLineWizard : IDTWizard
 	{
 
-		enum ContextOptions : int
+		enum ContextOptions
 		{
 			WizardType,
 			ProjectName, 
@@ -140,26 +139,19 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 			Silent
 		}
 
-		private string _ClassName = null;
-		private string _NewProjectNamespace = null;
-		private string _Namespace = null;
-		private string _ComponentDescription = null;
-
-		private string _BizTalkInstallPath = null;
-        private string _TargetVSVersion = null;
-        private string _VisualStudioInstallPath = null;
-		private string _ProjectDirectory = null;
-		private string _ProjectName = null;
-		private string _SolutionName = null;
+		private string _BizTalkInstallPath;
+        private string _TargetVSVersion;
+		private string _ProjectDirectory;
+		private string _ProjectName;
 
 		private const string _ProjectNamespace = "MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard";
-		private DTE2 _Application = null;
+		private DTE2 _Application;
 
 		bool _FExclusive;
-		private Solution2 _PipelineComponentSolution = null;
+		private Solution2 _PipelineComponentSolution;
 
-		private IDictionary<string, object> _WizardResults = null;
-		private IDictionary<string, object> _DesignerProperties = null;
+		private IDictionary<string, object> _WizardResults;
+		private IDictionary<string, object> _DesignerProperties;
 		
 		public BizTalkPipeLineWizard()
 		{
@@ -223,15 +215,8 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 			//Get the "official" wizard results
 			_ProjectDirectory = ContextParams[(int)ContextOptions.LocalDirectory].ToString();
 			_ProjectName = ContextParams[(int)ContextOptions.ProjectName].ToString();
-			_SolutionName = ContextParams[(int)ContextOptions.SolutionName].ToString();
 			_FExclusive = bool.Parse(ContextParams[(int)ContextOptions.FExclusive].ToString());	
 
-			//Get the custom wizard results
-			_ClassName = (string) _WizardResults[WizardValues.ClassName];
-			_NewProjectNamespace = (string) _WizardResults[WizardValues.NewProjectNamespace];
-			_Namespace = (string) _WizardResults[WizardValues.Namespace];
-			_ComponentDescription = (string) _WizardResults[WizardValues.ComponentDescription];
-            
 			if (!_FExclusive)//New solution or existing?
 			{
 				// Get a reference to the solution from the IDE Object
@@ -286,9 +271,6 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
             string vsInstallFolderRegistryKey = string.Format(@"SOFTWARE\Microsoft\VisualStudio\{0}_Config", _TargetVSVersion);
 			regkey = Registry.CurrentUser.OpenSubKey(vsInstallFolderRegistryKey);
 
-			// set the actual Visual Studio installation folder for later use
-			_VisualStudioInstallPath = regkey.GetValue("InstallDir").ToString();
-
 			regkey.Close();
 
 			string projectTemplate;
@@ -327,12 +309,6 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
             // Query for te added project
             pipelineComponentProject = _Application.Solution.Projects
                 .Cast<Project>().First(p => startingProjects.All(s => s.UniqueName != p.UniqueName));
-
-            //get version
-            DTE DTE = Marshal.GetActiveObject("VisualStudio.DTE.14.0") as DTE;
-            DTEHandle h = new DTEHandle();
-            Project proj = pipelineComponentProject;
-            string s1 = Convert.ToString(proj.Properties.Item("TargetFramework").Value);
 
             // delete the Class1.cs|vb|jsharp|... the template adds to the project
             pipelineComponentProject.ProjectItems.Item("Class1" + classFileExtension).Delete();
@@ -465,30 +441,6 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 			}
 			Trace.WriteLine("-- End _DesignerProperties");
 		}
-
-		/// <summary>
-		/// Helper to get resource from manifest.
-		/// </summary>
-		/// <param name="resource">Full resource name</param>
-		/// <returns>Resource value</returns>
-		private string GetResource(string resource) 
-		{
-			string value = null;
-			if (null != resource) 
-			{
-				Assembly assem = GetType().Assembly;
-				Stream stream = assem.GetManifestResourceStream(resource);
-				Trace.WriteLine(resource);
-				StreamReader reader;
-
-				using (reader = new StreamReader(stream)) 
-				{
-					value = reader.ReadToEnd();
-				}
-			}
-			return value;
-		}
-
 	}
 
     public class DTEHandle

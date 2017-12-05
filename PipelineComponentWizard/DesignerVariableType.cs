@@ -44,7 +44,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
         /// determines whether a reference to Microsoft.BizTalk.Component.Utilities
         /// is needed within the generated project
         /// </summary>
-        private static bool _schemaListUsed = false;
+        private static bool _schemaListUsed;
 
         /// <summary>
         /// determines whether the user added one or more Designer properties of the

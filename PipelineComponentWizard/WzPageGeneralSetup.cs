@@ -114,8 +114,6 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
         
 		private void PipelineType_Changed(object sender, EventArgs e)
 		{
-			System.Resources.ResourceManager resources = new System.Resources.ResourceManager(typeof(WzPageGeneralSetup));
-
 			cboComponentStage.Items.Clear();
 			cboComponentStage.Enabled = true;
 

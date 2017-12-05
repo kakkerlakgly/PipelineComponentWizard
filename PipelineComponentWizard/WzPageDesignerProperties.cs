@@ -10,7 +10,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
     public partial class WzPageDesignerProperties : Microsoft.BizTalk.Wizard.WizardInteriorPage, IWizardControl
 	{
 		public event AddDesignerPropertyEvent _AddDesignerPropertyEvent; 
-		private bool _IsLoaded = false;
+		private bool _IsLoaded;
 
 
 
@@ -127,34 +127,6 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 				errorProvider.SetError(ctl, "");
 			}
 		}
-
-		private void cmdRecvHandlerDel_Click(object sender, EventArgs e)
-		{
-			try
-			{
-				ResetAllErrProviders();
-				if (lstDesignerProperties.SelectedItem == null)
-				{
-					errorProvider.SetError(cmdDesignerPropertyDel,
-						"Please select a value in the property list");
-					return;
-				}
-
-				Object objItem = lstDesignerProperties.SelectedItem;
-				string strVal = objItem.ToString();
-				string strPropName = strVal.Substring(0,strVal.IndexOf("(") - 1);
-				RemoveDesignerProperty(strPropName);
-				lstDesignerProperties.Items.Remove(lstDesignerProperties.SelectedItem);
-
-			}
-			catch(Exception err)
-			{
-				MessageBox.Show(err.Message);
-				Trace.WriteLine(err.Message + Environment.NewLine + err.StackTrace);
-			}	
-		}
-
-
 
 		private void cmdDesignerPropertyAdd_Click(object sender, EventArgs e)
 		{

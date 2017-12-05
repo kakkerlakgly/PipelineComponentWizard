@@ -13,10 +13,8 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		//private NameValueCollection _WizardResults = new NameValueCollection();
 		private IDictionary<string, object> _WizardResults = new Dictionary<string, object>();
 
-	    private HelpProvider _HelpProvider = new HelpProvider();
-
 		private IList<IWizardControl> _PageCollection = new List<IWizardControl>();
-		private int _PageCount = 0;
+		private int _PageCount;
 
         /// <summary>
 		/// Constructor. Sets eventhandlers for inherited buttons and 
@@ -178,20 +176,9 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 			}
 		}
 
-		private void wzPageSummary1_Load(object sender, EventArgs e)
-		{
-		
-		}
-
 		public IDictionary<string, object> DesignerProperties { get; } = new Dictionary<string, object>();
 
 	    public IDictionary<string, object> WizardResults => _WizardResults;
-
-	    public IDictionary<string, object> TransmitEndpointProperties { get; } = new Dictionary<string, object>();
-
-	    public IDictionary<string, object> ReceiveEndpointProperties { get; } = new Dictionary<string, object>();
-
-	    public IDictionary<string, object> TransmitHandlerProperties { get; } = new Dictionary<string, object>();
 	}
 }
 

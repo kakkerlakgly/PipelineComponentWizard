@@ -6,7 +6,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
     [ComVisible(false)]
     public partial class WzPageSummary : Microsoft.BizTalk.Wizard.WizardCompletionPage, IWizardControl
 	{
-		private string _Summary = null;
+		private string _Summary;
 
 		public WzPageSummary()
 		{

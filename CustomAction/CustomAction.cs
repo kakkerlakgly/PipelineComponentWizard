@@ -21,35 +21,35 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard.Installatio
 		/// <summary>
 		/// contains the BizTalk Server [version] installation folder
 		/// </summary>
-		private string _BizTalkInstallPath = null;
+		private string _BizTalkInstallPath;
         /// <summary>
         /// contains the retrieved BizTalk Server target Visual Studio version from registry.
         /// </summary>
-        private string _TargetVSVersion = null;
+        private string _TargetVSVersion;
         /// <summary>
 		/// contains the Visual Studio Wizard definition file location
 		/// </summary>
-		private string _BizTalkVszFileLocation = null;
+		private string _BizTalkVszFileLocation;
 		/// <summary>
 		/// contains the path to the running .NET framework version for use of RegAsm.exe
 		/// </summary>
-		private string _DotNetFrameworkPath = null;
+		private string _DotNetFrameworkPath;
 		/// <summary>
 		/// stores any exception that might occur for review
 		/// </summary>
-		private Exception _Exception = null;
+		private Exception _Exception;
 		/// <summary>
 		/// defines whether the occured exception is a 'general' exception
 		/// </summary>
-		private bool _GeneralError = false;
+		private bool _GeneralError;
 		/// <summary>
 		/// contains the Visual Studio installation folder
 		/// </summary>
-		private string _VisualStudioInstallPath = null;
+		private string _VisualStudioInstallPath;
 		/// <summary>
 		///  contains the path to the base folder where the Wizard definition file resides
 		/// </summary>
-		private string _VsDirPath = null;
+		private string _VsDirPath;
 		/// <summary>
 		/// defines the Wizard definition file
 		/// </summary>
