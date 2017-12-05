@@ -4,11 +4,12 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
 using System.Runtime.InteropServices;
+using Microsoft.BizTalk.Wizard;
 
 namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 {
     [ComVisible(false)]
-    public partial class WzPageGeneralProperties : Microsoft.BizTalk.Wizard.WizardInteriorPage, IWizardControl
+    public partial class WzPageGeneralProperties : WizardInteriorPage, IWizardControl
 	{
 		public event AddWizardResultEvent AddWizardResultEvent;
 
@@ -39,17 +40,11 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 			}
 		}
 
-		public bool NextButtonEnabled
-		{
-			get {	return GetAllStates();	}
-		}
-		
-		public bool NeedSummary
-		{
-			get {	return false;	}
-		}
+		public bool NextButtonEnabled => GetAllStates();
 
-		private bool GetAllStates()
+	    public bool NeedSummary => false;
+
+	    private bool GetAllStates()
 		{
 			return (Regex.IsMatch(txtComponentVersion.Text, ComponentVersionRegEx) &&
 				Regex.IsMatch(txtComponentName.Text, ComponentNameRegEx));

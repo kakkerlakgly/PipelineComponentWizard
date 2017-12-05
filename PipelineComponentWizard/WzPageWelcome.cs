@@ -1,7 +1,9 @@
+using System;
 using Microsoft.Win32;
 using System.Windows.Forms;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using Microsoft.BizTalk.Wizard;
 
 namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 {
@@ -10,7 +12,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
     /// the user to this wizard
     /// </summary>
     [ComVisible(false)]
-	public partial class WzPageWelcome : Microsoft.BizTalk.Wizard.WizardPage, IWizardControl
+	public partial class WzPageWelcome : WizardPage, IWizardControl
 	{
         /// <summary>
         /// defines the Registry hive our settings are located
@@ -36,20 +38,14 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
         /// <summary>
         /// whether the Next button should be enabled
         /// </summary>
-		public bool NextButtonEnabled
-		{
-			get {	return true;	}
-		}
+		public bool NextButtonEnabled => true;
 
-        /// <summary>
+	    /// <summary>
         /// whether this page needs a summary
         /// </summary>
-		public bool NeedSummary
-		{
-			get {	return false;	}
-		}
+		public bool NeedSummary => false;
 
-        public override void OnEnterPage(object sender, Microsoft.BizTalk.Wizard.PageEventArgs e)
+	    public override void OnEnterPage(object sender, Microsoft.BizTalk.Wizard.PageEventArgs e)
         {
             // retrieve the WizardForm which hosts our page
             Microsoft.BizTalk.Wizard.WizardForm form1 = WizardForm;
@@ -125,7 +121,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 	            var browser = key.GetValue(null).ToString().ToLower().Replace("\"", "");
 
 	            //get rid of everything after the ".exe"
-	            browser = browser.Substring(0, browser.IndexOf(".exe") + 4);
+	            browser = browser.Substring(0, browser.IndexOf(".exe", StringComparison.Ordinal) + 4);
 	            return browser;
             }
 	    }

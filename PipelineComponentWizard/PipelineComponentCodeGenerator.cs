@@ -67,7 +67,8 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 				case ImplementationLanguages.VbNet:
 					return new VBCodeProvider().CreateGenerator(sw);
 				default:
-                    throw new NotImplementedException(string.Format("The requested language support ({0}) has not been implemented.", Enum.GetName(typeof(ImplementationLanguages), language)));
+                    throw new NotImplementedException(
+                        $"The requested language support ({Enum.GetName(typeof(ImplementationLanguages), language)}) has not been implemented.");
 			}
 		}
 		#endregion
@@ -474,9 +475,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		                {
 		                    clsMethod.Statements.Add(
 		                        new CodeSnippetStatement(
-		                            string.Format(
-		                                "#error please implement IPersistPropertyBag.Load for property \"{0}\"",
-		                                entry.Key)));
+		                            $"#error please implement IPersistPropertyBag.Load for property \"{entry.Key}\""));
 		                }
 		                else if (designerPropertyType == typeof(SchemaWithNone))
 		                {
@@ -561,9 +560,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		            {
 		                clsMethod.Statements.Add(
 		                    new CodeSnippetStatement(
-		                        string.Format(
-		                            "#error please implement IPersistPropertyBag.Save for property \"{0}\"",
-		                            entry.Key)));
+		                        $"#error please implement IPersistPropertyBag.Save for property \"{entry.Key}\""));
 		            }
 		            else if (designerPropertyType == typeof(SchemaWithNone))
 		            {
@@ -1222,7 +1219,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
             {
                 if (match.Groups["implements"].Value.Length > 0)
                 {
-                    replacement = replacer.Replace(buffer.ToString(), string.Format("{0}, {1}", interfaces, baseclasses));
+                    replacement = replacer.Replace(buffer.ToString(), $"{interfaces}, {baseclasses}");
                 }
             }
             #endregion

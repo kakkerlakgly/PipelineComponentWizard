@@ -3,11 +3,12 @@ using System.ComponentModel;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using Microsoft.BizTalk.Wizard;
 
 namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 {
     [ComVisible(false)]
-    public partial class WzPageGeneralSetup : Microsoft.BizTalk.Wizard.WizardInteriorPage, IWizardControl
+    public partial class WzPageGeneralSetup : WizardInteriorPage, IWizardControl
 	{
 		private const string TransportRegEx = @"^[_a-zA-Z][_a-zA-Z0-9]*$";
 		private const string NamespaceRegEx = @"(?i)^([a-z].?)*$";
@@ -102,17 +103,11 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 			EnableNext(GetAllStates());	
 		}
 
-		public bool NextButtonEnabled
-		{
-			get {	return GetAllStates();	}
-		}
+		public bool NextButtonEnabled => GetAllStates();
 
-		public bool NeedSummary
-		{
-			get {	return false;	}
-		}
-        
-		private void PipelineType_Changed(object sender, EventArgs e)
+	    public bool NeedSummary => false;
+
+	    private void PipelineType_Changed(object sender, EventArgs e)
 		{
 			cboComponentStage.Items.Clear();
 			cboComponentStage.Enabled = true;

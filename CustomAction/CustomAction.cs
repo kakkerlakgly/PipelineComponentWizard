@@ -66,14 +66,15 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard.Installatio
 			        {
 			            _bizTalkInstallPath = registryKey.GetValue("InstallPath").ToString();
 			            _bizTalkVszFileLocation = Path.Combine(_bizTalkInstallPath,
-			                string.Format(@"Developer Tools\BizTalkProjects\{0}", VszFile));
+			                $@"Developer Tools\BizTalkProjects\{VszFile}");
 			        }
 			    }
 			    catch
 			    {
-			        Context.LogMessage(string.Format(
-			            @"Unable to locate BizTalk installation folder from registry. Tried InstallPath (2006/2009/2010/2013/2013 R2/2016) in HKLM\{0}",
-			            bizTalkInstallRegistryKey));
+			        Context.LogMessage(
+			            $@"Unable to locate BizTalk installation folder from registry. Tried InstallPath (2006/2009/2010/2013/2013 R2/2016) in HKLM\{
+			                bizTalkInstallRegistryKey
+			            }");
 			    }
 
 			    // Visual studio installation folder
@@ -84,7 +85,8 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard.Installatio
 			    {
 			        _dotNetFrameworkPath = regkey.GetValue("InstallRoot").ToString();
 			    }
-			    string frameworkVersion = string.Format("v{0}.{1}.{2}", Environment.Version.Major, Environment.Version.Minor, Environment.Version.Build);
+			    string frameworkVersion =
+			        $"v{Environment.Version.Major}.{Environment.Version.Minor}.{Environment.Version.Build}";
 
 				// the path to the .NET framework folder is in the form vx.y.z, where x.y.z is Major, Minor and Build
 				// version of the framework. within the folder defined in HKLM\SOFTWARE\Microsoft\.NETFramework
@@ -129,14 +131,14 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard.Installatio
                 else
                 {
                     // only append the wizard line of not present
-                    if (definitionBuffer.IndexOf(VszFile) == -1)
+                    if (definitionBuffer.IndexOf(VszFile, StringComparison.Ordinal) == -1)
                     {
                         definitionBuffer += "\r\n" + vsDirLine + "\r\n";
 
                     }
                 }
 
-                var tempFile = string.Format("{0}.tmp", _vsDirPath);
+                var tempFile = $"{_vsDirPath}.tmp";
 
                 File.WriteAllText(tempFile, definitionBuffer);
 
@@ -278,7 +280,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard.Installatio
 				}
 
 				// format the RegAsm arguments
-				var regAsmArguments = string.Format("\"{0}\"", Path.Combine(Context.Parameters["ApplicationPath"], "PipelineComponentWizard.dll"));
+				var regAsmArguments = $"\"{Path.Combine(Context.Parameters["ApplicationPath"], "PipelineComponentWizard.dll")}\"";
 				regAsmArguments += " /codebase /s";
 
 				// create and run the command-line in the background

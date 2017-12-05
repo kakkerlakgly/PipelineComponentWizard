@@ -3,11 +3,12 @@ using System.Windows.Forms;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using Microsoft.BizTalk.Wizard;
 
 namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 {
     [ComVisible(false)]
-    public partial class WzPageDesignerProperties : Microsoft.BizTalk.Wizard.WizardInteriorPage, IWizardControl
+    public partial class WzPageDesignerProperties : WizardInteriorPage, IWizardControl
 	{
 		public event AddDesignerPropertyEvent AddDesignerPropertyEvent; 
 		private bool _isLoaded;
@@ -24,15 +25,9 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 
 
 
-		public bool NextButtonEnabled
-		{
-			get {	return true;	}
-		}
+		public bool NextButtonEnabled => true;
 
-		public bool NeedSummary
-		{
-			get {	return false;	}
-		}
+	    public bool NeedSummary => false;
 
 	    private void AddDesignerProperty(string strName, string strValue)
 		{
@@ -60,7 +55,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 				{
 					string strVal = objItem.ToString();
 
-					string strPropName = strVal.Substring(0,strVal.IndexOf("(") - 1);
+					string strPropName = strVal.Substring(0,strVal.IndexOf("(", StringComparison.Ordinal) - 1);
 
 					string strPropType = strVal.Replace(strPropName + " (", string.Empty);
 					strPropType = strPropType.Replace(")", string.Empty);
@@ -104,7 +99,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 			foreach(object o in lstDesignerProperties.Items)
 			{
 				string strObjVal = o.ToString();
-				strObjVal = strObjVal.Remove(strObjVal.IndexOf(" ("),strObjVal.Length - strObjVal.IndexOf(" ("));
+				strObjVal = strObjVal.Remove(strObjVal.IndexOf(" (", StringComparison.Ordinal),strObjVal.Length - strObjVal.IndexOf(" (", StringComparison.Ordinal));
 				if (strObjVal == strValue)
 					return true;
 			}

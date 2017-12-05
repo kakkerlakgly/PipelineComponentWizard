@@ -1,10 +1,11 @@
 using System;
 using System.Runtime.InteropServices;
+using Microsoft.BizTalk.Wizard;
 
 namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 {
     [ComVisible(false)]
-    public partial class WzPageSummary : Microsoft.BizTalk.Wizard.WizardCompletionPage, IWizardControl
+    public partial class WzPageSummary : WizardCompletionPage, IWizardControl
 	{
 		private string _summary;
 
@@ -16,17 +17,11 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 			// TODO: Add any initialization after the InitializeComponent call
 		}
 
-		public bool NextButtonEnabled
-		{
-			get {	return true;	}
-		}
+		public bool NextButtonEnabled => true;
 
-		public bool NeedSummary
-		{
-			get {	return true;	}
-		}
+	    public bool NeedSummary => true;
 
-		public string Summary
+	    public string Summary
 		{
 		    private get {	return _summary;	}
 			set 

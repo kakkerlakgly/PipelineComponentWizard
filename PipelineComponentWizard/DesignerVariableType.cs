@@ -50,10 +50,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
         /// determines whether the user added one or more Designer properties of the
         /// SchemaList type
         /// </summary>
-        public static bool SchemaListUsed
-        {
-            get { return _schemaListUsed; }
-        }
+        public static bool SchemaListUsed => _schemaListUsed;
 
         /// <summary>
         /// checks whether the inbound string matches the regular expressions

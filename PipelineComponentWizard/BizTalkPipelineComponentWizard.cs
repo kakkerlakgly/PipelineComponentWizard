@@ -150,9 +150,10 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		public BizTalkPipeLineWizard()
 		{
 			const string bizTalkKey = @"SOFTWARE\Microsoft\BizTalk Server\3.0";
-			RegistryKey bizTalkReg = Registry.LocalMachine.OpenSubKey(bizTalkKey);
-			_bizTalkInstallPath = bizTalkReg.GetValue("InstallPath").ToString();
-			bizTalkReg.Close();
+		    using (RegistryKey bizTalkReg = Registry.LocalMachine.OpenSubKey(bizTalkKey))
+		    {
+		        _bizTalkInstallPath = bizTalkReg.GetValue("InstallPath").ToString();
+		    }
 		}
 
 		/// <summary>
@@ -278,7 +279,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 					
                     break;
 				default:
-					MessageBox.Show(String.Format("Language \"{0}\" not supported", language));
+					MessageBox.Show($"Language \"{language}\" not supported");
 					return;
 			}
 
@@ -313,14 +314,15 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 
 			// add our resource bundle
 			string resourceBundle = Path.Combine(_projectDirectory, ((string) _wizardResults[WizardValues.ClassName]) + ".resx");
-			ResXResourceWriter resx = new ResXResourceWriter(resourceBundle);
-			resx.AddResource("COMPONENTNAME", _wizardResults[WizardValues.ComponentName] as string);
-			resx.AddResource("COMPONENTDESCRIPTION", _wizardResults[WizardValues.ComponentDescription] as string);
-			resx.AddResource("COMPONENTVERSION", _wizardResults[WizardValues.ComponentVersion] as string);
-			resx.AddResource("COMPONENTICON", _wizardResults[WizardValues.ComponentIcon]);
-			resx.Close();
+		    using (ResXResourceWriter resx = new ResXResourceWriter(resourceBundle))
+		    {
+		        resx.AddResource("COMPONENTNAME", _wizardResults[WizardValues.ComponentName] as string);
+		        resx.AddResource("COMPONENTDESCRIPTION", _wizardResults[WizardValues.ComponentDescription] as string);
+		        resx.AddResource("COMPONENTVERSION", _wizardResults[WizardValues.ComponentVersion] as string);
+		        resx.AddResource("COMPONENTICON", _wizardResults[WizardValues.ComponentIcon]);
+		    }
 
-			pipelineComponentProject.ProjectItems.AddFromFile(resourceBundle);
+		    pipelineComponentProject.ProjectItems.AddFromFile(resourceBundle);
 
 			// get the enum value of our choosen component type
 		    ComponentTypes componentType;
