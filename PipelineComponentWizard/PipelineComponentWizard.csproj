@@ -166,14 +166,17 @@
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
-    <Reference Include="VSLangProj, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-      <SpecificVersion>False</SpecificVersion>
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-      <HintPath>C:\Program Files (x86)\Common Files\Microsoft Shared\MSEnv\PublicAssemblies\VSLangProj.dll</HintPath>
+    <Reference Include="vslangproj, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+      <EmbedInteropTypes>True</EmbedInteropTypes>
+      <HintPath>..\packages\VSLangProj.7.0.3300\lib\net10\vslangproj.dll</HintPath>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssemblyInfo.cs">
+    <Compile Include="PipelineComponentWizardForm.Designer.cs">
+      <DependentUpon>PipelineComponentWizardForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="BizTalkPipelineComponentWizard.cs">
@@ -200,14 +203,29 @@
     <Compile Include="WzPageDesignerProperties.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="WzPageDesignerProperties.Designer.cs">
+      <DependentUpon>WzPageDesignerProperties.cs</DependentUpon>
+    </Compile>
     <Compile Include="WzPageGeneralProperties.cs">
       <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="WzPageGeneralProperties.Designer.cs">
+      <DependentUpon>WzPageGeneralProperties.cs</DependentUpon>
     </Compile>
     <Compile Include="WzPageGeneralSetup.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Include="WzPageGeneralSetup.Designer.cs">
+      <DependentUpon>WzPageGeneralSetup.cs</DependentUpon>
+    </Compile>
+    <Compile Include="WzPageWelcome.Designer.cs">
+      <DependentUpon>WzPageWelcome.cs</DependentUpon>
+    </Compile>
     <Compile Include="WzPageSummary.cs">
       <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="WzPageSummary.Designer.cs">
+      <DependentUpon>WzPageSummary.cs</DependentUpon>
     </Compile>
     <Compile Include="WzPageWelcome.cs">
       <SubType>UserControl</SubType>
@@ -275,9 +293,6 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Microsoft.BizTalk.Component.Utilities.dll" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="BizTalk.ico" />
