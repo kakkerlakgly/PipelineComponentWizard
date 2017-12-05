@@ -15,106 +15,8 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 {
 	public delegate void AddWizardResultEvent(object sender,PropertyPairEvent e);
 	public delegate void AddDesignerPropertyEvent(object sender,PropertyPairEvent e);
-	
-	/// <summary>
-	/// List of constants to find values in the namevaluecollection
-	/// </summary>
-	internal class WizardValues
-	{
-		/// <summary>
-		/// defines the version of the component, as entered by the user
-		/// </summary>
-		public const string ComponentVersion = "ComponentVersion";
-		/// <summary>
-		/// defines the classname, as entered by the user
-		/// </summary>
-		public const string ClassName = "ClassName";
-		/// <summary>
-		/// defines the description (single-line) of the component, as entered by the user
-		/// </summary>
-		public const string ComponentDescription = "ComponentDescription";
-		/// <summary>
-		/// defines the namespace in which the component should reside, as entered by the user
-		/// </summary>
-		public const string Namespace = "Namespace";
-		/// <summary>
-		/// defines the component name, as entered by the user
-		/// </summary>
-		public const string ComponentName = "ComponentName";
-		/// <summary>
-		/// defines the icon this component will display within the toolbox of Visual Studio
-		/// </summary>
-		public const string ComponentIcon = "ComponentIcon";
-		/// <summary>
-		/// defines the type of pipeline component the user wishes to have generated
-		/// </summary>
-		public const string PipelineType = "PipelineType";
-		/// <summary>
-		/// defines the stage in which the user would like it's generated
-		/// pipeline component to reside
-		/// </summary>
-		public const string ComponentStage = "ComponentStage";
-		/// <summary>
-		/// defines whether the user wants to let the wizard implement the IProbeMessage
-		/// interface, which allows the pipeline component to determine for itself whether
-		/// it's interested in processing an inbound message
-		/// </summary>
-		public const string ImplementIProbeMessage = "ImplementIProbeMessage";
-		/// <summary>
-		/// defines the programming languages in which the pipeline component should
-		/// be implemented, as choosen by the user
-		/// </summary>
-		public const string ImplementationLanguage = "ImplementationLanguage";
-	}
 
-	/// <summary>
-	/// defines the types of pipeline components we support
-	/// see SDK\Include\Pipeline_Int.idl
-	/// </summary>
-	internal enum ComponentTypes
-	{
-		/// <summary>
-		/// links to CATID_Decoder
-		/// </summary>
-		Decoder = 0,
-		/// <summary>
-		/// links to CATID_DisassemblingParser
-		/// </summary>
-		DisassemblingParser,
-		/// <summary>
-		/// links to CATID_Validate
-		/// </summary>
-		Validate,
-		/// <summary>
-		/// links to CATID_PartyResolver
-		/// </summary>
-		PartyResolver,
-		/// <summary>
-		/// links to CATID_Any
-		/// </summary>
-		Any,
-
-		/// <summary>
-		/// links to CATID_Encoder
-		/// </summary>
-		Encoder,
-		//PreAssembler,	// BUG: Pre-Assembler has no specific CATID associated
-		/// <summary>
-		/// links to CATID_AssemblingSerializer
-		/// </summary>
-		AssemblingSerializer,
-	}
-
-	/// <summary>
-	/// defines the supported languages we generate sourcecode for
-	/// </summary>
-	internal enum ImplementationLanguages
-	{
-		CSharp = 0,
-		VbNet = 1
-	}
-
-	/// <summary>
+    /// <summary>
 	/// Class (com-object) called by VS2003.NET to start a new pipeline component
 	/// project.
 	/// </summary>
@@ -419,24 +321,4 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 			Trace.WriteLine("-- End _DesignerProperties");
 		}
 	}
-
-    public class DteHandle
-    {
-        //EnvDTE.Project proj;
-        //EnvDTE.Configuration config;
-        //EnvDTE.Properties configProps;
-        //EnvDTE.Property prop;
-        readonly DTE _dte = Marshal.GetActiveObject("VisualStudio.DTE.14.0") as DTE;
-        public Project GetProject(String name)
-        {
-            foreach (Project item in _dte.Solution.Projects)
-            {
-                if (item.Name == name)
-                {
-                    return item;
-                }
-            }
-            return null;
-        }
-    }
 }
