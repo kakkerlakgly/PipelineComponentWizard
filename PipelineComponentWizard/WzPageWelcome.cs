@@ -45,10 +45,10 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
         /// </summary>
 		public bool NeedSummary => false;
 
-	    public override void OnEnterPage(object sender, Microsoft.BizTalk.Wizard.PageEventArgs e)
+	    public override void OnEnterPage(object sender, PageEventArgs e)
         {
             // retrieve the WizardForm which hosts our page
-            Microsoft.BizTalk.Wizard.WizardForm form1 = WizardForm;
+            WizardForm form1 = WizardForm;
 
             // enable the buttons as we see fit
             form1.ButtonBack.Enabled = false;
@@ -81,10 +81,10 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
             }
         }
 
-        public override void OnLeavePage(object sender, Microsoft.BizTalk.Wizard.PageEventArgs e)
+        public override void OnLeavePage(object sender, PageEventArgs e)
         {
             // if the user pressed the "Next" button
-            if (e.Button == Microsoft.BizTalk.Wizard.PageEventButton.Next)
+            if (e.Button == PageEventButton.Next)
             {
                 // the RegistryKey to query / update
 

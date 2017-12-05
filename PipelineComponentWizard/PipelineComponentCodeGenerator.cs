@@ -179,7 +179,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		            new CodeAttributeDeclaration(
 		                "ComponentCategory",
 		                new CodeAttributeArgument(
-		                    new CodeTypeReferenceExpression("CategoryTypes.CATID_" + componentCategory.ToString()))));
+		                    new CodeTypeReferenceExpression("CategoryTypes.CATID_" + componentCategory))));
 
 		        #endregion
 
@@ -415,7 +415,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		        clsMethod.Parameters.Add(new CodeParameterDeclarationExpression(typeof(Guid), "classid"));
 		        clsMethod.Parameters[0].Direction = FieldDirection.Out;
 		        clsMethod.Statements.Add(new CodeAssignStatement(new CodeArgumentReferenceExpression("classid"),
-		            new CodeObjectCreateExpression(typeof(Guid), new CodeSnippetExpression("\"" + componentGuid.ToString() + "\""))));
+		            new CodeObjectCreateExpression(typeof(Guid), new CodeSnippetExpression("\"" + componentGuid + "\""))));
 		        clsMethod.ReturnType = new CodeTypeReference(typeof(void));
 		        clsMethod.Comments.Add(new CodeCommentStatement("<summary>", true));
 		        clsMethod.Comments.Add(new CodeCommentStatement("Gets class ID of component for usage from unmanaged code.",
