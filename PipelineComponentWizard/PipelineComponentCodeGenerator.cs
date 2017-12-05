@@ -71,16 +71,19 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		#endregion
 
 		#region generatePipelineComponent, responsible for using CodeDOM to actually create the used class 
-		/// <summary>
-		/// generates the main class this pipeline component revolves around, uses CodeCOM to generate
-		/// code and store it in "fileName"
-		/// </summary>
-		/// <param name="fileName">the output filename to use</param>
-		/// <param name="clsNameSpace">the class' namespace</param>
-		/// <param name="clsClassName">the class' name</param>
-		/// <param name="designerProperties">any designer properties defined</param>
-		/// <param name="componentCategory">the used component category</param>
-		internal static void generatePipelineComponent(
+
+	    /// <summary>
+	    /// generates the main class this pipeline component revolves around, uses CodeCOM to generate
+	    /// code and store it in "fileName"
+	    /// </summary>
+	    /// <param name="fileName">the output filename to use</param>
+	    /// <param name="clsNameSpace">the class' namespace</param>
+	    /// <param name="clsClassName">the class' name</param>
+	    /// <param name="implementsIProbeMessage"></param>
+	    /// <param name="designerProperties">any designer properties defined</param>
+	    /// <param name="componentCategory">the used component category</param>
+	    /// <param name="language"></param>
+	    internal static void generatePipelineComponent(
 			string fileName,
 			string clsNameSpace,
 			string clsClassName,
