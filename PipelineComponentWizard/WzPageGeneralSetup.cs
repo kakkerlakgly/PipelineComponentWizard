@@ -141,7 +141,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 					cboComponentStage.SelectedIndex = 0;
 					break;
 				default:
-					throw new ApplicationException("Unsupported pipeline type selected");
+					throw new ArgumentException("Unsupported pipeline type selected");
 			}
 		}
 

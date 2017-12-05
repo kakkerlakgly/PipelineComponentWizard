@@ -100,28 +100,30 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 			Guid componentGuid = Guid.NewGuid();
 
 			// the classes normally used within our component
-			string[] usingClauses = new string[] {
-													 "System",
-													 "System.IO",
-													 "System.Text",
-													 "System.Drawing",
-													 "System.Resources",
-													 "System.Reflection",
-													 "System.Diagnostics",
-													 "System.Collections",
-													 "System.ComponentModel",
-													 "Microsoft.BizTalk.Message.Interop",
-													 "Microsoft.BizTalk.Component.Interop",
-													 "Microsoft.BizTalk.Component",
-													 "Microsoft.BizTalk.Messaging",
-                                                     "Microsoft.BizTalk.Streaming"
-			};
+		    string[] usingClauses =
+		    {
+		        "System",
+		        "System.IO",
+		        "System.Text",
+		        "System.Drawing",
+		        "System.Resources",
+		        "System.Reflection",
+		        "System.Diagnostics",
+		        "System.Collections",
+		        "System.ComponentModel",
+		        "Microsoft.BizTalk.Message.Interop",
+		        "Microsoft.BizTalk.Component.Interop",
+		        "Microsoft.BizTalk.Component",
+		        "Microsoft.BizTalk.Messaging",
+		        "Microsoft.BizTalk.Streaming"
+		    };
 
-			string[] baseTypes = new string[] {
-												  "IBaseComponent",
-												  "IPersistPropertyBag",
-												  "IComponentUI",
-			};
+		    string[] baseTypes =
+		    {
+		        "IBaseComponent",
+		        "IPersistPropertyBag",
+		        "IComponentUI",
+		    };
 			#endregion
 
             // create the output file
