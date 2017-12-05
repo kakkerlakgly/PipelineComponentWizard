@@ -27,7 +27,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
         /// <summary>
         /// contains the options we use to generate the sourcecode
         /// </summary>
-		private static CodeGeneratorOptions _cgo;
+		private static readonly CodeGeneratorOptions _cgo;
 
 	    /// <summary>
         /// static constructor, sets general options for code generation.
@@ -302,13 +302,12 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		        #endregion
 
 		        // used to define #region elements to group output code
-		        CodeRegionDirective crDirective;
 		        // used to define #endregion directive
 		        CodeRegionDirective crEndDirective = new CodeRegionDirective(CodeRegionMode.End, null);
 
 		        #region implement IBaseComponent
 
-		        crDirective = new CodeRegionDirective(CodeRegionMode.Start, "IBaseComponent members");
+		        var crDirective = new CodeRegionDirective(CodeRegionMode.Start, "IBaseComponent members");
 
 		        #region IBaseComponent.Name
 

@@ -208,7 +208,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		/// </summary>
 		/// <param name="ideObject"></param>
 		/// <param name="contextParams"></param>
-		public void CreateSolution(_DTE ideObject,object[] contextParams)
+		private void CreateSolution(_DTE ideObject,object[] contextParams)
 		{
 			TraceAllValues(contextParams);
 
@@ -249,29 +249,21 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		/// Creates the designtime project and adds the appropriate files to the
 		/// project.
 		/// </summary>
-		public void CreateProject(Solution2 mySolution)
+		private void CreateProject(Solution2 mySolution)
 		{  
 			// first, retrieve the visual studio installation folder
-			RegistryKey regkey;
 
-            // notice no try/catch, we want exceptions bubbling up as there's really nothing
+		    // notice no try/catch, we want exceptions bubbling up as there's really nothing
             // we can do about them here.
 
 			// retrieve the BizTalk Server installation folder
 			string bizTalkInstallRegistryKey = @"SOFTWARE\Microsoft\BizTalk Server\3.0";
-			regkey = Registry.LocalMachine.OpenSubKey(bizTalkInstallRegistryKey);
-
-			_bizTalkInstallPath = regkey.GetValue("InstallPath").ToString();
-            // This is no longer present in the registry under the BizTalk Server key
+		    using (var regkey1 = Registry.LocalMachine.OpenSubKey(bizTalkInstallRegistryKey))
+		    {
+		        _bizTalkInstallPath = regkey1.GetValue("InstallPath").ToString();
+		    }
+		    // This is no longer present in the registry under the BizTalk Server key
             _targetVsVersion = "14.0"; // regkey.GetValue("TargetVSVersion").ToString();
-
-			regkey.Close();
-
-			// Visual studio installation folder
-            string vsInstallFolderRegistryKey = string.Format(@"SOFTWARE\Microsoft\VisualStudio\{0}_Config", _targetVsVersion);
-			regkey = Registry.CurrentUser.OpenSubKey(vsInstallFolderRegistryKey);
-
-			regkey.Close();
 
 			string projectTemplate;
 			string projectFileName;
@@ -304,10 +296,8 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
             // add the specified project to the solution
 			mySolution.AddFromTemplate(projectTemplate, _projectDirectory, _projectName, _fExclusive);
 
-            Project pipelineComponentProject;
-
-            // Query for te added project
-            pipelineComponentProject = _application.Solution.Projects
+		    // Query for te added project
+            var pipelineComponentProject = _application.Solution.Projects
                 .Cast<Project>().First(p => startingProjects.All(s => s.UniqueName != p.UniqueName));
 
             // delete the Class1.cs|vb|jsharp|... the template adds to the project
@@ -449,7 +439,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
         //EnvDTE.Configuration config;
         //EnvDTE.Properties configProps;
         //EnvDTE.Property prop;
-        DTE _dte = Marshal.GetActiveObject("VisualStudio.DTE.14.0") as DTE;
+        readonly DTE _dte = Marshal.GetActiveObject("VisualStudio.DTE.14.0") as DTE;
         public Project GetProject(String name)
         {
             foreach (Project item in _dte.Solution.Projects)

@@ -12,20 +12,20 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 	    public PropertyPairEvent(string strName, object value)
 		{
 			Name = strName;
-			this.Value = value;
+			Value = value;
 		}
 		
 		public PropertyPairEvent(string strName, object value, bool remove)
 		{
 			Name = strName;
-			this.Value = value;
+			Value = value;
 			Remove = remove;
 		}
 
-		public string Name { set; get; }
+		public string Name { get; }
 
-	    public object Value { set; get; }
+	    public object Value { get; }
 
-	    public bool Remove { get; set; }
+	    public bool Remove { get; }
 	}
 }

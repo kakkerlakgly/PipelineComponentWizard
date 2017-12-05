@@ -11,9 +11,9 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
     public partial class PipeLineComponentWizardForm : WizardForm
 	{
 		//private NameValueCollection _WizardResults = new NameValueCollection();
-		private IDictionary<string, object> _wizardResults = new Dictionary<string, object>();
+		private readonly IDictionary<string, object> _wizardResults = new Dictionary<string, object>();
 
-		private IList<IWizardControl> _pageCollection = new List<IWizardControl>();
+		private readonly IList<IWizardControl> _pageCollection = new List<IWizardControl>();
 		private int _pageCount;
 
         /// <summary>

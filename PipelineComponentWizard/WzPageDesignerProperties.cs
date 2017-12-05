@@ -34,7 +34,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 			get {	return false;	}
 		}
 
-		protected void AddDesignerProperty(string strName, string strValue)
+	    private void AddDesignerProperty(string strName, string strValue)
 		{
 			PropertyPairEvent propertyPair = new PropertyPairEvent(strName, strValue);
 			OnAddDesignerProperty(propertyPair);

@@ -22,7 +22,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 			cboComponentStage.Items.Clear();
 		}
 
-        protected void AddWizardResult(string strName, object value)
+	    private void AddWizardResult(string strName, object value)
 		{
 			PropertyPairEvent propertyPair = new PropertyPairEvent(strName, value);
 			OnAddWizardResult(propertyPair);

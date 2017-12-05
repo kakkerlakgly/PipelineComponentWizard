@@ -28,7 +28,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 
 		public string Summary
 		{
-			get {	return _summary;	}
+		    private get {	return _summary;	}
 			set 
 			{
 				_summary = value;

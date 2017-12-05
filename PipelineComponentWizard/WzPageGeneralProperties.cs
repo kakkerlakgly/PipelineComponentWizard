@@ -21,7 +21,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 			InitializeComponent();
 		}
 
-		protected void AddWizardResult(string strName, object value)
+	    private void AddWizardResult(string strName, object value)
 		{
 			PropertyPairEvent propertyPair = new PropertyPairEvent(strName, value);
 			OnAddWizardResult(propertyPair);
