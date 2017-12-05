@@ -40,16 +40,10 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 			OnAddDesignerProperty(propertyPair);
 		}
 
-		protected void RemoveDesignerProperty(string strName)
-		{
-			PropertyPairEvent propertyPair = new PropertyPairEvent(strName, null, true);
-			OnAddDesignerProperty(propertyPair);
-		}
-
 		// The protected OnAddReceiveHandlerProperty method raises the event by invoking 
 		// the delegates. The sender is always this, the current instance 
 		// of the class.
-		protected virtual void OnAddDesignerProperty(PropertyPairEvent e)
+	    private void OnAddDesignerProperty(PropertyPairEvent e)
 		{
 			if (e != null) 
 			{

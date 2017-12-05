@@ -147,12 +147,6 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 
 		private void AddProperty(IDictionary<string, object> ht, PropertyPairEvent e)
 		{
-			if (e.Remove)
-			{
-				if (ht.ContainsKey(e.Name))
-					ht.Remove(e.Name);
-				return;
-			}
             //Replace the value if it already exists
 		    if (ht.ContainsKey(e.Name))
                 ht.Remove(e.Name);

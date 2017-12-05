@@ -14,18 +14,9 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 			Name = strName;
 			Value = value;
 		}
-		
-		public PropertyPairEvent(string strName, object value, bool remove)
-		{
-			Name = strName;
-			Value = value;
-			Remove = remove;
-		}
 
 		public string Name { get; }
 
 	    public object Value { get; }
-
-	    public bool Remove { get; }
-	}
+    }
 }

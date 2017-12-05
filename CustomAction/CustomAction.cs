@@ -23,10 +23,6 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard.Installatio
 		/// </summary>
 		private readonly string _bizTalkInstallPath;
         /// <summary>
-        /// contains the retrieved BizTalk Server target Visual Studio version from registry.
-        /// </summary>
-        private readonly string _targetVsVersion;
-        /// <summary>
 		/// contains the Visual Studio Wizard definition file location
 		/// </summary>
 		private readonly string _bizTalkVszFileLocation;
@@ -42,10 +38,6 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard.Installatio
 		/// defines whether the occured exception is a 'general' exception
 		/// </summary>
 		private readonly bool _generalError;
-		/// <summary>
-		/// contains the Visual Studio installation folder
-		/// </summary>
-		private string _visualStudioInstallPath;
 		/// <summary>
 		///  contains the path to the base folder where the Wizard definition file resides
 		/// </summary>
@@ -73,7 +65,6 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard.Installatio
 			        using (var registryKey = Registry.LocalMachine.OpenSubKey(bizTalkInstallRegistryKey))
 			        {
 			            _bizTalkInstallPath = registryKey.GetValue("InstallPath").ToString();
-			            _targetVsVersion = "14.0"; //regkey.GetValue("TargetVSVersion").ToString();
 			            _bizTalkVszFileLocation = Path.Combine(_bizTalkInstallPath,
 			                string.Format(@"Developer Tools\BizTalkProjects\{0}", VszFile));
 			        }
@@ -87,19 +78,6 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard.Installatio
 
 			    // Visual studio installation folder
 				_vsDirPath = Path.Combine(_bizTalkInstallPath, @"Developer Tools\BizTalkProjects\BTSProjects.vsdir");
-				string vsInstallFolderRegistryKey = string.Format(@"SOFTWARE\Microsoft\VisualStudio\{0}_Config", _targetVsVersion);
-
-				try
-				{
-				    using (var registryKey = Registry.CurrentUser.OpenSubKey(vsInstallFolderRegistryKey))
-				    {
-				        _visualStudioInstallPath = registryKey.GetValue("InstallDir").ToString();
-				    }
-				}
-				catch
-				{
-					Context.LogMessage(string.Format("Unable to find Visual Studio installation path for version {0}", _targetVsVersion));
-				}
 
 				// .NET framework installation folder
 			    using (var regkey = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\.NETFramework"))

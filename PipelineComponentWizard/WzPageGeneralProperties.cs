@@ -30,7 +30,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		// The protected OnRaiseProperty method raises the event by invoking 
 		// the delegates. The sender is always this, the current instance 
 		// of the class.
-		protected virtual void OnAddWizardResult(PropertyPairEvent e)
+	    private void OnAddWizardResult(PropertyPairEvent e)
 		{
 			if (e != null) 
 			{

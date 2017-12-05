@@ -27,14 +27,14 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
         /// <summary>
         /// contains the options we use to generate the sourcecode
         /// </summary>
-		private static readonly CodeGeneratorOptions _cgo;
+		private static readonly CodeGeneratorOptions Cgo;
 
 	    /// <summary>
         /// static constructor, sets general options for code generation.
         /// </summary>
 		static PipelineComponentCodeGenerator() 
 		{
-		    _cgo = new CodeGeneratorOptions
+		    Cgo = new CodeGeneratorOptions
 		    {
 		        BracingStyle = "C",
 		        VerbatimOrder = true
@@ -1154,7 +1154,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		        cnsCodeNamespace.Types.Add(clsDecleration);
 
 		        // tell the code generator to generate our sourcecode
-		        codeGenerator.GenerateCodeFromNamespace(cnsCodeNamespace, sw, _cgo);
+		        codeGenerator.GenerateCodeFromNamespace(cnsCodeNamespace, sw, Cgo);
 		    }
 
 

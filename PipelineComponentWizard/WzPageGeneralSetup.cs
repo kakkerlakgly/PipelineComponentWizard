@@ -34,7 +34,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		/// of the class.
 		/// </summary>
 		/// <param name="e"></param>
-		protected virtual void OnAddWizardResult(PropertyPairEvent e)
+		private void OnAddWizardResult(PropertyPairEvent e)
 		{
 			if (e != null) 
 			{

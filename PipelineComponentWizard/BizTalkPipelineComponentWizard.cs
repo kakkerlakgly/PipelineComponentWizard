@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Reflection;
 using System.Resources;
 using System.Runtime.InteropServices;
 using System.Windows.Forms;
@@ -42,10 +41,6 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		/// defines the component name, as entered by the user
 		/// </summary>
 		public const string ComponentName = "ComponentName";
-		/// <summary>
-		/// defines the default namespace for the newly created project, as entered by the user
-		/// </summary>
-		public const string NewProjectNamespace = "NewProjectNamespace";
 		/// <summary>
 		/// defines the icon this component will display within the toolbox of Visual Studio
 		/// </summary>
@@ -335,8 +330,8 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 			string pipelineComponentSourceFile = Path.Combine(_projectDirectory, ((string) _wizardResults[WizardValues.ClassName]) + classFileExtension);
 			PipelineComponentCodeGenerator.GeneratePipelineComponent(
 				pipelineComponentSourceFile,
-				_wizardResults[WizardValues.Namespace] as string,
-				_wizardResults[WizardValues.ClassName] as string,
+				(string) _wizardResults[WizardValues.Namespace],
+				(string) _wizardResults[WizardValues.ClassName],
 				(bool) _wizardResults[WizardValues.ImplementIProbeMessage],
 				_designerProperties,
 				componentType,
@@ -348,24 +343,17 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 			if(DesignerVariableType.SchemaListUsed)
 			{
 				string bizTalkUtilitiesFileName = "Microsoft.BizTalk.Component.Utilities.dll";
-				Stream stream = GetType().Assembly.GetManifestResourceStream(ProjectNamespace  + "." + bizTalkUtilitiesFileName);
-				using(BinaryReader br = new BinaryReader(stream))
-				{
-					using(FileStream fs =  new FileStream(Path.Combine(_projectDirectory, bizTalkUtilitiesFileName), FileMode.Create))
-					{
-						// temporary storage
-						byte[] b;
+			    using (Stream stream = GetType().Assembly.GetManifestResourceStream(ProjectNamespace + "." + bizTalkUtilitiesFileName))
+			    {
+			        using (FileStream fs = new FileStream(Path.Combine(_projectDirectory, bizTalkUtilitiesFileName),
+			            FileMode.Create))
+			        {
+			            stream.CopyTo(fs);
+			        }
+			    }
 
-						// read the stream in blocks of ushort.MaxValue
-						while((b = br.ReadBytes(ushort.MaxValue)).Length > 0)
-						{
-							// write what we've read to the output file
-							fs.Write(b, 0, b.Length);
-						}
-					}
-				}
 
-				pipelineComponentVsProject.References.Add(Path.Combine(_projectDirectory, bizTalkUtilitiesFileName));
+			    pipelineComponentVsProject.References.Add(Path.Combine(_projectDirectory, bizTalkUtilitiesFileName));
 			}
 			#endregion
 
