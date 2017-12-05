@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Drawing;
@@ -15,14 +16,14 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
     public partial class PipeLineComponentWizardForm : Microsoft.BizTalk.Wizard.WizardForm
 	{
 		//private NameValueCollection _WizardResults = new NameValueCollection();
-		private Hashtable _WizardResults = new Hashtable();
-		private Hashtable _TransmitHandlerProperties = new Hashtable();
-		private Hashtable _TransmitEndpointProperties = new Hashtable();
-		private Hashtable _DesignerProperties = new Hashtable();
-		private Hashtable _ReceiveEndpointProperties = new Hashtable();
+		private IDictionary<string, object> _WizardResults = new Dictionary<string, object>();
+		private IDictionary<string, object> _TransmitHandlerProperties = new Dictionary<string, object>();
+		private IDictionary<string, object> _TransmitEndpointProperties = new Dictionary<string, object>();
+		private IDictionary<string, object> _DesignerProperties = new Dictionary<string, object>();
+		private IDictionary<string, object> _ReceiveEndpointProperties = new Dictionary<string, object>();
 		private HelpProvider _HelpProvider = new HelpProvider();
 
-		private ArrayList _PageCollection = new ArrayList();
+		private IList<IWizardControl> _PageCollection = new List<IWizardControl>();
 		private int _PageCount = 0;
 
         /// <summary>
@@ -62,12 +63,12 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 			{
 				PageEventArgs e2 = new PageEventArgs((WizardPage) _PageCollection[_PageCount], PageEventButton.Next);
 				_PageCount = AdjustPageCount(_PageCount, true);
-				if(((IWizardControl) _PageCollection[_PageCount]).NeedSummary)
+				if(_PageCollection[_PageCount].NeedSummary)
 				{
 					((WzPageSummary) _PageCollection[_PageCount]).Summary = CreateSummary();
 				}
 				SetCurrentPage((WizardPage) _PageCollection[_PageCount], e2);
-				ButtonNext.Enabled = ((IWizardControl) _PageCollection[_PageCount]).NextButtonEnabled;
+				ButtonNext.Enabled = _PageCollection[_PageCount].NextButtonEnabled;
 			}
 			catch(Exception exc)
 			{
@@ -154,17 +155,17 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 			}
 		}
 
-		private void AddProperty(Hashtable ht, PropertyPairEvent e)
+		private void AddProperty(IDictionary<string, object> ht, PropertyPairEvent e)
 		{
 			if (e.Remove)
 			{
-				if (ht[e.Name] != null)
+				if (ht.ContainsKey(e.Name))
 					ht.Remove(e.Name);
 				return;
 			}
-			//Replace the value if it already exists
-			if (ht[e.Name] != null)
-				ht.Remove(e.Name);
+            //Replace the value if it already exists
+		    if (ht.ContainsKey(e.Name))
+                ht.Remove(e.Name);
 			ht.Add(e.Name, e.Value);
 		}
 
@@ -190,27 +191,27 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		
 		}
 
-		public Hashtable DesignerProperties
+		public IDictionary<string, object> DesignerProperties
 		{
 			get { return this._DesignerProperties; }
 		}
 
-		public Hashtable WizardResults
+		public IDictionary<string, object> WizardResults
 		{
 			get { return this._WizardResults; }
 		}
 
-		public Hashtable TransmitEndpointProperties
+		public IDictionary<string, object> TransmitEndpointProperties
 		{
 			get { return this._TransmitEndpointProperties; }
 		}
 
-		public Hashtable ReceiveEndpointProperties
+		public IDictionary<string, object> ReceiveEndpointProperties
 		{
 			get { return this._ReceiveEndpointProperties; }
 		}
 
-		public Hashtable TransmitHandlerProperties
+		public IDictionary<string, object> TransmitHandlerProperties
 		{
 			get { return this._TransmitHandlerProperties; }
 		}

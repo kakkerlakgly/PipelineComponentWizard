@@ -4,6 +4,7 @@ using Microsoft.BizTalk.Wizard;
 using Microsoft.Win32;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Reflection;
@@ -159,8 +160,8 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		bool _FExclusive;
 		private Solution2 _PipelineComponentSolution = null;
 
-		private Hashtable _WizardResults = null;
-		private Hashtable _DesignerProperties = null;
+		private IDictionary<string, object> _WizardResults = null;
+		private IDictionary<string, object> _DesignerProperties = null;
 		
 		public BizTalkPipeLineWizard()
 		{
@@ -319,8 +320,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 			}
 
 
-            var startingProjects = (from Project p in this._Application.Solution.Projects
-                                          select p).ToArray();
+            var startingProjects = _Application.Solution.Projects.Cast<Project>();
 
             // add the specified project to the solution
 			mySolution.AddFromTemplate(projectTemplate, _ProjectDirectory, _ProjectName, this._FExclusive);
@@ -328,9 +328,8 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
             Project pipelineComponentProject = null;
 
             // Query for te added project
-            pipelineComponentProject = (from Project p in this._Application.Solution.Projects
-                                            where !startingProjects.Any(s => s.UniqueName == p.UniqueName)
-                                            select p).First();
+            pipelineComponentProject = _Application.Solution.Projects
+                .Cast<Project>().First(p => startingProjects.All(s => s.UniqueName != p.UniqueName));
 
             //get version
             EnvDTE.DTE DTE = Marshal.GetActiveObject("VisualStudio.DTE.14.0") as EnvDTE.DTE;
@@ -369,7 +368,8 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 			pipelineComponentProject.ProjectItems.AddFromFile(resourceBundle);
 
 			// get the enum value of our choosen component type
-			componentTypes componentType = (componentTypes) Enum.Parse(typeof(componentTypes), _WizardResults[WizardValues.ComponentStage] as string);
+		    componentTypes componentType;
+            Enum.TryParse( _WizardResults[WizardValues.ComponentStage] as string, out componentType);
 
 			// create our actual class
 			string pipelineComponentSourceFile = Path.Combine(_ProjectDirectory, ((string) _WizardResults[WizardValues.ClassName]) + classFileExtension);
@@ -447,33 +447,24 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 			Trace.WriteLine("-- End ContextParams");
 
 			Trace.WriteLine("++ Start _WizardResults");
-			foreach(object o in _WizardResults)
+			foreach(var o in _WizardResults)
 			{
-				// only trace strings
-				if(o is string)
-				{
-					Trace.WriteLine("Name:" + (string) o + " - Value = " + _WizardResults[(string) o]);
-				}
+                // only trace strings
+			    Trace.WriteLine("Name:" + o.Key + " - Value = " + o.Value);
 			}
-			Trace.WriteLine("-- End _WizardResults");
+            Trace.WriteLine("-- End _WizardResults");
 
 			Trace.WriteLine("++ Start _DesignerProperties");
-			foreach(object o in _DesignerProperties)
+			foreach(var o in _DesignerProperties)
 			{
-				if(o is string)
-				{
-					Trace.WriteLine("Name:" + (string) o + " - Value = " + _DesignerProperties[(string) o]);
-				}
+			    Trace.WriteLine("Name:" + o.Key + " - Value = " + o.Value);
 			}
-			Trace.WriteLine("-- End _DesignerProperties");
+            Trace.WriteLine("-- End _DesignerProperties");
 
 			Trace.WriteLine("++ Start _DesignerProperties");
-			foreach(object o in _DesignerProperties)
+			foreach(var o in _DesignerProperties)
 			{
-				if(o is string)
-				{
-					Trace.WriteLine("Name:" + (string) o + " - Value = " + _DesignerProperties[(string) o]);
-				}
+        		Trace.WriteLine("Name:" + o.Key + " - Value = " + o.Value);
 			}
 			Trace.WriteLine("-- End _DesignerProperties");
 		}

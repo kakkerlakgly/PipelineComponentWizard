@@ -7,8 +7,10 @@ using System;
 using System.CodeDom;
 using System.CodeDom.Compiler;
 using System.Collections;
+using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Resources;
 using System.Text;
@@ -83,7 +85,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 			string clsNameSpace,
 			string clsClassName,
 			bool implementsIProbeMessage,
-			Hashtable designerProperties,
+			IDictionary<string, object> designerProperties,
 			componentTypes componentCategory,
 			implementationLanguages language)
 		{
@@ -208,7 +210,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		        CodeMemberProperty clsProperty = null;
 
 		        // iterate all defined properties
-		        foreach (DictionaryEntry entry in designerProperties)
+		        foreach (var entry in designerProperties)
 		        {
 		            // try and lookup the type as the variable
 		            Type designerPropertyType = DesignerVariableType.getType(entry.Value as string);
@@ -254,7 +256,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		            clsProperty.HasSet = true;
 		            if (designerPropertyType == typeof(SchemaList))
 		            {
-		                ArrayList setStatementList = new ArrayList();
+		                var setStatementList = new List<CodeStatement>();
 
 		                string varName = "_" + entry.Key as string;
 
@@ -281,7 +283,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		                            new CodeCommentStatement(
 		                                "objects and use those to fill the propertybag when storing the"),
 		                            new CodeCommentStatement("SchemaList")
-		                        }));
+		                        }).Cast<CodeCommentStatement>());
 		            }
 		            else
 		            {
@@ -452,7 +454,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		            // object val = null;
 		            clsMethod.Statements.Add(
 		                new CodeVariableDeclarationStatement(typeof(object), "val", new CodePrimitiveExpression(null)));
-		            foreach (DictionaryEntry entry in designerProperties)
+		            foreach (var entry in designerProperties)
 		            {
 		                // val = this.ReadPropertyBag(pb, "property");
 		                clsMethod.Statements.Add(
@@ -555,7 +557,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		        clsMethod.Attributes = MemberAttributes.Public;
 		        clsMethod.ImplementationTypes.Add(typeof(IPersistPropertyBag));
 
-		        foreach (DictionaryEntry entry in designerProperties)
+		        foreach (var entry in designerProperties)
 		        {
 		            Type designerPropertyType = DesignerVariableType.getType(entry.Value as string);
 

@@ -1,6 +1,7 @@
 using Microsoft.BizTalk.Component.Utilities;
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
@@ -111,19 +112,18 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
         /// choose what type designer property should encompass
         /// </summary>
         /// <returns></returns>
-        public static string[] ToArray()
+        public static IEnumerable<string> ToArray()
         {
-            ArrayList retVal = new ArrayList();
-
-            retVal.Add(dvtString);
-            retVal.Add(dvtBoolean);
-            retVal.Add(dvtInt);
-            retVal.Add(dvtLong);
-            retVal.Add(dvtShort);
-            retVal.Add(dvtSchemaList);
-            retVal.Add(dvtSchemaWithNone);
-
-            return (string[])retVal.ToArray(typeof(string));
+            return new []
+            {
+                dvtString,
+                dvtBoolean,
+                dvtInt,
+                dvtLong,
+                dvtShort,
+                dvtSchemaList,
+                dvtSchemaWithNone
+            };
         }
     }
 }
