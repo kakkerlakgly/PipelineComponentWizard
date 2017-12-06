@@ -3,7 +3,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
     /// <summary>
     /// List of constants to find values in the namevaluecollection
     /// </summary>
-    internal class WizardValues
+    public class WizardValues
     {
         /// <summary>
         /// defines the version of the component, as entered by the user

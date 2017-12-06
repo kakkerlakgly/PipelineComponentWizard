@@ -71,7 +71,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 	    /// <param name="designerProperties">any designer properties defined</param>
 	    /// <param name="componentCategory">the used component category</param>
 	    /// <param name="language"></param>
-	    internal static void GeneratePipelineComponent(
+	    public static void GeneratePipelineComponent(
 			string fileName,
 			string clsNameSpace,
 			string clsClassName,

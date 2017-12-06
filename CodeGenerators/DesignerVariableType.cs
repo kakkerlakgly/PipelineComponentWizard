@@ -10,7 +10,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
     /// as designer variables types. primarily used to facilitate strong
     /// casting within the code creating the pipeline component using CodeDOM
     /// </summary>
-    internal class DesignerVariableType
+    public class DesignerVariableType
     {
         /// <summary>
         /// represents the string primitive type

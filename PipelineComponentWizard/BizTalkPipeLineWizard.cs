@@ -13,9 +13,6 @@ using System.Linq;
 
 namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 {
-	public delegate void AddWizardResultEvent(object sender,PropertyPairEvent e);
-	public delegate void AddDesignerPropertyEvent(object sender,PropertyPairEvent e);
-
     /// <summary>
 	/// Class (com-object) called by VS2003.NET to start a new pipeline component
 	/// project.

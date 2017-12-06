@@ -133,10 +133,12 @@
       <Name>Microsoft.BizTalk.Pipeline</Name>
       <HintPath>C:\Program Files (x86)\Microsoft BizTalk Server 2016\Microsoft.BizTalk.Pipeline.dll</HintPath>
       <AssemblyFolderKey>hklm\dn\biztalk</AssemblyFolderKey>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.BizTalk.Pipeline.Components">
       <Name>Microsoft.BizTalk.Pipeline.Components</Name>
       <HintPath>C:\Program Files (x86)\Microsoft BizTalk Server 2016\Pipeline Components\Microsoft.BizTalk.Pipeline.Components.dll</HintPath>
+      <Private>False</Private>
     </Reference>
     <Reference Include="Microsoft.BizTalk.Streaming, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -145,6 +147,7 @@
       <Name>Microsoft.BizTalk.Wizard</Name>
       <HintPath>C:\Program Files (x86)\Microsoft BizTalk Server 2016\Microsoft.BizTalk.Wizard.dll</HintPath>
       <AssemblyFolderKey>hklm\dn\biztalk</AssemblyFolderKey>
+      <Private>False</Private>
     </Reference>
     <Reference Include="stdole, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
       <EmbedInteropTypes>False</EmbedInteropTypes>
@@ -173,20 +176,14 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ComponentTypes.cs" />
+    <Compile Include="AddDesignerPropertyEvent.cs" />
+    <Compile Include="AddWizardResultEvent.cs" />
+    <Compile Include="BizTalkPipeLineWizard.cs" />
     <Compile Include="DteHandle.cs" />
-    <Compile Include="ImplementationLanguages.cs" />
     <Compile Include="PipelineComponentWizardForm.Designer.cs">
       <DependentUpon>PipelineComponentWizardForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="BizTalkPipelineComponentWizard.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="DesignerVariableType.cs" />
-    <Compile Include="PipelineComponentCodeGenerator.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="PipelineComponentWizardForm.cs">
@@ -304,6 +301,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Resources\WizardGlyph.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\CodeGenerators\CodeGenerators.csproj">
+      <Project>{867052d7-2718-45f5-820b-82e89ad3d49a}</Project>
+      <Name>CodeGenerators</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

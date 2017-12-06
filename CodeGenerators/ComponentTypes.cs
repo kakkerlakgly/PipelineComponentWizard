@@ -4,7 +4,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
     /// defines the types of pipeline components we support
     /// see SDK\Include\Pipeline_Int.idl
     /// </summary>
-    internal enum ComponentTypes
+    public enum ComponentTypes
     {
         /// <summary>
         /// links to CATID_Decoder

@@ -93,7 +93,6 @@
             this.wzPageSummary1.Name = "wzPageSummary1";
             this.wzPageSummary1.Next = null;
             this.wzPageSummary1.SubTitle = "";
-            this.wzPageSummary1.Summary = null;
             this.wzPageSummary1.Title = "BizTalk Server Pipeline Component Wizard";
             this.wzPageSummary1.WizardForm = null;
             // 
