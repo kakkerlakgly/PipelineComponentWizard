@@ -27,26 +27,11 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
         /// <summary>
         /// contains the options we use to generate the sourcecode
         /// </summary>
-		private static readonly CodeGeneratorOptions Cgo;
-
-	    /// <summary>
-        /// static constructor, sets general options for code generation.
-        /// </summary>
-		static PipelineComponentCodeGenerator() 
-		{
-		    Cgo = new CodeGeneratorOptions
-		    {
-		        BracingStyle = "C",
-		        VerbatimOrder = true
-		    };
-
-		    // removed, this is the default value according to documentation
-		    // cgo.BlankLinesBetweenMembers = true;
-
-
-		    // we don't want CodeDOM to rearrange our defined members to do
-		    // property-first aligment. this is to protect region directives we define
-		}
+		private static readonly CodeGeneratorOptions Cgo = new CodeGeneratorOptions
+        {
+            BracingStyle = "C",
+            VerbatimOrder = true
+        };
 
 		#region retrieveCodeGenerator, generates an instance of the requested ICodeGenerator class
         /// <summary>
