@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
+  <TemplateData>
+    <Name>PipelineComponentWizard</Name>
+    <Description>PipelineComponentTemplate</Description>
+    <Icon>PipelineComponentTemplate.ico</Icon>
+    <ProjectType>CSharp</ProjectType>
+    <RequiredFrameworkVersion>2.0</RequiredFrameworkVersion>
+    <SortOrder>1000</SortOrder>
+    <TemplateID>756571b4-9f0a-4835-ad75-f31d52e8aa20</TemplateID>
+    <CreateNewFolder>true</CreateNewFolder>
+    <DefaultName>PipelineComponentWizard</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+  </TemplateData>
+  <TemplateContent>
+    <Project File="ProjectTemplate.csproj" ReplaceParameters="true">
+      <ProjectItem ReplaceParameters="true" TargetFileName="Properties\AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="$pipelineComponentFileName$.resx">PipelineComponent.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" OpenInEditor="true" TargetFileName="$pipelineComponentFileName$.cs">PipelineComponent.cs</ProjectItem>
+    </Project>
+  </TemplateContent>
+  <WizardExtension>
+    <Assembly>PipelineComponentVSIXProject, Version=1.0.0.0, Culture=neutral, PublicKeyToken=ae0059ef58b388b1</Assembly>
+    <FullClassName>PipelineComponentVSIXProject.PipelineComponentWizard</FullClassName>
+  </WizardExtension>
+</VSTemplate>

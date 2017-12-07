@@ -1,16 +1,15 @@
-using Microsoft.BizTalk.Component.Utilities;
 using System;
-using System.Collections.Generic;
 using System.Text.RegularExpressions;
+using Microsoft.BizTalk.Component.Utilities;
 
-namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
+namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators
 {
     /// <summary>
     /// used to strongly cast the string selection choosen by the user
     /// as designer variables types. primarily used to facilitate strong
     /// casting within the code creating the pipeline component using CodeDOM
     /// </summary>
-    public class DesignerVariableType
+    public static class DesignerVariableType
     {
         /// <summary>
         /// represents the string primitive type
@@ -102,15 +101,21 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
             }
         }
 
+        public static bool IsSchemaList(string dataType)
+        {
+            return Regex.IsMatch(dataType, DvtSchemaWithNone, RegexOptions.IgnoreCase) ||
+                   Regex.IsMatch(dataType, DvtSchemaList, RegexOptions.IgnoreCase);
+        }
+
         /// <summary>
         /// returns a string array for all supported variable types.
         /// used to create the dropdownlist in which the user can
         /// choose what type designer property should encompass
         /// </summary>
         /// <returns></returns>
-        public static IEnumerable<string> ToArray()
+        public static object[] ToArray()
         {
-            return new []
+            return new object[]
             {
                 DvtString,
                 DvtBoolean,

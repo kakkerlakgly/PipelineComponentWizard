@@ -4,11 +4,11 @@ VisualStudioVersion = 15.0.27130.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PipelineComponentWizard", "PipelineComponentWizard\PipelineComponentWizard.csproj", "{628BA2B0-D5D3-4BCC-925E-C1EF60B76021}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "PipelineComponentWizard.Setup", "PipelineComponentWizard.Setup\PipelineComponentWizard.Setup.vdproj", "{5E5EE8D2-C6B0-46C9-A0B3-DA7AB92FF360}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomAction", "CustomAction\CustomAction.csproj", "{D6160604-3ADB-4737-8BEF-2C953750A100}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CodeGenerators", "CodeGenerators\CodeGenerators.csproj", "{867052D7-2718-45F5-820B-82E89AD3D49A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PipelineComponentTemplate", "PipelineComponentTemplate\PipelineComponentTemplate.csproj", "{000F6EF2-0AD0-4600-97B4-C149EDBFE00A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PipelineComponentVSIXProject", "PipelineComponentVSIXProject\PipelineComponentVSIXProject.csproj", "{03461056-1C86-45AF-A806-1B9DE28CCCFA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -20,17 +20,18 @@ Global
 		{628BA2B0-D5D3-4BCC-925E-C1EF60B76021}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{628BA2B0-D5D3-4BCC-925E-C1EF60B76021}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{628BA2B0-D5D3-4BCC-925E-C1EF60B76021}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5E5EE8D2-C6B0-46C9-A0B3-DA7AB92FF360}.Debug|Any CPU.ActiveCfg = Debug
-		{5E5EE8D2-C6B0-46C9-A0B3-DA7AB92FF360}.Debug|Any CPU.Build.0 = Debug
-		{5E5EE8D2-C6B0-46C9-A0B3-DA7AB92FF360}.Release|Any CPU.ActiveCfg = Release
-		{D6160604-3ADB-4737-8BEF-2C953750A100}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D6160604-3ADB-4737-8BEF-2C953750A100}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D6160604-3ADB-4737-8BEF-2C953750A100}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D6160604-3ADB-4737-8BEF-2C953750A100}.Release|Any CPU.Build.0 = Release|Any CPU
 		{867052D7-2718-45F5-820B-82E89AD3D49A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{867052D7-2718-45F5-820B-82E89AD3D49A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{867052D7-2718-45F5-820B-82E89AD3D49A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{867052D7-2718-45F5-820B-82E89AD3D49A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{000F6EF2-0AD0-4600-97B4-C149EDBFE00A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{000F6EF2-0AD0-4600-97B4-C149EDBFE00A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{000F6EF2-0AD0-4600-97B4-C149EDBFE00A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{000F6EF2-0AD0-4600-97B4-C149EDBFE00A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03461056-1C86-45AF-A806-1B9DE28CCCFA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03461056-1C86-45AF-A806-1B9DE28CCCFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03461056-1C86-45AF-A806-1B9DE28CCCFA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03461056-1C86-45AF-A806-1B9DE28CCCFA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

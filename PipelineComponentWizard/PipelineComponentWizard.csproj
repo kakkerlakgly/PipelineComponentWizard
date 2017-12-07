@@ -179,7 +179,6 @@
     <Compile Include="AddDesignerPropertyEvent.cs" />
     <Compile Include="AddWizardResultEvent.cs" />
     <Compile Include="BizTalkPipeLineWizard.cs" />
-    <Compile Include="DteHandle.cs" />
     <Compile Include="PipelineComponentWizardForm.Designer.cs">
       <DependentUpon>PipelineComponentWizardForm.cs</DependentUpon>
     </Compile>

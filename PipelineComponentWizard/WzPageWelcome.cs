@@ -12,12 +12,13 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
     /// the user to this wizard
     /// </summary>
     [ComVisible(false)]
-	public partial class WzPageWelcome : WizardPage, IWizardControl
-	{
+    public partial class WzPageWelcome : WizardPage, IWizardControl
+    {
         /// <summary>
         /// defines the Registry hive our settings are located
         /// </summary>
         const string OurSettingKey = @"Software\MartijnHoogendoorn\BizTalkPipelineComponentWizard";
+
         /// <summary>
         /// defines the Name of the Registry key which determines whether this page needs to be skipped
         /// </summary>
@@ -26,10 +27,10 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
         /// <summary>
         /// constructor, sets general settings for this instance
         /// </summary>
-		public WzPageWelcome()
-		{
-			// This call is required by the Windows Form Designer.
-			InitializeComponent();
+        public WzPageWelcome()
+        {
+            // This call is required by the Windows Form Designer.
+            InitializeComponent();
 
             labelNavigation.Links.Clear();
             labelNavigation.Links.Add(0, labelNavigation.Text.Length - 1, "http://blogs.msdn.com/martijnh/");
@@ -38,14 +39,14 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
         /// <summary>
         /// whether the Next button should be enabled
         /// </summary>
-		public bool NextButtonEnabled => true;
+        public bool NextButtonEnabled => true;
 
-	    /// <summary>
+        /// <summary>
         /// whether this page needs a summary
         /// </summary>
-		public bool NeedSummary => false;
+        public bool NeedSummary => false;
 
-	    public override void OnEnterPage(object sender, PageEventArgs e)
+        public override void OnEnterPage(object sender, PageEventArgs e)
         {
             // retrieve the WizardForm which hosts our page
             WizardForm form1 = WizardForm;
@@ -89,7 +90,8 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
                 // the RegistryKey to query / update
 
                 // open our private 'configuration' key, enable writing
-                using (var wizardKey = Registry.CurrentUser.OpenSubKey(OurSettingKey, true) ?? Registry.CurrentUser.CreateSubKey(OurSettingKey))
+                using (var wizardKey = Registry.CurrentUser.OpenSubKey(OurSettingKey, true) ??
+                                       Registry.CurrentUser.CreateSubKey(OurSettingKey))
                 {
                     wizardKey.SetValue(SkipWelcome, checkBoxSkipWelcome.Checked);
                 }
@@ -98,33 +100,32 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
             base.OnLeavePage(sender, e);
         }
 
-	    void labelNavigation_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
-	    {
-	        // set the visited state for the clicked link
-	        labelNavigation.Links[labelNavigation.Links.IndexOf(e.Link)].Visited = true;
+        void labelNavigation_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            // set the visited state for the clicked link
+            labelNavigation.Links[labelNavigation.Links.IndexOf(e.Link)].Visited = true;
 
-	        // get the target of the link
-	        string target = e.Link.LinkData as string;
+            // get the target of the link
+            string target = e.Link.LinkData as string;
 
-	        // spawn a *new* browser process to view the link
-	        Process.Start(new ProcessStartInfo(GetDefaultBrowser(), target));
-	    }
+            // spawn a *new* browser process to view the link
+            Process.Start(new ProcessStartInfo(GetDefaultBrowser(), target));
+        }
 
-	    /// <summary>
-	    /// 'borrowed from http://ryanfarley.com/blog/archive/2004/05/16/649.aspx
-	    /// </summary>
-	    /// <returns>the default registered browser, without arguments</returns>
-	    private string GetDefaultBrowser()
-	    {
-	        using (var key = Registry.ClassesRoot.OpenSubKey(@"HTTP\shell\open\command", false))
-	        {
-	            var browser = key.GetValue(null).ToString().ToLower().Replace("\"", "");
+        /// <summary>
+        /// 'borrowed from http://ryanfarley.com/blog/archive/2004/05/16/649.aspx
+        /// </summary>
+        /// <returns>the default registered browser, without arguments</returns>
+        private string GetDefaultBrowser()
+        {
+            using (var key = Registry.ClassesRoot.OpenSubKey(@"HTTP\shell\open\command", false))
+            {
+                var browser = key.GetValue(null).ToString().ToLower().Replace("\"", "");
 
-	            //get rid of everything after the ".exe"
-	            browser = browser.Substring(0, browser.IndexOf(".exe", StringComparison.Ordinal) + 4);
-	            return browser;
+                //get rid of everything after the ".exe"
+                browser = browser.Substring(0, browser.IndexOf(".exe", StringComparison.Ordinal) + 4);
+                return browser;
             }
-	    }
+        }
     }
 }
-

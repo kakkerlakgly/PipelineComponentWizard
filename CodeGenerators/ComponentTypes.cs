@@ -1,4 +1,4 @@
-namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
+namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators
 {
     /// <summary>
     /// defines the types of pipeline components we support

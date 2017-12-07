@@ -1,8 +1,3 @@
-using Microsoft.BizTalk.Component.Interop;
-using Microsoft.BizTalk.Component.Utilities;
-using Microsoft.BizTalk.Message.Interop;
-using Microsoft.CSharp;
-using Microsoft.VisualBasic;
 using System;
 using System.CodeDom;
 using System.CodeDom.Compiler;
@@ -15,8 +10,13 @@ using System.Reflection;
 using System.Resources;
 using System.Text;
 using System.Text.RegularExpressions;
+using Microsoft.BizTalk.Component.Interop;
+using Microsoft.BizTalk.Component.Utilities;
+using Microsoft.BizTalk.Message.Interop;
+using Microsoft.CSharp;
+using Microsoft.VisualBasic;
 
-namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
+namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
 {
 	/// <summary>
 	/// PipelineComponentCodeGenerator is responsible for generating the code 
@@ -76,7 +76,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 			string clsNameSpace,
 			string clsClassName,
 			bool implementsIProbeMessage,
-			IDictionary<string, object> designerProperties,
+			IDictionary<string, string> designerProperties,
 			ComponentTypes componentCategory,
 			ImplementationLanguages language)
 		{
@@ -202,7 +202,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 		        foreach (var entry in designerProperties)
 		        {
 		            // try and lookup the type as the variable
-		            Type designerPropertyType = DesignerVariableType.GetType(entry.Value as string);
+		            Type designerPropertyType = DesignerVariableType.GetType(entry.Value);
 
 		            // add a member variable using the suggested name
 		            cmf = new CodeMemberField(designerPropertyType, "_" + entry.Key) {Attributes = MemberAttributes.Private};

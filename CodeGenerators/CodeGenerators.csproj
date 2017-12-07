@@ -7,8 +7,8 @@
     <ProjectGuid>{867052D7-2718-45F5-820B-82E89AD3D49A}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>CodeGenerators</RootNamespace>
-    <AssemblyName>MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators</AssemblyName>
+    <RootNamespace>MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators</RootNamespace>
+    <AssemblyName>CodeGenerators</AssemblyName>
     <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
