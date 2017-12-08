@@ -101,31 +101,6 @@
     <Win32Resource>PipelineComponentWizard.res</Win32Resource>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="EnvDTE, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-      <HintPath>..\packages\EnvDTE.8.0.1\lib\net10\EnvDTE.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="EnvDTE100, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-      <HintPath>..\packages\EnvDTE100.10.0.1\lib\net20\EnvDTE100.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="EnvDTE80, Version=8.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-      <HintPath>..\packages\EnvDTE80.8.0.1\lib\net10\EnvDTE80.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="EnvDTE90, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-      <HintPath>..\packages\EnvDTE90.9.0.1\lib\net10\EnvDTE90.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="EnvDTE90a, Version=9.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-      <HintPath>..\packages\EnvDTE90a.9.0.1\lib\net10\EnvDTE90a.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="Microsoft.BizTalk.Component.Utilities, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
@@ -149,11 +124,6 @@
       <AssemblyFolderKey>hklm\dn\biztalk</AssemblyFolderKey>
       <Private>False</Private>
     </Reference>
-    <Reference Include="stdole, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-      <EmbedInteropTypes>False</EmbedInteropTypes>
-      <HintPath>..\packages\stdole.7.0.3301\lib\net10\stdole.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System">
       <Name>System</Name>
     </Reference>
@@ -169,16 +139,10 @@
     <Reference Include="System.Xml">
       <Name>System.XML</Name>
     </Reference>
-    <Reference Include="vslangproj, Version=7.0.3300.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-      <EmbedInteropTypes>True</EmbedInteropTypes>
-      <HintPath>..\packages\VSLangProj.7.0.3300\lib\net10\vslangproj.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AddDesignerPropertyEvent.cs" />
     <Compile Include="AddWizardResultEvent.cs" />
-    <Compile Include="BizTalkPipeLineWizard.cs" />
     <Compile Include="PipelineComponentWizardForm.Designer.cs">
       <DependentUpon>PipelineComponentWizardForm.cs</DependentUpon>
     </Compile>
@@ -259,7 +223,6 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
     <None Include="PipelineComponentWizard.res" />
     <None Include="pipelinecomponentwizard.snk" />
   </ItemGroup>
