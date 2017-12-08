@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using System.Windows.Forms;
 using MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators;
 using Microsoft.BizTalk.Wizard;
 

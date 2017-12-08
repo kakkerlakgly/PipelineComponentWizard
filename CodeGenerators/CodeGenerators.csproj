@@ -30,6 +30,7 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <RunCodeAnalysis>true</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup>
     <SignAssembly>true</SignAssembly>
@@ -41,16 +42,13 @@
     <Reference Include="Microsoft.BizTalk.Component.Utilities, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
     </Reference>
-    <Reference Include="Microsoft.BizTalk.Pipeline">
-      <Name>Microsoft.BizTalk.Pipeline</Name>
-      <HintPath>C:\Program Files (x86)\Microsoft BizTalk Server 2016\Microsoft.BizTalk.Pipeline.dll</HintPath>
-      <AssemblyFolderKey>hklm\dn\biztalk</AssemblyFolderKey>
-      <Private>False</Private>
+    <Reference Include="Microsoft.BizTalk.Pipeline, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Program Files (x86)\Microsoft BizTalk Server 2016\Microsoft.BizTalk.Pipeline.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.BizTalk.Pipeline.Components">
-      <Name>Microsoft.BizTalk.Pipeline.Components</Name>
-      <HintPath>C:\Program Files (x86)\Microsoft BizTalk Server 2016\Pipeline Components\Microsoft.BizTalk.Pipeline.Components.dll</HintPath>
-      <Private>False</Private>
+    <Reference Include="Microsoft.BizTalk.Pipeline.Components, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\Program Files (x86)\Microsoft BizTalk Server 2016\Pipeline Components\Microsoft.BizTalk.Pipeline.Components.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
