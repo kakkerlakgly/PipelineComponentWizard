@@ -62,7 +62,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
             catch (Exception exc)
             {
 #if DEBUG
-				MessageBox.Show(this, exc.ToString(), this.Text,MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(this, exc.ToString(), Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
 #else
                 MessageBox.Show(this, exc.Message, Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
 #endif
@@ -80,7 +80,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
             catch (Exception exc)
             {
 #if DEBUG
-				MessageBox.Show(this, exc.ToString(), this.Text,MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(this, exc.ToString(), Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
 #else
                 MessageBox.Show(this, exc.Message, Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
 #endif
@@ -96,7 +96,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
             catch (Exception exc)
             {
 #if DEBUG
-				MessageBox.Show(this, exc.ToString(), this.Text,MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(this, exc.ToString(), Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
 #else
                 MessageBox.Show(this, exc.Message, Text, MessageBoxButtons.OK, MessageBoxIcon.Error);
 #endif

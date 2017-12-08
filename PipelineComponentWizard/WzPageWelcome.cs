@@ -68,7 +68,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
             // open our private 'configuration' key, enable writing
             using (var wizardKey = Registry.CurrentUser.OpenSubKey(OurSettingKey))
             {
-                var currentWelcomeValue = wizardKey?.GetValue(SkipWelcome) as string;
+                var currentWelcomeValue = wizardKey?.GetValue(SkipWelcome).ToString();
 
                 // if we should skip this page,
                 if (currentWelcomeValue != null && bool.Parse(currentWelcomeValue))

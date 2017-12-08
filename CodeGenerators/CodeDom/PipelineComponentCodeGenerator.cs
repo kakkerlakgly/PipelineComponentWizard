@@ -455,7 +455,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
 		                                thisObject, "ReadPropertyBag"), new CodeArgumentReferenceExpression("pb"), new CodeSnippetExpression("\"" + entry.Key + "\""))));
 
 		                // typeof(variable)
-		                Type designerPropertyType = DesignerVariableType.GetType(entry.Value as string);
+		                Type designerPropertyType = DesignerVariableType.GetType(entry.Value);
 		                CodeAssignStatement assignment;
 
 		                if (designerPropertyType == typeof(SchemaList))
@@ -491,7 +491,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
 		                    assignment =
 		                        new CodeAssignStatement(
 		                            new CodeFieldReferenceExpression(thisObject, "_" + entry.Key),
-		                            new CodeCastExpression(DesignerVariableType.GetType(entry.Value as string),
+		                            new CodeCastExpression(DesignerVariableType.GetType(entry.Value),
 		                                new CodeVariableReferenceExpression("val")));
 
 		                    // if(val != null)
@@ -541,7 +541,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
 
 		        foreach (var entry in designerProperties)
 		        {
-		            Type designerPropertyType = DesignerVariableType.GetType(entry.Value as string);
+		            Type designerPropertyType = DesignerVariableType.GetType(entry.Value);
 
 		            if (designerPropertyType == typeof(SchemaList))
 		            {
