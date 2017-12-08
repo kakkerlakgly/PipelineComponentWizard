@@ -42,14 +42,6 @@
     <Win32Resource>PipelineComponentWizard.res</Win32Resource>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.BizTalk.Pipeline, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Program Files (x86)\Microsoft BizTalk Server 2016\Microsoft.BizTalk.Pipeline.dll</HintPath>
-    </Reference>
-    <Reference Include="Microsoft.BizTalk.Pipeline.Components, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Program Files (x86)\Microsoft BizTalk Server 2016\Pipeline Components\Microsoft.BizTalk.Pipeline.Components.dll</HintPath>
-    </Reference>
     <Reference Include="Microsoft.BizTalk.Wizard, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\Program Files (x86)\Microsoft BizTalk Server 2016\Microsoft.BizTalk.Wizard.dll</HintPath>
