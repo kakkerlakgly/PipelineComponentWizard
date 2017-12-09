@@ -62,7 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CodeDom\PipelineComponentCodeGenerator.cs" />
-    <Compile Include="ComponentTypes.cs" />
+    <Compile Include="ComponentType.cs" />
     <Compile Include="DesignerVariableType.cs" />
     <Compile Include="ImplementationLanguages.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

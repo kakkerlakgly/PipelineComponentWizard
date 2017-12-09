@@ -39,9 +39,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
             _pageCollection.Add(WzPageDesignerProperties1);
             _pageCollection.Add(wzPageSummary1);
 
-            wzPageGeneralSetup1.AddWizardResultEvent += AddWizardResult;
             WzPageDesignerProperties1.AddDesignerPropertyEvent += AddDesignerProperty;
-            WzPageGeneralProperties1.AddWizardResultEvent += AddWizardResult;
 
             ButtonHelp.Enabled = false;
         }
@@ -123,28 +121,6 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
             return countingUp ? ++pageCount : --pageCount;
         }
 
-        private void AddWizardResult(object sender, PropertyPairEvent e)
-        {
-            try
-            {
-                //Replace the value if it already exists
-                if (WizardResults.ContainsKey(e.Name))
-                {
-                    WizardResults.Remove(e.Name);
-                }
-                WizardResults.Add(e.Name, e.Value);
-            }
-            catch (Exception err)
-            {
-#if DEBUG
-				MessageBox.Show(this, err.ToString());
-#else
-                MessageBox.Show(this, err.Message);
-#endif
-                Trace.WriteLine(err.Message + Environment.NewLine + err.StackTrace);
-            }
-        }
-
         private void AddProperty(IDictionary<string, Type> ht, DesignerVariableEvent e)
         {
             //Replace the value if it already exists
@@ -172,6 +148,6 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 
         public IDictionary<string, Type> DesignerProperties { get; } = new Dictionary<string, Type>();
 
-        public IDictionary<string, object> WizardResults { get; } = new Dictionary<string, object>();
+        public WizardValues WizardResults { get; } = new WizardValues();
     }
 }

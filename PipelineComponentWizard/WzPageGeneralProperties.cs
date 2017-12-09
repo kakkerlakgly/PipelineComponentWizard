@@ -11,35 +11,17 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
     [ComVisible(false)]
     public partial class WzPageGeneralProperties : WizardInteriorPage, IWizardControl
     {
-        public event AddWizardResultEvent AddWizardResultEvent;
+        private readonly WizardValues _wizardValues;
 
         private const string ComponentVersionRegEx = @"[0-9]+\.[0-9]+$";
         private const string ComponentNameRegEx = @"(?i)^[a-z]+[0-9a-z]*$";
 
-        public WzPageGeneralProperties()
+        public WzPageGeneralProperties(WizardValues wizardValues)
         {
+            _wizardValues = wizardValues;
             // This call is required by the Windows Form Designer.
             InitializeComponent();
         }
-
-        private void AddWizardResult(string strName, object value)
-        {
-            PropertyPairEvent propertyPair = new PropertyPairEvent(strName, value);
-            OnAddWizardResult(propertyPair);
-        }
-
-        // The protected OnRaiseProperty method raises the event by invoking 
-        // the delegates. The sender is always this, the current instance 
-        // of the class.
-        private void OnAddWizardResult(PropertyPairEvent e)
-        {
-            if (e != null)
-            {
-                // Invokes the delegates. 
-                AddWizardResultEvent(this, e);
-            }
-        }
-
         public bool NextButtonEnabled => GetAllStates();
 
         public bool NeedSummary => false;
@@ -52,10 +34,10 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 
         private void WzPageGeneralProperties_Leave(object sender, EventArgs e)
         {
-            AddWizardResult(WizardValues.ComponentName, txtComponentName.Text);
-            AddWizardResult(WizardValues.ComponentDescription, txtComponentDescription.Text);
-            AddWizardResult(WizardValues.ComponentIcon, ComponentIcon.Image);
-            AddWizardResult(WizardValues.ComponentVersion, txtComponentVersion.Text);
+            _wizardValues.ComponentName = txtComponentName.Text;
+            _wizardValues.ComponentDescription = txtComponentDescription.Text;
+            _wizardValues.ComponentIcon = ComponentIcon.Image;
+            _wizardValues.ComponentVersion = txtComponentVersion.Text;
         }
 
         private void ComponentIcon_DoubleClick(object sender, EventArgs e)
@@ -63,7 +45,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 ComponentIcon.Image = Image.FromFile(openFileDialog1.FileName);
-                AddWizardResult(WizardValues.ComponentIcon, ComponentIcon.Image);
+                _wizardValues.ComponentIcon = ComponentIcon.Image;
             }
         }
 
@@ -71,8 +53,8 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
         {
             System.Resources.ResourceManager resources =
                 new System.Resources.ResourceManager(typeof(WzPageGeneralProperties));
-            ComponentIcon.Image = ((Image) (resources.GetObject("ComponentIcon.Image")));
-            AddWizardResult(WizardValues.ComponentIcon, ComponentIcon.Image);
+            ComponentIcon.Image = (Image) resources.GetObject("ComponentIcon.Image");
+            _wizardValues.ComponentIcon= ComponentIcon.Image;
         }
 
         private void txtComponentVersion_Validating(object sender, CancelEventArgs e)

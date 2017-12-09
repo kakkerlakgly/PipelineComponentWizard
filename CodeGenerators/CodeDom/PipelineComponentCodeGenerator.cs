@@ -77,7 +77,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
 			string clsClassName,
 			bool implementsIProbeMessage,
 			IDictionary<string, Type> designerProperties,
-			ComponentTypes componentCategory,
+			ComponentType componentCategory,
 			ImplementationLanguages language)
 		{
 			#region variable definition
@@ -776,7 +776,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
 		        {
 		            #region AssemblingSerializer (IAssemblerComponent)
 
-		            case ComponentTypes.AssemblingSerializer:
+		            case ComponentType.AssemblingSerializer:
 		                // add another base type
 		                clsDecleration.BaseTypes.Add(typeof(IAssemblerComponent));
 
@@ -887,7 +887,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
 
 		            #region DisassemblingParser (IDisassemblerComponent, IProbeMessage)
 
-		            case ComponentTypes.DisassemblingParser:
+		            case ComponentType.DisassemblingParser:
 		                clsDecleration.BaseTypes.Add(typeof(IDisassemblerComponent));
 
                         // add a member variable to store the incoming message

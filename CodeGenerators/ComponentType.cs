@@ -4,12 +4,12 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators
     /// defines the types of pipeline components we support
     /// see SDK\Include\Pipeline_Int.idl
     /// </summary>
-    public enum ComponentTypes
+    public enum ComponentType
     {
         /// <summary>
         /// links to CATID_Decoder
         /// </summary>
-        Decoder = 0,
+        Decoder,
         /// <summary>
         /// links to CATID_DisassemblingParser
         /// </summary>

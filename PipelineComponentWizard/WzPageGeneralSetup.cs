@@ -9,41 +9,44 @@ using Microsoft.BizTalk.Wizard;
 
 namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 {
+    public enum PipelineType {
+        Receive,
+        Send,
+        Any
+    }
+
     [ComVisible(false)]
     public partial class WzPageGeneralSetup : WizardInteriorPage, IWizardControl
     {
+        private readonly WizardValues _wizardValues;
+        private readonly PipelineType[] _pipelineTypes = {
+            PipelineType.Receive,
+            PipelineType.Send,
+            PipelineType.Any
+        };
+
+        private readonly ImplementationLanguages[] _implementationLanguageses = {
+            ImplementationLanguages.CSharp,
+            ImplementationLanguages.VbNet
+        };
         private const string TransportRegEx = @"^[_a-zA-Z][_a-zA-Z0-9]*$";
         private const string NamespaceRegEx = @"(?i)^([a-z].?)*$";
-        public event AddWizardResultEvent AddWizardResultEvent;
 
-        public WzPageGeneralSetup()
+        public WzPageGeneralSetup(WizardValues wizardValues)
         {
+            _wizardValues = wizardValues;
+            
             // This call is required by the Windows Form Designer.
             InitializeComponent();
 
-            // re-clear all items from the stage dropdown
-            cboComponentStage.Items.Clear();
-        }
+            cboImplementationLanguage.DataSource = _implementationLanguageses;
+            cboImplementationLanguage.Visible = false;
+            label5.Visible = false;
 
-        private void AddWizardResult(string strName, object value)
-        {
-            PropertyPairEvent propertyPair = new PropertyPairEvent(strName, value);
-            OnAddWizardResult(propertyPair);
-        }
-
-        /// <summary>
-        /// The protected OnRaiseProperty method raises the event by invoking 
-        /// the delegates. The sender is always this, the current instance 
-        /// of the class.
-        /// </summary>
-        /// <param name="e"></param>
-        private void OnAddWizardResult(PropertyPairEvent e)
-        {
-            if (e != null)
-            {
-                // Invokes the delegates. 
-                AddWizardResultEvent(this, e);
-            }
+            cboPipelineType.DataSource = _pipelineTypes;
+            cboPipelineType.SelectedIndex = -1;
+            cboPipelineType.SelectedIndexChanged += PipelineType_Changed;
+            cboPipelineType.SelectedValueChanged += Element_Changed;
         }
 
         /// <summary>
@@ -52,29 +55,27 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
         /// <returns></returns>
         private bool GetAllStates()
         {
-            return (txtClassName.Text.Length > 0 && Regex.IsMatch(txtClassName.Text, TransportRegEx) &&
-                    txtNameSpace.Text.Length > 0 && Regex.IsMatch(txtNameSpace.Text, NamespaceRegEx) &&
-                    cboComponentStage.SelectedIndex > -1 && cboPipelineType.SelectedIndex > -1);
+            return txtClassName.Text.Length > 0 && Regex.IsMatch(txtClassName.Text, TransportRegEx) &&
+                   txtNameSpace.Text.Length > 0 && Regex.IsMatch(txtNameSpace.Text, NamespaceRegEx) &&
+                   cboComponentStage.SelectedIndex > -1 && cboPipelineType.SelectedIndex > -1;
         }
 
         private void WzPageGeneralSetup_Leave(object sender, EventArgs e)
         {
             try
             {
-                AddWizardResult(WizardValues.ClassName, txtClassName.Text);
-                AddWizardResult(WizardValues.Namespace, txtNameSpace.Text);
-                AddWizardResult(WizardValues.PipelineType,
-                    cboPipelineType.Items[cboPipelineType.SelectedIndex].ToString());
-                AddWizardResult(WizardValues.ComponentStage,
-                    cboComponentStage.Items[cboComponentStage.SelectedIndex].ToString());
-                AddWizardResult(WizardValues.ImplementationLanguage,
-                    (ImplementationLanguages) cboImplementationLanguage.SelectedIndex);
-                AddWizardResult(WizardValues.ImplementIProbeMessage, chkImplementIProbeMessage.Checked);
+                _wizardValues.ClassName = txtClassName.Text;
+
+                _wizardValues.Namespace = txtNameSpace.Text;
+                _wizardValues.PipelineType = (PipelineType) cboPipelineType.SelectedItem;
+                _wizardValues.ComponentStage = (ComponentType) cboComponentStage.SelectedItem;
+                _wizardValues.ImplementationLanguage = (ImplementationLanguages) cboImplementationLanguage.SelectedItem;
+                _wizardValues.ImplementIProbeMessage = chkImplementIProbeMessage.Checked;
             }
             catch (Exception err)
             {
 #if DEBUG
-				MessageBox.Show(err.Message);
+                MessageBox.Show(err.Message);
 #endif
                 Trace.WriteLine(err.Message + Environment.NewLine + err.StackTrace);
             }
@@ -114,36 +115,35 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 
         private void PipelineType_Changed(object sender, EventArgs e)
         {
-            cboComponentStage.Items.Clear();
             cboComponentStage.Enabled = true;
 
-            switch (cboPipelineType.SelectedIndex)
+            switch ((PipelineType)cboPipelineType.SelectedItem)
             {
                 // do we have a receive pipeline component selected?
-                case 0:
-                    cboComponentStage.Items.AddRange(new object[]
+                case PipelineType.Receive:
+                    cboComponentStage.DataSource = new[]
                     {
-                        ComponentTypes.Decoder.ToString(),
-                        ComponentTypes.DisassemblingParser.ToString(),
-                        ComponentTypes.Validate.ToString(),
-                        ComponentTypes.PartyResolver.ToString(),
-                        ComponentTypes.Any.ToString()
-                    });
-                    cboComponentStage.SelectedIndex = 0;
+                        ComponentType.Decoder,
+                        ComponentType.DisassemblingParser,
+                        ComponentType.Validate,
+                        ComponentType.PartyResolver,
+                        ComponentType.Any
+                    };
+                    cboComponentStage.SelectedItem = ComponentType.Decoder;
                     break;
-                case 1:
-                    cboComponentStage.Items.AddRange(new object[]
+                case PipelineType.Send:
+                    cboComponentStage.DataSource = new[]
                     {
-                        ComponentTypes.Encoder.ToString(),
-                        ComponentTypes.AssemblingSerializer.ToString(),
-                        ComponentTypes.Any.ToString()
-                    });
-                    cboComponentStage.SelectedIndex = 0;
+                        ComponentType.Encoder,
+                        ComponentType.AssemblingSerializer,
+                        ComponentType.Any
+                    };
+                    cboComponentStage.SelectedItem = ComponentType.Encoder;
                     break;
-                case 2:
-                    cboComponentStage.Items.Add(ComponentTypes.Any.ToString());
+                case PipelineType.Any:
+                    cboComponentStage.Items.Add(ComponentType.Any);
                     cboComponentStage.Enabled = false;
-                    cboComponentStage.SelectedIndex = 0;
+                    cboComponentStage.SelectedItem = ComponentType.Any;
                     break;
                 default:
                     throw new ArgumentException("Unsupported pipeline type selected");
@@ -169,8 +169,8 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
         {
             // do we have a disassembler selected?
             // only disassemblers can implement IProbeMessage
-            if (cboComponentStage.Items[cboComponentStage.SelectedIndex].ToString() ==
-                ComponentTypes.DisassemblingParser.ToString())
+            if ((ComponentType)cboComponentStage.SelectedItem ==
+                ComponentType.DisassemblingParser)
             {
                 chkImplementIProbeMessage.Visible = true;
             }
