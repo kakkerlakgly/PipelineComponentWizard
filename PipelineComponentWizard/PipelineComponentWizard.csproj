@@ -60,6 +60,7 @@
   <ItemGroup>
     <Compile Include="AddDesignerPropertyEvent.cs" />
     <Compile Include="AddWizardResultEvent.cs" />
+    <Compile Include="DesignerVariable.cs" />
     <Compile Include="PipelineComponentWizardForm.Designer.cs">
       <DependentUpon>PipelineComponentWizardForm.cs</DependentUpon>
     </Compile>
@@ -74,6 +75,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="DesignerVariableEvent.cs" />
     <Compile Include="PropertyPairEvent.cs">
       <SubType>Code</SubType>
     </Compile>

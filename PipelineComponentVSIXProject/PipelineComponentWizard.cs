@@ -16,7 +16,7 @@ namespace PipelineComponentVSIXProject
     public class PipelineComponentWizard : IWizard
     {
         private IDictionary<string, object> _wizardResults;
-        private IDictionary<string, string> _designerProperties;
+        private IDictionary<string, Type> _designerProperties;
         private string _pipelineComponentSourceFile;
         private string _destinationdirectory;
 
