@@ -15,8 +15,8 @@ namespace PipelineComponentVSIXProject
 {
     public class PipelineComponentWizard : IWizard
     {
-        private IDictionary<string, object> _wizardResults;
-        private IDictionary<string, string> _designerProperties;
+        private WizardValues _wizardResults;
+        private IDictionary<string, Type> _designerProperties;
         private string _pipelineComponentSourceFile;
         private string _destinationdirectory;
 
@@ -28,32 +28,30 @@ namespace PipelineComponentVSIXProject
         {
             try
             {
-                // add our resource bundle
-                string resourceBundle = Path.Combine(_destinationdirectory,
-                    (string) _wizardResults[WizardValues.ClassName] + ".resx");
-                using (ResXResourceWriter resx = new ResXResourceWriter(resourceBundle))
+                if (_wizardResults != null)
                 {
-                    resx.AddResource("COMPONENTNAME", _wizardResults[WizardValues.ComponentName] as string);
-                    resx.AddResource("COMPONENTDESCRIPTION",
-                        _wizardResults[WizardValues.ComponentDescription] as string);
-                    resx.AddResource("COMPONENTVERSION", _wizardResults[WizardValues.ComponentVersion] as string);
-                    resx.AddResource("COMPONENTICON", _wizardResults[WizardValues.ComponentIcon]);
+                    // add our resource bundle
+                    string resourceBundle = Path.Combine(_destinationdirectory, _wizardResults.ClassName + ".resx");
+                    using (ResXResourceWriter resx = new ResXResourceWriter(resourceBundle))
+                    {
+                        resx.AddResource("COMPONENTNAME", _wizardResults.ComponentName);
+                        resx.AddResource("COMPONENTDESCRIPTION", _wizardResults.ComponentDescription);
+                        resx.AddResource("COMPONENTVERSION", _wizardResults.ComponentVersion);
+                        resx.AddResource("COMPONENTICON", _wizardResults.ComponentIcon);
+                    }
+
+                    // create our actual class
+                    _pipelineComponentSourceFile = Path.Combine(_destinationdirectory,
+                        _wizardResults.ClassName + ".cs");
+                    PipelineComponentCodeGenerator.GeneratePipelineComponent(
+                        _pipelineComponentSourceFile,
+                        _wizardResults.Namespace,
+                        _wizardResults.ClassName,
+                        _wizardResults.ImplementIProbeMessage,
+                        _designerProperties,
+                        _wizardResults.ComponentStage,
+                        ImplementationLanguages.CSharp);
                 }
-
-                // get the enum value of our choosen component type
-                Enum.TryParse(_wizardResults[WizardValues.ComponentStage] as string, out ComponentTypes componentType);
-
-                // create our actual class
-                _pipelineComponentSourceFile = Path.Combine(_destinationdirectory,
-                    (string) _wizardResults[WizardValues.ClassName] + ".cs");
-                PipelineComponentCodeGenerator.GeneratePipelineComponent(
-                    _pipelineComponentSourceFile,
-                    (string) _wizardResults[WizardValues.Namespace],
-                    (string) _wizardResults[WizardValues.ClassName],
-                    (bool) _wizardResults[WizardValues.ImplementIProbeMessage],
-                    _designerProperties,
-                    componentType,
-                    ImplementationLanguages.CSharp);
             }
             catch (Exception ex)
             {
@@ -92,11 +90,14 @@ namespace PipelineComponentVSIXProject
                     //_TransmitHandlerProperties = WizardForm.TransmitHandlerProperties;
                     _designerProperties = wizardForm.DesignerProperties;
 
-                    replacementsDictionary.Add("$pipelineComponentFileName$",
-                        (string) _wizardResults[WizardValues.ClassName]);
+                    replacementsDictionary.Add("$pipelineComponentFileName$", _wizardResults.ClassName);
 
                     replacementsDictionary.Add("$SchemaListUsed$",
                         _designerProperties.Values.Any(DesignerVariableType.IsSchemaList).ToString());
+                }
+                else
+                {
+                    replacementsDictionary.Add("$pipelineComponentFileName$", "Class1");
                 }
             }
             catch (Exception ex)

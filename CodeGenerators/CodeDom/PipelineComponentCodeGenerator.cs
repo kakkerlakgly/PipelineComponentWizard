@@ -76,8 +76,8 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
 			string clsNameSpace,
 			string clsClassName,
 			bool implementsIProbeMessage,
-			IDictionary<string, string> designerProperties,
-			ComponentTypes componentCategory,
+			IDictionary<string, Type> designerProperties,
+			ComponentType componentCategory,
 			ImplementationLanguages language)
 		{
 			#region variable definition
@@ -133,7 +133,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
 		        }
 
 		        // SchemaList is defined inside Microsoft.BizTalk.Component.Utilities
-		        if (DesignerVariableType.SchemaListUsed)
+		        if (designerProperties.Values.Any(DesignerVariableType.IsSchemaList))
 		        {
 		            // so add it to the Import / using clauses
 		            cnsCodeNamespace.Imports.Add(new CodeNamespaceImport("Microsoft.BizTalk.Component.Utilities"));
@@ -202,7 +202,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
 		        foreach (var entry in designerProperties)
 		        {
 		            // try and lookup the type as the variable
-		            Type designerPropertyType = DesignerVariableType.GetType(entry.Value);
+		            Type designerPropertyType = entry.Value;
 
 		            // add a member variable using the suggested name
 		            cmf = new CodeMemberField(designerPropertyType, "_" + entry.Key) {Attributes = MemberAttributes.Private};
@@ -455,7 +455,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
 		                                thisObject, "ReadPropertyBag"), new CodeArgumentReferenceExpression("pb"), new CodeSnippetExpression("\"" + entry.Key + "\""))));
 
 		                // typeof(variable)
-		                Type designerPropertyType = DesignerVariableType.GetType(entry.Value);
+		                Type designerPropertyType = entry.Value;
 		                CodeAssignStatement assignment;
 
 		                if (designerPropertyType == typeof(SchemaList))
@@ -491,7 +491,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
 		                    assignment =
 		                        new CodeAssignStatement(
 		                            new CodeFieldReferenceExpression(thisObject, "_" + entry.Key),
-		                            new CodeCastExpression(DesignerVariableType.GetType(entry.Value),
+		                            new CodeCastExpression(entry.Value,
 		                                new CodeVariableReferenceExpression("val")));
 
 		                    // if(val != null)
@@ -541,7 +541,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
 
 		        foreach (var entry in designerProperties)
 		        {
-		            Type designerPropertyType = DesignerVariableType.GetType(entry.Value);
+		            Type designerPropertyType = entry.Value;
 
 		            if (designerPropertyType == typeof(SchemaList))
 		            {
@@ -776,7 +776,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
 		        {
 		            #region AssemblingSerializer (IAssemblerComponent)
 
-		            case ComponentTypes.AssemblingSerializer:
+		            case ComponentType.AssemblingSerializer:
 		                // add another base type
 		                clsDecleration.BaseTypes.Add(typeof(IAssemblerComponent));
 
@@ -887,7 +887,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
 
 		            #region DisassemblingParser (IDisassemblerComponent, IProbeMessage)
 
-		            case ComponentTypes.DisassemblingParser:
+		            case ComponentType.DisassemblingParser:
 		                clsDecleration.BaseTypes.Add(typeof(IDisassemblerComponent));
 
                         // add a member variable to store the incoming message

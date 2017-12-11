@@ -2,6 +2,7 @@ using System;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
 using System.Diagnostics;
+using System.Linq;
 using System.Runtime.InteropServices;
 using MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators;
 using Microsoft.BizTalk.Wizard;
@@ -30,16 +31,16 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 
         public bool NeedSummary => false;
 
-        private void AddDesignerProperty(string strName, string strValue)
+        private void AddDesignerProperty(DesignerVariable variable)
         {
-            PropertyPairEvent propertyPair = new PropertyPairEvent(strName, strValue);
-            OnAddDesignerProperty(propertyPair);
+            DesignerVariableEvent variablePair = new DesignerVariableEvent(variable);
+            OnAddDesignerProperty(variablePair);
         }
 
         // The protected OnAddReceiveHandlerProperty method raises the event by invoking 
         // the delegates. The sender is always this, the current instance 
         // of the class.
-        private void OnAddDesignerProperty(PropertyPairEvent e)
+        private void OnAddDesignerProperty(DesignerVariableEvent e)
         {
             if (e != null)
             {
@@ -52,16 +53,9 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
         {
             try
             {
-                foreach (object objItem in lstDesignerProperties.Items)
+                foreach (DesignerVariable objItem in lstDesignerProperties.Items)
                 {
-                    string strVal = objItem.ToString();
-
-                    string strPropName = strVal.Substring(0, strVal.IndexOf("(", StringComparison.Ordinal) - 1);
-
-                    string strPropType = strVal.Replace(strPropName + " (", string.Empty);
-                    strPropType = strPropType.Replace(")", string.Empty);
-
-                    AddDesignerProperty(strPropName, strPropType);
+                    AddDesignerProperty(objItem);
                 }
             }
             catch (Exception err)
@@ -78,9 +72,9 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
                 if (_isLoaded)
                     return;
 
-                cmbDesignerPropertyDataType.Items.AddRange(DesignerVariableType.ToArray());
-                //cmbDesignerPropertyDataType.Text = strDataTypes[0];
-                cmbDesignerPropertyDataType.SelectedIndex = 0;
+                cmbDesignerPropertyDataType.DataSource = DesignerVariableType.ToArray;
+                cmbDesignerPropertyDataType.DisplayMember = nameof(Type.Name);
+                cmbDesignerPropertyDataType.SelectedItem = typeof(string);
 
                 _isLoaded = true;
             }
@@ -94,15 +88,8 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 
         private bool VarNameAlreadyExists(string strValue)
         {
-            foreach (object o in lstDesignerProperties.Items)
-            {
-                string strObjVal = o.ToString();
-                strObjVal = strObjVal.Remove(strObjVal.IndexOf(" (", StringComparison.Ordinal),
-                    strObjVal.Length - strObjVal.IndexOf(" (", StringComparison.Ordinal));
-                if (strObjVal == strValue)
-                    return true;
-            }
-            return false;
+            return lstDesignerProperties.Items.Cast<DesignerVariable>()
+                .Any(strObjVal => strObjVal.Name == strValue);
         }
 
         /// <summary>
@@ -133,11 +120,10 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
                         "Please enter a unique name. No two properties can have the same name");
                     return;
                 }
-                lstDesignerProperties.Items.Add(
-                    txtDesignerProperty.Text + " (" + cmbDesignerPropertyDataType.Text + ")");
+                lstDesignerProperties.Items.Add(new DesignerVariable(txtDesignerProperty.Text,
+                    (Type) cmbDesignerPropertyDataType.SelectedItem));
                 txtDesignerProperty.Clear();
-                cmbDesignerPropertyDataType.Text = "string";
-
+                cmbDesignerPropertyDataType.SelectedItem = typeof(string);
             }
             catch (Exception err)
             {
@@ -149,15 +135,14 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 
         private void cmbDesignerPropertyDataType_Changed(object sender, EventArgs e)
         {
-            string currentSelection =
-                cmbDesignerPropertyDataType.Items[cmbDesignerPropertyDataType.SelectedIndex].ToString();
-            if (currentSelection == "SchemaList")
+            Type currentSelection = (Type)cmbDesignerPropertyDataType.SelectedItem;
+            if (currentSelection.Name == "SchemaList")
             {
                 lblHelpDesignerProperties.Text =
                     "SchemaList allows for a dialog to pick any number of referenced schemas";
                 lblHelpDesignerProperties.Visible = true;
             }
-            else if (currentSelection == "SchemaWithNone")
+            else if (currentSelection.Name == "SchemaWithNone")
             {
                 lblHelpDesignerProperties.Text =
                     "SchemaWithNone allows for a dropdown listbox with referenced schemas, selecting one only";

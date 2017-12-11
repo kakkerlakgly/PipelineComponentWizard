@@ -104,13 +104,7 @@
             // 
             this.cboPipelineType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             resources.ApplyResources(this.cboPipelineType, "cboPipelineType");
-            this.cboPipelineType.Items.AddRange(new object[] {
-            resources.GetString("cboPipelineType.Items"),
-            resources.GetString("cboPipelineType.Items1"),
-            resources.GetString("cboPipelineType.Items2")});
             this.cboPipelineType.Name = "cboPipelineType";
-            this.cboPipelineType.SelectedIndexChanged += new System.EventHandler(this.PipelineType_Changed);
-            this.cboPipelineType.SelectedValueChanged += new System.EventHandler(this.Element_Changed);
             this.cboPipelineType.Validating += new System.ComponentModel.CancelEventHandler(this.cboPipelineType_Validating);
             // 
             // label4
@@ -127,9 +121,6 @@
             // 
             resources.ApplyResources(this.cboImplementationLanguage, "cboImplementationLanguage");
             this.cboImplementationLanguage.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cboImplementationLanguage.Items.AddRange(new object[] {
-            resources.GetString("cboImplementationLanguage.Items"),
-            resources.GetString("cboImplementationLanguage.Items1")});
             this.cboImplementationLanguage.Name = "cboImplementationLanguage";
             // 
             // label5

@@ -303,12 +303,6 @@
   <data name="cboImplementationLanguage.ItemHeight" type="System.Int32, mscorlib">
     <value>13</value>
   </data>
-  <data name="cboImplementationLanguage.Items" xml:space="preserve">
-    <value>C#</value>
-  </data>
-  <data name="cboImplementationLanguage.Items1" xml:space="preserve">
-    <value>VB.NET</value>
-  </data>
   <data name="cboImplementationLanguage.Location" type="System.Drawing.Point, System.Drawing">
     <value>259, 227</value>
   </data>
@@ -365,15 +359,6 @@
   </data>
   <data name="cboPipelineType.ItemHeight" type="System.Int32, mscorlib">
     <value>13</value>
-  </data>
-  <data name="cboPipelineType.Items" xml:space="preserve">
-    <value>Receive</value>
-  </data>
-  <data name="cboPipelineType.Items1" xml:space="preserve">
-    <value>Send</value>
-  </data>
-  <data name="cboPipelineType.Items2" xml:space="preserve">
-    <value>Any</value>
   </data>
   <data name="cboPipelineType.Location" type="System.Drawing.Point, System.Drawing">
     <value>27, 187</value>

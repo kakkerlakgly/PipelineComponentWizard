@@ -39,9 +39,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
             _pageCollection.Add(WzPageDesignerProperties1);
             _pageCollection.Add(wzPageSummary1);
 
-            wzPageGeneralSetup1.AddWizardResultEvent += AddWizardResult;
             WzPageDesignerProperties1.AddDesignerPropertyEvent += AddDesignerProperty;
-            WzPageGeneralProperties1.AddWizardResultEvent += AddWizardResult;
 
             ButtonHelp.Enabled = false;
         }
@@ -123,37 +121,15 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
             return countingUp ? ++pageCount : --pageCount;
         }
 
-        private void AddWizardResult(object sender, PropertyPairEvent e)
-        {
-            try
-            {
-                //Replace the value if it already exists
-                if (WizardResults.ContainsKey(e.Name))
-                {
-                    WizardResults.Remove(e.Name);
-                }
-                WizardResults.Add(e.Name, e.Value);
-            }
-            catch (Exception err)
-            {
-#if DEBUG
-				MessageBox.Show(this, err.ToString());
-#else
-                MessageBox.Show(this, err.Message);
-#endif
-                Trace.WriteLine(err.Message + Environment.NewLine + err.StackTrace);
-            }
-        }
-
-        private void AddProperty(IDictionary<string, string> ht, PropertyPairEvent e)
+        private void AddProperty(IDictionary<string, Type> ht, DesignerVariableEvent e)
         {
             //Replace the value if it already exists
-            if (ht.ContainsKey(e.Name))
-                ht.Remove(e.Name);
-            ht.Add(e.Name, e.Value.ToString());
+            if (ht.ContainsKey(e.Variable.Name))
+                ht.Remove(e.Variable.Name);
+            ht.Add(e.Variable.Name, e.Variable.Type);
         }
 
-        private void AddDesignerProperty(object sender, PropertyPairEvent e)
+        private void AddDesignerProperty(object sender, DesignerVariableEvent e)
         {
             try
             {
@@ -170,8 +146,8 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
             }
         }
 
-        public IDictionary<string, string> DesignerProperties { get; } = new Dictionary<string, string>();
+        public IDictionary<string, Type> DesignerProperties { get; } = new Dictionary<string, Type>();
 
-        public IDictionary<string, object> WizardResults { get; } = new Dictionary<string, object>();
+        public WizardValues WizardResults { get; } = new WizardValues();
     }
 }
