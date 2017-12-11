@@ -143,26 +143,26 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
 
 		        // create our class, this variable will entail the entire definition until
 		        // we write it out
-		        CodeTypeDeclaration clsDecleration = new CodeTypeDeclaration {Name = clsClassName};
+		        CodeTypeDeclaration clsDeclaration = new CodeTypeDeclaration {Name = clsClassName};
 
 		        // start by setting the name of the class
 
 		        #region class attributes
 
 		        // add our attributes
-		        clsDecleration.CustomAttributes.Add(
+		        clsDeclaration.CustomAttributes.Add(
 		            new CodeAttributeDeclaration(
 		                "ComponentCategory",
 		                new CodeAttributeArgument(new CodeTypeReferenceExpression("CategoryTypes.CATID_PipelineComponent"))));
 
 		        // add our Guid
-		        clsDecleration.CustomAttributes.Add(
+		        clsDeclaration.CustomAttributes.Add(
 		            new CodeAttributeDeclaration(
 		                "System.Runtime.InteropServices.Guid",
 		                new CodeAttributeArgument(new CodePrimitiveExpression(componentGuid.ToString()))));
 
 		        // add the component category
-		        clsDecleration.CustomAttributes.Add(
+		        clsDeclaration.CustomAttributes.Add(
 		            new CodeAttributeDeclaration(
 		                "ComponentCategory",
 		                new CodeAttributeArgument(
@@ -189,7 +189,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
 		        // set the accessor visibility
 
 		        // finally, add the statement to the class
-		        clsDecleration.Members.Add(cmf);
+		        clsDeclaration.Members.Add(cmf);
 
 		        #endregion
 
@@ -225,7 +225,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
 		            }
 
 		            // add the member variable to the class definition
-		            clsDecleration.Members.Add(cmf);
+		            clsDeclaration.Members.Add(cmf);
 
 		            // instantiate a new CodeMemberProperty, which defines a getter/setter combination
 		            clsProperty = new CodeMemberProperty
@@ -284,7 +284,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
 
 		            clsProperty.Attributes = MemberAttributes.Public;
 		            clsProperty.Attributes |= MemberAttributes.Final;
-		            clsDecleration.Members.Add(clsProperty);
+		            clsDeclaration.Members.Add(clsProperty);
 		        }
 
 		        #endregion
@@ -320,7 +320,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
 		        clsProperty.Attributes |= MemberAttributes.Final;
 		        clsProperty.ImplementationTypes.Clear();
 		        clsProperty.ImplementationTypes.Add(typeof(IBaseComponent));
-		        clsDecleration.Members.Add(clsProperty);
+		        clsDeclaration.Members.Add(clsProperty);
 
 		        #endregion
 
@@ -346,7 +346,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
 		        clsProperty.Attributes |= MemberAttributes.Final;
 		        clsProperty.ImplementationTypes.Clear();
 		        clsProperty.ImplementationTypes.Add(typeof(IBaseComponent));
-		        clsDecleration.Members.Add(clsProperty);
+		        clsDeclaration.Members.Add(clsProperty);
 
 		        #endregion
 
@@ -380,7 +380,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
 		        // add the #endregion directive
 		        clsProperty.EndDirectives.Add(crEndDirective);
 
-		        clsDecleration.Members.Add(clsProperty);
+		        clsDeclaration.Members.Add(clsProperty);
 
 		        #endregion
 
@@ -414,7 +414,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
 		        clsMethod.Attributes = MemberAttributes.Public;
 		        clsMethod.Attributes |= MemberAttributes.Final;
 		        clsMethod.ImplementationTypes.Add(typeof(IPersistPropertyBag));
-		        clsDecleration.Members.Add(clsMethod);
+		        clsDeclaration.Members.Add(clsMethod);
 
 		        #endregion
 
@@ -428,7 +428,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
 		        clsMethod.Attributes = MemberAttributes.Public;
 		        clsMethod.Attributes |= MemberAttributes.Final;
 		        clsMethod.ImplementationTypes.Add(typeof(IPersistPropertyBag));
-		        clsDecleration.Members.Add(clsMethod);
+		        clsDeclaration.Members.Add(clsMethod);
 
 		        #endregion
 
@@ -515,7 +515,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
 		        clsMethod.ReturnType = new CodeTypeReference(typeof(void));
 		        clsMethod.Attributes = MemberAttributes.Public;
 		        clsMethod.ImplementationTypes.Add(typeof(IPersistPropertyBag));
-		        clsDecleration.Members.Add(clsMethod);
+		        clsDeclaration.Members.Add(clsMethod);
 
 		        #endregion
 
@@ -564,7 +564,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
 		            }
 		        }
 
-		        clsDecleration.Members.Add(clsMethod);
+		        clsDeclaration.Members.Add(clsMethod);
 
 		        #endregion
 
@@ -631,7 +631,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
 		        clsMethod.Comments.Add(new CodeCommentStatement("<param name=\"pb\">Property bag</param>", true));
 		        clsMethod.Comments.Add(new CodeCommentStatement("<param name=\"propName\">Name of property</param>", true));
 		        clsMethod.Comments.Add(new CodeCommentStatement("<returns>Value of the property</returns>", true));
-		        clsDecleration.Members.Add(clsMethod);
+		        clsDeclaration.Members.Add(clsMethod);
 
 		        #endregion
 
@@ -685,7 +685,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
 		        // add the #endregion directive for the IPersistPropertyBag implementation
 		        clsMethod.EndDirectives.Add(crEndDirective);
 
-		        clsDecleration.Members.Add(clsMethod);
+		        clsDeclaration.Members.Add(clsMethod);
 
 		        #endregion
 
@@ -728,7 +728,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
 		        clsProperty.Attributes |= MemberAttributes.Final;
 		        clsProperty.ImplementationTypes.Add(typeof(IComponentUI));
 
-		        clsDecleration.Members.Add(clsProperty);
+		        clsDeclaration.Members.Add(clsProperty);
 
 		        #endregion
 
@@ -766,7 +766,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
 
 		        clsMethod.EndDirectives.Add(crEndDirective);
 
-		        clsDecleration.Members.Add(clsMethod);
+		        clsDeclaration.Members.Add(clsMethod);
 
 		        #endregion
 
@@ -778,7 +778,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
 
 		            case ComponentType.AssemblingSerializer:
 		                // add another base type
-		                clsDecleration.BaseTypes.Add(typeof(IAssemblerComponent));
+		                clsDeclaration.BaseTypes.Add(typeof(IAssemblerComponent));
 
                         // add a member variable to store the incoming message
                         cmf = new CodeMemberField(typeof(ArrayList), "_inmsgs")
@@ -789,7 +789,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
 
                             Attributes = MemberAttributes.Private
                         };
-                        clsDecleration.Members.Add(cmf);
+                        clsDeclaration.Members.Add(cmf);
 
 		                #region implement IAssemblerComponent
 
@@ -826,7 +826,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
 		                clsMethod.Attributes = MemberAttributes.Public;
 		                clsMethod.Attributes |= MemberAttributes.Final;
 		                clsMethod.ImplementationTypes.Add(typeof(IAssemblerComponent));
-		                clsDecleration.Members.Add(clsMethod);
+		                clsDeclaration.Members.Add(clsMethod);
 
                         #endregion
 
@@ -875,7 +875,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
 		                // add #endregion
 		                clsMethod.EndDirectives.Add(crEndDirective);
 
-		                clsDecleration.Members.Add(clsMethod);
+		                clsDeclaration.Members.Add(clsMethod);
 
 		                #endregion
 
@@ -888,7 +888,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
 		            #region DisassemblingParser (IDisassemblerComponent, IProbeMessage)
 
 		            case ComponentType.DisassemblingParser:
-		                clsDecleration.BaseTypes.Add(typeof(IDisassemblerComponent));
+		                clsDeclaration.BaseTypes.Add(typeof(IDisassemblerComponent));
 
                         // add a member variable to store the incoming message
                         cmf = new CodeMemberField(typeof(Queue), "_msgs")
@@ -900,7 +900,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
 		                cmf.Comments.Add(new CodeCommentStatement(
 		                    "this variable will contain any message generated by the Disassemble method", true));
 		                cmf.Comments.Add(new CodeCommentStatement("</summary>", true));
-		                clsDecleration.Members.Add(cmf);
+		                clsDeclaration.Members.Add(cmf);
 
 		                #region implement IDisassemblerComponent
 
@@ -962,7 +962,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
 		                clsMethod.Attributes = MemberAttributes.Public;
 		                clsMethod.Attributes |= MemberAttributes.Final;
 		                clsMethod.ImplementationTypes.Add(typeof(IDisassemblerComponent));
-		                clsDecleration.Members.Add(clsMethod);
+		                clsDeclaration.Members.Add(clsMethod);
 
                         #endregion
 
@@ -1003,7 +1003,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
 		                // add #endregion directive
 		                clsMethod.EndDirectives.Add(crEndDirective);
 
-		                clsDecleration.Members.Add(clsMethod);
+		                clsDeclaration.Members.Add(clsMethod);
 
 		                #endregion
 
@@ -1018,7 +1018,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
 
 		                    #region IProbeMessage.Probe
 
-		                    clsDecleration.BaseTypes.Add(typeof(IProbeMessage));
+		                    clsDeclaration.BaseTypes.Add(typeof(IProbeMessage));
 
 		                    clsMethod = new CodeMemberMethod();
 
@@ -1063,7 +1063,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
 		                    // add #endregion directive
 		                    clsMethod.EndDirectives.Add(crEndDirective);
 
-		                    clsDecleration.Members.Add(clsMethod);
+		                    clsDeclaration.Members.Add(clsMethod);
 
 		                    #endregion
 
@@ -1075,7 +1075,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
 		            #endregion
 
 		            default:
-		                clsDecleration.BaseTypes.Add(typeof(IComponent));
+		                clsDeclaration.BaseTypes.Add(typeof(IComponent));
 
 		                #region IComponent implementation
 
@@ -1123,7 +1123,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
 		                // add #endregion directive
 		                clsMethod.EndDirectives.Add(crEndDirective);
 
-		                clsDecleration.Members.Add(clsMethod);
+		                clsDeclaration.Members.Add(clsMethod);
 
 		                #endregion
 
@@ -1135,15 +1135,15 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
 		        // add the interfaces we've implemented
 		        foreach (string baseType in baseTypes)
 		        {
-		            clsDecleration.BaseTypes.Add(baseType);
+		            clsDeclaration.BaseTypes.Add(baseType);
 		        }
 
 		        // we're generating a public class
-		        clsDecleration.IsClass = true;
-		        clsDecleration.TypeAttributes = TypeAttributes.Public;
+		        clsDeclaration.IsClass = true;
+		        clsDeclaration.TypeAttributes = TypeAttributes.Public;
 
 		        // and add it to our namespace
-		        cnsCodeNamespace.Types.Add(clsDecleration);
+		        cnsCodeNamespace.Types.Add(clsDeclaration);
 
 		        // tell the code generator to generate our sourcecode
 		        codeGenerator.GenerateCodeFromNamespace(cnsCodeNamespace, sw, Cgo);
