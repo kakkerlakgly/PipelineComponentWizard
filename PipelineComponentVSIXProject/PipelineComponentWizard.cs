@@ -43,7 +43,8 @@ namespace PipelineComponentVSIXProject
                     // create our actual class
                     _pipelineComponentSourceFile = Path.Combine(_destinationdirectory,
                         _wizardResults.ClassName + ".cs");
-                    PipelineComponentCodeGenerator.GeneratePipelineComponent(
+                    var codeGenerator = new PipelineComponentCodeGenerator();
+                    codeGenerator.GeneratePipelineComponent(
                         _pipelineComponentSourceFile,
                         _wizardResults.Namespace,
                         _wizardResults.ClassName,
