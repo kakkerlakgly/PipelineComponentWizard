@@ -135,7 +135,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
             #region resource manager
 
             // add our ResourceManager instance
-            var codeMemberField = new CodeMemberField(typeof(ResourceManager), "resourceManager")
+            var codeMemberField = new CodeMemberField(typeof(ResourceManager), "_resourceManager")
             {
                 InitExpression = new CodeObjectCreateExpression(
                     typeof(ResourceManager),
@@ -168,7 +168,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
                 var designerPropertyType = entry.Value;
 
                 // add a member variable using the suggested name
-                codeMemberField = new CodeMemberField(designerPropertyType, "_" + entry.Key)
+                codeMemberField = new CodeMemberField(designerPropertyType, GetPrivateMemberName(entry.Key))
                 {
                     Attributes = MemberAttributes.Private
                 };
@@ -192,7 +192,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
                 // instantiate a new CodeMemberProperty, which defines a getter/setter combination
                 codeMemberProperty = new CodeMemberProperty
                 {
-                    Name = entry.Key,
+                    Name = GetPublicMemberName(entry.Key),
                     Attributes = MemberAttributes.Public,
                     Type = new CodeTypeReference(designerPropertyType),
                     HasGet = true
@@ -203,14 +203,14 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
                 // indicate the Property has a Getter
                 // add a simple Getter implementation to the getter (get { return <variableName>; ))
                 codeMemberProperty.GetStatements.Add(
-                    new CodeMethodReturnStatement(new CodeVariableReferenceExpression("_" + entry.Key)));
+                    new CodeMethodReturnStatement(new CodeVariableReferenceExpression(GetPrivateMemberName(entry.Key))));
                 // indicate the Property also has a Setter
                 codeMemberProperty.HasSet = true;
                 if (designerPropertyType == typeof(SchemaList))
                 {
                     var setStatementList = new List<CodeStatement>();
 
-                    var varName = "_" + entry.Key;
+                    var varName = GetPrivateMemberName(entry.Key);
 
                     // this._property = value;
                     setStatementList.Add(new CodeAssignStatement(new CodeVariableReferenceExpression(varName),
@@ -241,7 +241,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
                 else
                 {
                     codeMemberProperty.SetStatements.Add(new CodeAssignStatement(
-                        new CodeVariableReferenceExpression("_" + entry.Key),
+                        new CodeVariableReferenceExpression(GetPrivateMemberName(entry.Key)),
                         new CodePropertySetValueReferenceExpression()));
                 }
 
@@ -258,7 +258,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
 
             #region implement IBaseComponent
 
-            var crDirective = new CodeRegionDirective(CodeRegionMode.Start, "IBaseComponent members");
+            var codeRegionDirective = new CodeRegionDirective(CodeRegionMode.Start, "IBaseComponent members");
 
             #region IBaseComponent.Name
 
@@ -266,13 +266,13 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
             codeMemberProperty = new CodeMemberProperty();
 
             // add the #region directive
-            codeMemberProperty.StartDirectives.Add(crDirective);
+            codeMemberProperty.StartDirectives.Add(codeRegionDirective);
 
             codeMemberProperty.Name = "Name";
             codeMemberProperty.HasSet = false;
             codeMemberProperty.HasGet = true;
             codeMemberProperty.GetStatements.Add(new CodeMethodReturnStatement(new CodeSnippetExpression(
-                "resourceManager.GetString(\"COMPONENTNAME\", System.Globalization.CultureInfo.InvariantCulture)")));
+                "_resourceManager.GetString(\"COMPONENTNAME\", System.Globalization.CultureInfo.InvariantCulture)")));
             codeMemberProperty.Type = new CodeTypeReference(typeof(string));
             codeMemberProperty.CustomAttributes.Add(new CodeAttributeDeclaration("Browsable",
                 new CodeAttributeArgument(new CodePrimitiveExpression(false))));
@@ -297,7 +297,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
                 HasGet = true
             };
             codeMemberProperty.GetStatements.Add(new CodeMethodReturnStatement(new CodeSnippetExpression(
-                "resourceManager.GetString(\"COMPONENTVERSION\", System.Globalization.CultureInfo.InvariantCulture)")));
+                "_resourceManager.GetString(\"COMPONENTVERSION\", System.Globalization.CultureInfo.InvariantCulture)")));
             codeMemberProperty.Type = new CodeTypeReference(typeof(string));
             codeMemberProperty.CustomAttributes.Add(
                 new CodeAttributeDeclaration(
@@ -325,7 +325,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
                 Type = new CodeTypeReference(typeof(string))
             };
             codeMemberProperty.GetStatements.Add(new CodeMethodReturnStatement(new CodeSnippetExpression(
-                "resourceManager.GetString(\"COMPONENTDESCRIPTION\", System.Globalization.CultureInfo.InvariantCulture)")));
+                "_resourceManager.GetString(\"COMPONENTDESCRIPTION\", System.Globalization.CultureInfo.InvariantCulture)")));
             codeMemberProperty.CustomAttributes.Add(
                 new CodeAttributeDeclaration(
                     "Browsable", new CodeAttributeArgument(new CodePrimitiveExpression(false))));
@@ -353,7 +353,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
 
             #region implement IPersistPropertyBag
 
-            crDirective = new CodeRegionDirective(CodeRegionMode.Start, "IPersistPropertyBag members");
+            codeRegionDirective = new CodeRegionDirective(CodeRegionMode.Start, "IPersistPropertyBag members");
 
             #region IPersistPropertyBag.GetClassID
 
@@ -361,12 +361,12 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
             var codeMemberMethod = new CodeMemberMethod();
 
             // add the #region directive
-            codeMemberMethod.StartDirectives.Add(crDirective);
+            codeMemberMethod.StartDirectives.Add(codeRegionDirective);
 
             codeMemberMethod.Name = "GetClassID";
-            codeMemberMethod.Parameters.Add(new CodeParameterDeclarationExpression(typeof(Guid), "classid"));
+            codeMemberMethod.Parameters.Add(new CodeParameterDeclarationExpression(typeof(Guid), "classID"));
             codeMemberMethod.Parameters[0].Direction = FieldDirection.Out;
-            codeMemberMethod.Statements.Add(new CodeAssignStatement(new CodeArgumentReferenceExpression("classid"),
+            codeMemberMethod.Statements.Add(new CodeAssignStatement(new CodeArgumentReferenceExpression("classID"),
                 new CodeObjectCreateExpression(typeof(Guid),
                     new CodeSnippetExpression("\"" + _componentGuid + "\""))));
             codeMemberMethod.ReturnType = new CodeTypeReference(typeof(void));
@@ -375,7 +375,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
                 "Gets class ID of component for usage from unmanaged code.",
                 true));
             codeMemberMethod.Comments.Add(new CodeCommentStatement("</summary>", true));
-            codeMemberMethod.Comments.Add(new CodeCommentStatement("<param name=\"classid\">", true));
+            codeMemberMethod.Comments.Add(new CodeCommentStatement("<param name=\"classID\">", true));
             codeMemberMethod.Comments.Add(new CodeCommentStatement("Class ID of the component", true));
             codeMemberMethod.Comments.Add(new CodeCommentStatement("</param>", true));
             codeMemberMethod.Attributes = MemberAttributes.Public;
@@ -403,8 +403,8 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
 
             // next, implement IPersistPropertyBag.Load
             codeMemberMethod = new CodeMemberMethod {Name = "Load"};
-            codeMemberMethod.Parameters.Add(new CodeParameterDeclarationExpression(typeof(IPropertyBag), "pb"));
-            codeMemberMethod.Parameters.Add(new CodeParameterDeclarationExpression(typeof(int), "errlog"));
+            codeMemberMethod.Parameters.Add(new CodeParameterDeclarationExpression(typeof(IPropertyBag), "propertyBag"));
+            codeMemberMethod.Parameters.Add(new CodeParameterDeclarationExpression(typeof(int), "errorLog"));
 
             if (designerProperties.Count > 0)
             {
@@ -413,14 +413,14 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
                     new CodeVariableDeclarationStatement(typeof(object), "val", new CodePrimitiveExpression(null)));
                 foreach (var entry in designerProperties)
                 {
-                    // val = this.ReadPropertyBag(pb, "property");
+                    // val = this.ReadPropertyBag(propertyBag, "property");
                     codeMemberMethod.Statements.Add(
                         new CodeAssignStatement(
                             new CodeVariableReferenceExpression("val"),
                             new CodeMethodInvokeExpression(
                                 new CodeMethodReferenceExpression(
-                                    thisObject, "ReadPropertyBag"), new CodeArgumentReferenceExpression("pb"),
-                                new CodeSnippetExpression("\"" + entry.Key + "\""))));
+                                    thisObject, "ReadPropertyBag"), new CodeArgumentReferenceExpression("propertyBag"),
+                                new CodeSnippetExpression("\"" + GetPublicMemberName(entry.Key) + "\""))));
 
                     // typeof(variable)
                     var designerPropertyType = entry.Value;
@@ -430,14 +430,14 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
                     {
                         codeMemberMethod.Statements.Add(
                             new CodeSnippetStatement(
-                                $"#error please implement IPersistPropertyBag.Load for property \"{entry.Key}\""));
+                                $"#error please implement IPersistPropertyBag.Load for property \"{GetPublicMemberName(entry.Key)}\""));
                     }
                     else if (designerPropertyType == typeof(SchemaWithNone))
                     {
                         // this._property = new SchemaWithNone((string) val);
                         assignment =
                             new CodeAssignStatement(
-                                new CodeFieldReferenceExpression(thisObject, "_" + entry.Key),
+                                new CodeFieldReferenceExpression(thisObject, GetPrivateMemberName(entry.Key)),
                                 new CodeObjectCreateExpression(
                                     designerPropertyType,
                                     new CodeCastExpression(
@@ -458,7 +458,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
                         // this._property = (type) val;
                         assignment =
                             new CodeAssignStatement(
-                                new CodeFieldReferenceExpression(thisObject, "_" + entry.Key),
+                                new CodeFieldReferenceExpression(thisObject, GetPrivateMemberName(entry.Key)),
                                 new CodeCastExpression(entry.Value,
                                     new CodeVariableReferenceExpression("val")));
 
@@ -479,8 +479,8 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
                 new CodeCommentStatement("Loads configuration properties for the component", true));
             codeMemberMethod.Comments.Add(new CodeCommentStatement("</summary>", true));
             codeMemberMethod.Comments.Add(
-                new CodeCommentStatement("<param name=\"pb\">Configuration property bag</param>", true));
-            codeMemberMethod.Comments.Add(new CodeCommentStatement("<param name=\"errlog\">Error status</param>",
+                new CodeCommentStatement("<param name=\"propertyBag\">Configuration property bag</param>", true));
+            codeMemberMethod.Comments.Add(new CodeCommentStatement("<param name=\"errorLog\">Error status</param>",
                 true));
             codeMemberMethod.ReturnType = new CodeTypeReference(typeof(void));
             codeMemberMethod.Attributes = MemberAttributes.Public;
@@ -493,21 +493,21 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
 
             // next, implement IPersistPropertyBag.Save
             codeMemberMethod = new CodeMemberMethod {Name = "Save"};
-            codeMemberMethod.Parameters.Add(new CodeParameterDeclarationExpression(typeof(IPropertyBag), "pb"));
-            codeMemberMethod.Parameters.Add(new CodeParameterDeclarationExpression(typeof(bool), "fClearDirty"));
+            codeMemberMethod.Parameters.Add(new CodeParameterDeclarationExpression(typeof(IPropertyBag), "propertyBag"));
+            codeMemberMethod.Parameters.Add(new CodeParameterDeclarationExpression(typeof(bool), "clearDirty"));
             codeMemberMethod.Parameters.Add(
-                new CodeParameterDeclarationExpression(typeof(bool), "fSaveAllProperties"));
+                new CodeParameterDeclarationExpression(typeof(bool), "saveAllProperties"));
 
             codeMemberMethod.Comments.Add(new CodeCommentStatement("<summary>", true));
             codeMemberMethod.Comments.Add(
                 new CodeCommentStatement("Saves the current component configuration into the property bag", true));
             codeMemberMethod.Comments.Add(new CodeCommentStatement("</summary>", true));
             codeMemberMethod.Comments.Add(
-                new CodeCommentStatement("<param name=\"pb\">Configuration property bag</param>", true));
-            codeMemberMethod.Comments.Add(new CodeCommentStatement("<param name=\"fClearDirty\">not used</param>",
+                new CodeCommentStatement("<param name=\"propertyBag\">Configuration property bag</param>", true));
+            codeMemberMethod.Comments.Add(new CodeCommentStatement("<param name=\"clearDirty\">not used</param>",
                 true));
             codeMemberMethod.Comments.Add(
-                new CodeCommentStatement("<param name=\"fSaveAllProperties\">not used</param>", true));
+                new CodeCommentStatement("<param name=\"saveAllProperties\">not used</param>", true));
             codeMemberMethod.ReturnType = new CodeTypeReference(typeof(void));
             codeMemberMethod.Attributes = MemberAttributes.Public;
             codeMemberMethod.ImplementationTypes.Add(typeof(IPersistPropertyBag));
@@ -519,19 +519,19 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
                 if (designerPropertyType == typeof(SchemaList))
                     codeMemberMethod.Statements.Add(
                         new CodeSnippetStatement(
-                            $"#error please implement IPersistPropertyBag.Save for property \"{entry.Key}\""));
+                            $"#error please implement IPersistPropertyBag.Save for property \"{GetPublicMemberName(entry.Key)}\""));
                 else if (designerPropertyType == typeof(SchemaWithNone))
                     codeMemberMethod.Statements.Add(
                         new CodeMethodInvokeExpression(
-                            thisObject, "WritePropertyBag", new CodeArgumentReferenceExpression("pb"),
-                            new CodePrimitiveExpression(entry.Key), new CodeFieldReferenceExpression(
-                                new CodeFieldReferenceExpression(thisObject, entry.Key), "SchemaName")));
+                            thisObject, "WritePropertyBag", new CodeArgumentReferenceExpression("propertyBag"),
+                            new CodePrimitiveExpression(GetPublicMemberName(entry.Key)), new CodeFieldReferenceExpression(
+                                new CodeFieldReferenceExpression(thisObject, GetPublicMemberName(entry.Key)), "SchemaName")));
                 else
                     codeMemberMethod.Statements.Add(
                         new CodeMethodInvokeExpression(
-                            thisObject, "WritePropertyBag", new CodeArgumentReferenceExpression("pb"),
-                            new CodePrimitiveExpression(entry.Key),
-                            new CodeFieldReferenceExpression(thisObject, entry.Key)));
+                            thisObject, "WritePropertyBag", new CodeArgumentReferenceExpression("propertyBag"),
+                            new CodePrimitiveExpression(GetPublicMemberName(entry.Key)),
+                            new CodeFieldReferenceExpression(thisObject, GetPublicMemberName(entry.Key))));
             }
 
             codeTypeDeclaration.Members.Add(codeMemberMethod);
@@ -540,28 +540,28 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
 
             #region safe version of ReadPropertyBag
 
-            crDirective = new CodeRegionDirective(CodeRegionMode.Start, "utility functionality");
+            codeRegionDirective = new CodeRegionDirective(CodeRegionMode.Start, "utility functionality");
 
             // next, implement a safe version of ReadPropertyBag
             codeMemberMethod = new CodeMemberMethod();
 
             // add the #region directive
-            codeMemberMethod.StartDirectives.Add(crDirective);
+            codeMemberMethod.StartDirectives.Add(codeRegionDirective);
 
             codeMemberMethod.Name = "ReadPropertyBag";
             codeMemberMethod.ReturnType = new CodeTypeReference(typeof(object));
-            codeMemberMethod.Parameters.Add(new CodeParameterDeclarationExpression(typeof(IPropertyBag), "pb"));
-            codeMemberMethod.Parameters.Add(new CodeParameterDeclarationExpression(typeof(string), "propName"));
+            codeMemberMethod.Parameters.Add(new CodeParameterDeclarationExpression(typeof(IPropertyBag), "propertyBag"));
+            codeMemberMethod.Parameters.Add(new CodeParameterDeclarationExpression(typeof(string), "propertyName"));
 
             codeMemberMethod.Statements.Add(
                 new CodeVariableDeclarationStatement(typeof(object), "val", new CodePrimitiveExpression(null)));
 
-            // try running pb.Read()
-            var pbRead =
+            // try running propertyBag.Read()
+            var propertyBagRead =
                 new CodeMethodInvokeExpression(
                     new CodeMethodReferenceExpression(
-                        new CodeArgumentReferenceExpression("pb"), "Read"),
-                    new CodeArgumentReferenceExpression("propName"), new CodeDirectionExpression(FieldDirection.Out,
+                        new CodeArgumentReferenceExpression("propertyBag"), "Read"),
+                    new CodeArgumentReferenceExpression("propertyName"), new CodeDirectionExpression(FieldDirection.Out,
                         new CodeVariableReferenceExpression("val")), new CodePrimitiveExpression(0));
 
             var retVal = new CodeMethodReturnStatement(new CodeVariableReferenceExpression("val"));
@@ -569,7 +569,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
             if (codeProvider.Supports(GeneratorSupport.TryCatchStatements))
             {
                 var tryCatch = new CodeTryCatchFinallyStatement();
-                tryCatch.TryStatements.Add(pbRead);
+                tryCatch.TryStatements.Add(propertyBagRead);
                 var catchArgumentException =
                     new CodeCatchClause {CatchExceptionType = new CodeTypeReference(typeof(ArgumentException))};
                 catchArgumentException.Statements.Add(retVal);
@@ -592,7 +592,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
             else
             {
                 // unsafe
-                codeMemberMethod.Statements.Add(pbRead);
+                codeMemberMethod.Statements.Add(propertyBagRead);
             }
 
             codeMemberMethod.Statements.Add(retVal);
@@ -600,10 +600,10 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
             codeMemberMethod.Comments.Add(new CodeCommentStatement("<summary>", true));
             codeMemberMethod.Comments.Add(new CodeCommentStatement("Reads property value from property bag", true));
             codeMemberMethod.Comments.Add(new CodeCommentStatement("</summary>", true));
-            codeMemberMethod.Comments.Add(new CodeCommentStatement("<param name=\"pb\">Property bag</param>",
+            codeMemberMethod.Comments.Add(new CodeCommentStatement("<param name=\"propertyBag\">Property bag</param>",
                 true));
             codeMemberMethod.Comments.Add(
-                new CodeCommentStatement("<param name=\"propName\">Name of property</param>", true));
+                new CodeCommentStatement("<param name=\"propertyName\">Name of property</param>", true));
             codeMemberMethod.Comments.Add(
                 new CodeCommentStatement("<returns>Value of the property</returns>", true));
             codeTypeDeclaration.Members.Add(codeMemberMethod);
@@ -614,21 +614,21 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
 
             // next, implement a safe version of WritePropertyBag
             codeMemberMethod = new CodeMemberMethod {Name = "WritePropertyBag"};
-            codeMemberMethod.Parameters.Add(new CodeParameterDeclarationExpression(typeof(IPropertyBag), "pb"));
-            codeMemberMethod.Parameters.Add(new CodeParameterDeclarationExpression(typeof(string), "propName"));
+            codeMemberMethod.Parameters.Add(new CodeParameterDeclarationExpression(typeof(IPropertyBag), "propertyBag"));
+            codeMemberMethod.Parameters.Add(new CodeParameterDeclarationExpression(typeof(string), "propertyName"));
             codeMemberMethod.Parameters.Add(new CodeParameterDeclarationExpression(typeof(object), "val"));
 
-            var pbWrite =
+            var propertyBagWrite =
                 new CodeMethodInvokeExpression(
                     new CodeMethodReferenceExpression(
-                        new CodeArgumentReferenceExpression("pb"), "Write"),
-                    new CodeArgumentReferenceExpression("propName"), new CodeDirectionExpression(FieldDirection.Ref,
+                        new CodeArgumentReferenceExpression("propertyBag"), "Write"),
+                    new CodeArgumentReferenceExpression("propertyName"), new CodeDirectionExpression(FieldDirection.Ref,
                         new CodeVariableReferenceExpression("val")));
 
             if (codeProvider.Supports(GeneratorSupport.TryCatchStatements))
             {
                 var tryCatch = new CodeTryCatchFinallyStatement();
-                tryCatch.TryStatements.Add(pbWrite);
+                tryCatch.TryStatements.Add(propertyBagWrite);
                 var catchException = new CodeCatchClause("e", new CodeTypeReference(typeof(Exception)));
 
                 // if no dice, throw an ApplicationException
@@ -646,7 +646,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
             else
             {
                 // unsafe
-                codeMemberMethod.Statements.Add(pbWrite);
+                codeMemberMethod.Statements.Add(propertyBagWrite);
             }
 
             codeMemberMethod.Comments.Add(new CodeCommentStatement("<summary>", true));
@@ -654,9 +654,9 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
                 true));
             codeMemberMethod.Comments.Add(new CodeCommentStatement("</summary>", true));
             codeMemberMethod.Comments.Add(
-                new CodeCommentStatement("<param name=\"pb\">Property bag.</param>", true));
+                new CodeCommentStatement("<param name=\"propertyBag\">Property bag.</param>", true));
             codeMemberMethod.Comments.Add(
-                new CodeCommentStatement("<param name=\"propName\">Name of property.</param>", true));
+                new CodeCommentStatement("<param name=\"propertyName\">Name of property.</param>", true));
             codeMemberMethod.Comments.Add(new CodeCommentStatement("<param name=\"val\">Value of property.</param>",
                 true));
 
@@ -674,7 +674,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
 
             #region implement IComponentUI
 
-            crDirective = new CodeRegionDirective(CodeRegionMode.Start, "IComponentUI members");
+            codeRegionDirective = new CodeRegionDirective(CodeRegionMode.Start, "IComponentUI members");
 
             #region IComponentUI.Icon
 
@@ -682,7 +682,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
             codeMemberProperty = new CodeMemberProperty();
 
             // add the #region directive
-            codeMemberProperty.StartDirectives.Add(crDirective);
+            codeMemberProperty.StartDirectives.Add(codeRegionDirective);
 
             codeMemberProperty.Name = "Icon";
             codeMemberProperty.HasSet = false;
@@ -694,7 +694,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
                         new CodeCastExpression(
                             typeof(Bitmap),
                             new CodeMethodInvokeExpression(
-                                new CodeFieldReferenceExpression(thisObject, "resourceManager"),
+                                new CodeFieldReferenceExpression(thisObject, "_resourceManager"),
                                 "GetObject", new CodeSnippetExpression("\"COMPONENTICON\""),
                                 new CodeSnippetExpression("System.Globalization.CultureInfo.InvariantCulture"))),
                         "GetHicon")));
@@ -719,7 +719,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
 
             // finally, implement IComponentUI.Validate
             codeMemberMethod = new CodeMemberMethod {Name = "Validate"};
-            codeMemberMethod.Parameters.Add(new CodeParameterDeclarationExpression(typeof(object), "obj"));
+            codeMemberMethod.Parameters.Add(new CodeParameterDeclarationExpression(typeof(object), "projectSystem"));
 
             // add sample code for the IComponentUI.Validate method
             codeMemberMethod.Statements.Add(new CodeCommentStatement("example implementation:"));
@@ -740,7 +740,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
             codeMemberMethod.Comments.Add(new CodeCommentStatement("</summary>", true));
             codeMemberMethod.Comments.Add(
                 new CodeCommentStatement(
-                    "<param name=\"obj\">An Object containing the configuration properties.</param>",
+                    "<param name=\"projectSystem\">An Object containing the configuration properties.</param>",
                     true));
             codeMemberMethod.Comments.Add(new CodeCommentStatement(
                 "<returns>The IEnumerator enables the caller to enumerate through a collection of strings containing error messages. These error messages appear as compiler error messages. To report successful property validation, the method should return an empty enumerator.</returns>",
@@ -767,7 +767,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
                     codeTypeDeclaration.BaseTypes.Add(typeof(IAssemblerComponent));
 
                     // add a member variable to store the incoming message
-                    codeMemberField = new CodeMemberField(typeof(ArrayList), "_inmsgs")
+                    codeMemberField = new CodeMemberField(typeof(ArrayList), "_pInMsgs")
                     {
                         InitExpression =
                             new CodeObjectCreateExpression(
@@ -779,7 +779,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
 
                     #region implement IAssemblerComponent
 
-                    crDirective = new CodeRegionDirective(CodeRegionMode.Start, "IAssemblerComponent members");
+                    codeRegionDirective = new CodeRegionDirective(CodeRegionMode.Start, "IAssemblerComponent members");
 
                     #region IAssemblerComponent.AddDocument
 
@@ -787,31 +787,31 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
                     codeMemberMethod = new CodeMemberMethod();
 
                     // add #region directive
-                    codeMemberMethod.StartDirectives.Add(crDirective);
+                    codeMemberMethod.StartDirectives.Add(codeRegionDirective);
 
                     codeMemberMethod.Name = "AddDocument";
                     codeMemberMethod.Parameters.Add(
-                        new CodeParameterDeclarationExpression(typeof(IPipelineContext), "pc"));
+                        new CodeParameterDeclarationExpression(typeof(IPipelineContext), "pContext"));
                     codeMemberMethod.Parameters.Add(
-                        new CodeParameterDeclarationExpression(typeof(IBaseMessage), "inmsg"));
+                        new CodeParameterDeclarationExpression(typeof(IBaseMessage), "pInMsg"));
                     codeMemberMethod.ReturnType = new CodeTypeReference(typeof(void));
                     codeMemberMethod.Statements.Add(new CodeCommentStatement("store the message for later use"));
                     codeMemberMethod.Statements.Add(
                         new CodeMethodInvokeExpression(
                             new CodeMethodReferenceExpression(
-                                new CodeVariableReferenceExpression("_inmsgs"), "Add"),
-                            new CodeArgumentReferenceExpression("inmsg")));
+                                new CodeVariableReferenceExpression("_pInMsgs"), "Add"),
+                            new CodeArgumentReferenceExpression("pInMsg")));
 
                     codeMemberMethod.Comments.Add(new CodeCommentStatement("<summary>", true));
                     codeMemberMethod.Comments.Add(
-                        new CodeCommentStatement("Adds the document inmsg to the list of messages that will be",
+                        new CodeCommentStatement("Adds the document pInMsg to the list of messages that will be",
                             true));
                     codeMemberMethod.Comments.Add(new CodeCommentStatement("included in the interchange.", true));
                     codeMemberMethod.Comments.Add(new CodeCommentStatement("</summary>", true));
                     codeMemberMethod.Comments.Add(
-                        new CodeCommentStatement("<param name=\"pc\">the current pipeline context</param>", true));
+                        new CodeCommentStatement("<param name=\"pContext\">the current pipeline context</param>", true));
                     codeMemberMethod.Comments.Add(
-                        new CodeCommentStatement("<param name=\"inmsg\">the message to be added</param>", true));
+                        new CodeCommentStatement("<param name=\"pInMsg\">the message to be added</param>", true));
 
                     codeMemberMethod.Attributes = MemberAttributes.Public;
                     codeMemberMethod.Attributes |= MemberAttributes.Final;
@@ -828,7 +828,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
                         Name = "Assemble"
                     };
                     codeMemberMethod.Parameters.Add(
-                        new CodeParameterDeclarationExpression(typeof(IPipelineContext), "pc"));
+                        new CodeParameterDeclarationExpression(typeof(IPipelineContext), "pContext"));
                     codeMemberMethod.ReturnType = new CodeTypeReference(typeof(IBaseMessage));
                     codeMemberMethod.Statements.Add(new CodeCommentStatement("TODO: implement assembling logic"));
 
@@ -845,10 +845,10 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
                             new CodeCastExpression(
                                 typeof(IBaseMessage),
                                 new CodeArrayIndexerExpression(
-                                    new CodeVariableReferenceExpression("_inmsgs"),
+                                    new CodeVariableReferenceExpression("_pInMsgs"),
                                     new CodePrimitiveExpression(0)))));
 
-                    //new CodeSnippetExpression("return _inmsgs[0] as IBaseMessage"));
+                    //new CodeSnippetExpression("return _pInMsgs[0] as IBaseMessage"));
 
                     codeMemberMethod.Comments.Add(new CodeCommentStatement("<summary>", true));
                     codeMemberMethod.Comments.Add(new CodeCommentStatement(
@@ -857,7 +857,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
                         new CodeCommentStatement("Returns a pointer to the assembled message.", true));
                     codeMemberMethod.Comments.Add(new CodeCommentStatement("</summary>", true));
                     codeMemberMethod.Comments.Add(
-                        new CodeCommentStatement("<param name=\"pc\">the current pipeline context</param>", true));
+                        new CodeCommentStatement("<param name=\"pContext\">the current pipeline context</param>", true));
                     codeMemberMethod.Comments.Add(new CodeCommentStatement(
                         "<returns>the assembled message instance</returns>",
                         true));
@@ -898,7 +898,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
 
                     #region implement IDisassemblerComponent
 
-                    crDirective = new CodeRegionDirective(CodeRegionMode.Start, "IDisassemblerComponent members");
+                    codeRegionDirective = new CodeRegionDirective(CodeRegionMode.Start, "IDisassemblerComponent members");
 
                     #region IDisassemblerComponent.GetNext
 
@@ -906,11 +906,11 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
                     codeMemberMethod = new CodeMemberMethod();
 
                     // add #region directive
-                    codeMemberMethod.StartDirectives.Add(crDirective);
+                    codeMemberMethod.StartDirectives.Add(codeRegionDirective);
 
                     codeMemberMethod.Name = "GetNext";
                     codeMemberMethod.Parameters.Add(
-                        new CodeParameterDeclarationExpression(typeof(IPipelineContext), "pc"));
+                        new CodeParameterDeclarationExpression(typeof(IPipelineContext), "pContext"));
                     codeMemberMethod.ReturnType = new CodeTypeReference(typeof(IBaseMessage));
 
                     codeMemberMethod.Comments.Add(new CodeCommentStatement("<summary>", true));
@@ -919,7 +919,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
                         true));
                     codeMemberMethod.Comments.Add(new CodeCommentStatement("</summary>", true));
                     codeMemberMethod.Comments.Add(new CodeCommentStatement(
-                        "<param name=\"pc\">the pipeline context</param>",
+                        "<param name=\"pContext\">the pipeline context</param>",
                         true));
                     codeMemberMethod.Comments.Add(new CodeCommentStatement(
                         "<returns>an IBaseMessage instance representing the message created</returns>", true));
@@ -971,9 +971,9 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
                         Name = "Disassemble"
                     };
                     codeMemberMethod.Parameters.Add(
-                        new CodeParameterDeclarationExpression(typeof(IPipelineContext), "pc"));
+                        new CodeParameterDeclarationExpression(typeof(IPipelineContext), "pContext"));
                     codeMemberMethod.Parameters.Add(
-                        new CodeParameterDeclarationExpression(typeof(IBaseMessage), "inmsg"));
+                        new CodeParameterDeclarationExpression(typeof(IBaseMessage), "pInMsg"));
                     codeMemberMethod.ReturnType = new CodeTypeReference(typeof(void));
 
                     codeMemberMethod.Comments.Add(new CodeCommentStatement("<summary>", true));
@@ -982,10 +982,10 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
                             true));
                     codeMemberMethod.Comments.Add(new CodeCommentStatement("</summary>", true));
                     codeMemberMethod.Comments.Add(new CodeCommentStatement(
-                        "<param name=\"pc\">the pipeline context</param>",
+                        "<param name=\"pContext\">the pipeline context</param>",
                         true));
                     codeMemberMethod.Comments.Add(new CodeCommentStatement(
-                        "<param name=\"inmsg\">the actual message</param>",
+                        "<param name=\"pInMsg\">the actual message</param>",
                         true));
 
                     codeMemberMethod.Statements.Add(new CodeCommentStatement(""));
@@ -993,11 +993,11 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
                         new CodeCommentStatement("TODO: implement message retrieval logic"));
                     codeMemberMethod.Statements.Add(new CodeCommentStatement(""));
 
-                    // _msgs.Enqueue(inmsg)
+                    // _msgs.Enqueue(pInMsg)
                     codeMemberMethod.Statements.Add(
                         new CodeMethodInvokeExpression(
                             new CodeVariableReferenceExpression("_msgs"), "Enqueue",
-                            new CodeArgumentReferenceExpression("inmsg")));
+                            new CodeArgumentReferenceExpression("pInMsg")));
 
                     codeMemberMethod.Attributes = MemberAttributes.Public;
                     codeMemberMethod.Attributes |= MemberAttributes.Final;
@@ -1017,7 +1017,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
                     {
                         #region IProbeMessage implementation
 
-                        crDirective = new CodeRegionDirective(CodeRegionMode.Start, "IProbeMessage members");
+                        codeRegionDirective = new CodeRegionDirective(CodeRegionMode.Start, "IProbeMessage members");
 
                         #region IProbeMessage.Probe
 
@@ -1026,13 +1026,13 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
                         codeMemberMethod = new CodeMemberMethod();
 
                         // add #region directive
-                        codeMemberMethod.StartDirectives.Add(crDirective);
+                        codeMemberMethod.StartDirectives.Add(codeRegionDirective);
 
                         codeMemberMethod.Name = "Probe";
                         codeMemberMethod.Parameters.Add(
-                            new CodeParameterDeclarationExpression(typeof(IPipelineContext), "pc"));
+                            new CodeParameterDeclarationExpression(typeof(IPipelineContext), "pContext"));
                         codeMemberMethod.Parameters.Add(
-                            new CodeParameterDeclarationExpression(typeof(IBaseMessage), "inmsg"));
+                            new CodeParameterDeclarationExpression(typeof(IBaseMessage), "pInMsg"));
                         codeMemberMethod.ReturnType = new CodeTypeReference(typeof(bool));
 
                         codeMemberMethod.Comments.Add(new CodeCommentStatement("<summary>", true));
@@ -1051,10 +1051,10 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
                                 true));
                         codeMemberMethod.Comments.Add(new CodeCommentStatement("</summary>", true));
                         codeMemberMethod.Comments.Add(new CodeCommentStatement(
-                            "<param name=\"pc\">the pipeline context</param>",
+                            "<param name=\"pContext\">the pipeline context</param>",
                             true));
                         codeMemberMethod.Comments.Add(
-                            new CodeCommentStatement("<param name=\"inmsg\">the actual message</param>", true));
+                            new CodeCommentStatement("<param name=\"pInMsg\">the actual message</param>", true));
 
                         codeMemberMethod.Statements.Add(new CodeCommentStatement(""));
                         codeMemberMethod.Statements.Add(
@@ -1089,7 +1089,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
 
                     #region IComponent implementation
 
-                    crDirective = new CodeRegionDirective(CodeRegionMode.Start, "IComponent members");
+                    codeRegionDirective = new CodeRegionDirective(CodeRegionMode.Start, "IComponent members");
 
                     #region IComponent.Execute
 
@@ -1097,13 +1097,13 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
                     codeMemberMethod = new CodeMemberMethod();
 
                     // add #region directive
-                    codeMemberMethod.StartDirectives.Add(crDirective);
+                    codeMemberMethod.StartDirectives.Add(codeRegionDirective);
 
                     codeMemberMethod.Name = "Execute";
                     codeMemberMethod.Parameters.Add(
-                        new CodeParameterDeclarationExpression(typeof(IPipelineContext), "pc"));
+                        new CodeParameterDeclarationExpression(typeof(IPipelineContext), "pContext"));
                     codeMemberMethod.Parameters.Add(
-                        new CodeParameterDeclarationExpression(typeof(IBaseMessage), "inmsg"));
+                        new CodeParameterDeclarationExpression(typeof(IBaseMessage), "pInMsg"));
                     codeMemberMethod.ReturnType = new CodeTypeReference(typeof(IBaseMessage));
 
                     codeMemberMethod.Comments.Add(new CodeCommentStatement("<summary>", true));
@@ -1111,9 +1111,9 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
                         true));
                     codeMemberMethod.Comments.Add(new CodeCommentStatement("</summary>", true));
                     codeMemberMethod.Comments.Add(
-                        new CodeCommentStatement("<param name=\"pc\">Pipeline context</param>", true));
+                        new CodeCommentStatement("<param name=\"pContext\">Pipeline context</param>", true));
                     codeMemberMethod.Comments.Add(
-                        new CodeCommentStatement("<param name=\"inmsg\">Input message</param>", true));
+                        new CodeCommentStatement("<param name=\"pInMsg\">Input message</param>", true));
                     codeMemberMethod.Comments.Add(
                         new CodeCommentStatement("<returns>Original input message</returns>", true));
                     codeMemberMethod.Comments.Add(new CodeCommentStatement("<remarks>", true));
@@ -1132,7 +1132,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
                         new CodeCommentStatement("this way, it's a passthrough pipeline component"));
                     codeMemberMethod.Statements.Add(
                         new CodeMethodReturnStatement(
-                            new CodeArgumentReferenceExpression("inmsg")));
+                            new CodeArgumentReferenceExpression("pInMsg")));
 
                     codeMemberMethod.Attributes = MemberAttributes.Public;
                     codeMemberMethod.Attributes |= MemberAttributes.Final;
@@ -1173,6 +1173,17 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
             // we're done, unless the user chose to implement the code in VB.NET...
             if (language == ImplementationLanguages.VbNet)
                 PostFixVbCode(fileName);
+        }
+
+        private static string GetPrivateMemberName(string name)
+        {
+            return "_" + char.ToLowerInvariant(name[0]) + name.Substring(1);
+        }
+
+
+        private static string GetPublicMemberName(string name)
+        {
+            return char.ToUpperInvariant(name[0]) + name.Substring(1);
         }
 
         #endregion
