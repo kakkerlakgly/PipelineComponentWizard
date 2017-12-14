@@ -43,6 +43,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
             "System.Diagnostics",
             "System.Collections",
             "System.ComponentModel",
+            "System.Globalization",
             "Microsoft.BizTalk.Message.Interop",
             "Microsoft.BizTalk.Component.Interop",
             "Microsoft.BizTalk.Component",
@@ -272,7 +273,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
             codeMemberProperty.HasSet = false;
             codeMemberProperty.HasGet = true;
             codeMemberProperty.GetStatements.Add(new CodeMethodReturnStatement(new CodeSnippetExpression(
-                "_resourceManager.GetString(\"COMPONENTNAME\", System.Globalization.CultureInfo.InvariantCulture)")));
+                "_resourceManager.GetString(\"COMPONENTNAME\", CultureInfo.InvariantCulture)")));
             codeMemberProperty.Type = new CodeTypeReference(typeof(string));
             codeMemberProperty.CustomAttributes.Add(new CodeAttributeDeclaration("Browsable",
                 new CodeAttributeArgument(new CodePrimitiveExpression(false))));
@@ -297,7 +298,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
                 HasGet = true
             };
             codeMemberProperty.GetStatements.Add(new CodeMethodReturnStatement(new CodeSnippetExpression(
-                "_resourceManager.GetString(\"COMPONENTVERSION\", System.Globalization.CultureInfo.InvariantCulture)")));
+                "_resourceManager.GetString(\"COMPONENTVERSION\", CultureInfo.InvariantCulture)")));
             codeMemberProperty.Type = new CodeTypeReference(typeof(string));
             codeMemberProperty.CustomAttributes.Add(
                 new CodeAttributeDeclaration(
@@ -325,7 +326,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
                 Type = new CodeTypeReference(typeof(string))
             };
             codeMemberProperty.GetStatements.Add(new CodeMethodReturnStatement(new CodeSnippetExpression(
-                "_resourceManager.GetString(\"COMPONENTDESCRIPTION\", System.Globalization.CultureInfo.InvariantCulture)")));
+                "_resourceManager.GetString(\"COMPONENTDESCRIPTION\", CultureInfo.InvariantCulture)")));
             codeMemberProperty.CustomAttributes.Add(
                 new CodeAttributeDeclaration(
                     "Browsable", new CodeAttributeArgument(new CodePrimitiveExpression(false))));
@@ -696,7 +697,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
                             new CodeMethodInvokeExpression(
                                 new CodeFieldReferenceExpression(thisObject, "_resourceManager"),
                                 "GetObject", new CodeSnippetExpression("\"COMPONENTICON\""),
-                                new CodeSnippetExpression("System.Globalization.CultureInfo.InvariantCulture"))),
+                                new CodeSnippetExpression("CultureInfo.InvariantCulture"))),
                         "GetHicon")));
 
             codeMemberProperty.Type = new CodeTypeReference("IntPtr");
