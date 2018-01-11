@@ -4,6 +4,7 @@ using System.Windows.Forms;
 using Microsoft.BizTalk.Wizard;
 using System.Diagnostics;
 using System.Runtime.InteropServices;
+using MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators;
 
 namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 {

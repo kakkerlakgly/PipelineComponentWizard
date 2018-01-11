@@ -17,7 +17,6 @@ namespace PipelineComponentVSIXProject
     {
         private WizardValues _wizardResults;
         private IDictionary<string, Type> _designerProperties;
-        private string _pipelineComponentSourceFile;
         private string _destinationdirectory;
 
         public void BeforeOpeningFile(ProjectItem projectItem)
@@ -40,18 +39,18 @@ namespace PipelineComponentVSIXProject
                         resx.AddResource("COMPONENTICON", _wizardResults.ComponentIcon);
                     }
 
+                    _wizardResults.ImplementationLanguage =
+                        project.CodeModel.Language == CodeModelLanguageConstants.vsCMLanguageCSharp
+                            ? ImplementationLanguages.CSharp
+                            : ImplementationLanguages.VbNet;
+
                     // create our actual class
-                    _pipelineComponentSourceFile = Path.Combine(_destinationdirectory,
-                        _wizardResults.ClassName + ".cs");
+                    string pipelineComponentSourceFile = Path.Combine(_destinationdirectory, _wizardResults.ClassName);
                     var codeGenerator = new PipelineComponentCodeGenerator();
                     codeGenerator.GeneratePipelineComponent(
-                        _pipelineComponentSourceFile,
-                        _wizardResults.Namespace,
-                        _wizardResults.ClassName,
-                        _wizardResults.ImplementIProbeMessage,
-                        _designerProperties,
-                        _wizardResults.ComponentStage,
-                        ImplementationLanguages.CSharp);
+                        _wizardResults,
+                        pipelineComponentSourceFile,
+                        _designerProperties);
                 }
             }
             catch (Exception ex)
@@ -74,13 +73,21 @@ namespace PipelineComponentVSIXProject
             try
             {
                 _destinationdirectory = replacementsDictionary["$destinationdirectory$"];
-
-                string bizTalkInstallRegistryKey = @"SOFTWARE\Microsoft\BizTalk Server\3.0";
-                using (var registryKey = Registry.LocalMachine.OpenSubKey(bizTalkInstallRegistryKey))
+                string btsinstallpath = Environment.GetEnvironmentVariable("BTSINSTALLPATH");
+                if (!string.IsNullOrEmpty(btsinstallpath))
                 {
-                    if (registryKey != null)
-                        replacementsDictionary.Add("$BTSINSTALLPATH$", registryKey.GetValue("InstallPath").ToString());
-                    else throw new InvalidOperationException("BizTalk is not installed on this computer");
+                    replacementsDictionary.Add("$BTSINSTALLPATH$", btsinstallpath);
+                }
+                else
+                {
+                    string bizTalkInstallRegistryKey = @"SOFTWARE\Microsoft\BizTalk Server\3.0";
+                    using (var registryKey = Registry.LocalMachine.OpenSubKey(bizTalkInstallRegistryKey))
+                    {
+                        if (registryKey != null)
+                            replacementsDictionary.Add("$BTSINSTALLPATH$",
+                                registryKey.GetValue("InstallPath").ToString());
+                        else throw new InvalidOperationException("BizTalk is not installed on this computer");
+                    }
                 }
 
                 var wizardForm = new PipeLineComponentWizardForm();

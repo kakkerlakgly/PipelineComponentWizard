@@ -5,7 +5,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators
     /// </summary>
     public enum ImplementationLanguages
     {
-        CSharp = 0,
-        VbNet = 1
+        CSharp,
+        VbNet
     }
 }

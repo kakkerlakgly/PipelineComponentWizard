@@ -9,12 +9,6 @@ using Microsoft.BizTalk.Wizard;
 
 namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 {
-    public enum PipelineType {
-        Receive,
-        Send,
-        Any
-    }
-
     [ComVisible(false)]
     public partial class WzPageGeneralSetup : WizardInteriorPage, IWizardControl
     {

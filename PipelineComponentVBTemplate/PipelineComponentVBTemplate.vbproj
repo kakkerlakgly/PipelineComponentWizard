@@ -8,14 +8,17 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectTypeGuids>{82b43b9b-a64c-4715-b499-d71e9ca2bd60};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
-    <ProjectGuid>{000F6EF2-0AD0-4600-97B4-C149EDBFE00A}</ProjectGuid>
+    <ProjectTypeGuids>{82b43b9b-a64c-4715-b499-d71e9ca2bd60};{F184B08F-C81C-45f6-A57F-5ABD9991F28F}</ProjectTypeGuids>
+    <ProjectGuid>{6FD926F2-C537-489A-B3D2-85F9F74C0330}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>PipelineComponentTemplate</RootNamespace>
-    <AssemblyName>PipelineComponentTemplate</AssemblyName>
-    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <RootNamespace>PipelineComponentVBTemplate</RootNamespace>
+    <AssemblyName>PipelineComponentVBTemplate</AssemblyName>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <OptionExplicit>On</OptionExplicit>
+    <OptionCompare>Binary</OptionCompare>
+    <OptionStrict>Off</OptionStrict>
+    <OptionInfer>On</OptionInfer>
     <GeneratePkgDefFile>false</GeneratePkgDefFile>
     <IncludeAssemblyInVSIXContainer>false</IncludeAssemblyInVSIXContainer>
     <IncludeDebugSymbolsInVSIXContainer>false</IncludeDebugSymbolsInVSIXContainer>
@@ -30,45 +33,63 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
+    <DefineDebug>true</DefineDebug>
+    <DefineTrace>true</DefineTrace>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
+    <DefineDebug>false</DefineDebug>
+    <DefineTrace>true</DefineTrace>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.VisualStudio.CoreUtility">
-      <Private>False</Private>
-    </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="PipelineComponent.cs" />
-    <None Include="PipelineComponent.resx" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Import Include="Microsoft.VisualBasic" />
+    <Import Include="System" />
+    <Import Include="System.Collections" />
+    <Import Include="System.Collections.Generic" />
+    <Import Include="System.Data" />
+    <Import Include="System.Diagnostics" />
+    <Import Include="System.Linq" />
+    <Import Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="AssemblyInfo.cs" />
-    <None Include="ProjectTemplate.csproj">
+    <Compile Include="My Project\AssemblyInfo.vb" />
+    <None Include="Settings.Designer.vb" />
+    <None Include="Resources.Designer.vb" />
+    <None Include="MyApplication.Designer.vb" />
+    <None Include="Settings.settings" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="AssemblyInfo.vb" />
+    <None Include="PipelineComponent.vb" />
+    <None Include="PipelineComponent.resx">
       <SubType>Designer</SubType>
     </None>
-    <None Include="PipelineComponentTemplate.ico" />
+    <None Include="PipelineComponentVBTemplate.ico" />
+    <None Include="ProjectTemplate.vbproj" />
   </ItemGroup>
   <ItemGroup>
-    <VSTemplate Include="PipelineComponentTemplate.vstemplate" />
+    <VSTemplate Include="PipelineComponentVBTemplate.vstemplate" />
   </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <None Include="MyApplication.myapp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources.resx" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
   <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

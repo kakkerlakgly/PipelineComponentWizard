@@ -1,7 +1,6 @@
 using System.Drawing;
-using MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators;
 
-namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
+namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators
 {
     /// <summary>
     /// List of constants to find values in the namevaluecollection

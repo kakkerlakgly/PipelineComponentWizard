@@ -66,27 +66,19 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
         ///     generates the main class this pipeline component revolves around, uses CodeCOM to generate
         ///     code and store it in "fileName"
         /// </summary>
+        /// <param name="values"></param>
         /// <param name="fileName">the output filename to use</param>
-        /// <param name="classNameSpace">the class' classNameSpace</param>
-        /// <param name="className">the class' name</param>
-        /// <param name="implementsIProbeMessage"></param>
         /// <param name="designerProperties">any designer properties defined</param>
-        /// <param name="componentCategory">the used component category</param>
-        /// <param name="language"></param>
         public void GeneratePipelineComponent(
+            WizardValues values,
             string fileName,
-            string classNameSpace,
-            string className,
-            bool implementsIProbeMessage,
-            IDictionary<string, Type> designerProperties,
-            ComponentType componentCategory,
-            ImplementationLanguages language)
+            IDictionary<string, Type> designerProperties)
         {
             // codeGenerator will contain the generator for the choosen language
-            var codeProvider = CodeDomProvider.CreateProvider(language == ImplementationLanguages.CSharp ? "C#" : "vb");
+            var codeProvider = CodeDomProvider.CreateProvider(values.ImplementationLanguage == ImplementationLanguages.CSharp ? "C#" : "vb");
 
             // create our namespace, in which our class will reside
-            var codeNamespace = new CodeNamespace(classNameSpace);
+            var codeNamespace = new CodeNamespace(values.Namespace);
 
             var thisObject = new CodeThisReferenceExpression();
 
@@ -105,7 +97,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
 
             // create our class, this variable will entail the entire definition until
             // we write it out
-            var codeTypeDeclaration = new CodeTypeDeclaration(className);
+            var codeTypeDeclaration = new CodeTypeDeclaration(values.ClassName);
 
             // start by setting the name of the class
 
@@ -129,7 +121,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
                 new CodeAttributeDeclaration(
                     "ComponentCategory",
                     new CodeAttributeArgument(
-                        new CodeTypeReferenceExpression("CategoryTypes.CATID_" + componentCategory))));
+                        new CodeTypeReferenceExpression("CategoryTypes.CATID_" + values.ComponentStage))));
 
             #endregion
 
@@ -140,7 +132,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
             {
                 InitExpression = new CodeObjectCreateExpression(
                     typeof(ResourceManager),
-                    new CodeSnippetExpression("\"" + classNameSpace + "." + className + "\""),
+                    new CodeSnippetExpression("\"" + values.Namespace + "." + values.ClassName + "\""),
                     new CodeMethodInvokeExpression(
                         new CodeVariableReferenceExpression("Assembly"),
                         "GetExecutingAssembly")),
@@ -759,7 +751,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
 
             #endregion
 
-            switch (componentCategory)
+            switch (values.ComponentStage)
             {
                 #region AssemblingSerializer (IAssemblerComponent)
 
@@ -1014,7 +1006,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
                     #endregion
 
                     // does the user wants a stub for IProbeMessage?
-                    if (implementsIProbeMessage)
+                    if (values.ImplementIProbeMessage)
                     {
                         #region IProbeMessage implementation
 
@@ -1164,7 +1156,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
 
             // create the output file
             // enable writing to the selected output stream
-            using (var sw = new StreamWriter(fileName))
+            using (var sw = new StreamWriter(fileName + '.' + codeProvider.FileExtension))
             {
                 // tell the code generator to generate our sourcecode
                 codeProvider.GenerateCodeFromNamespace(codeNamespace, sw, _codeGeneratorOptions);
@@ -1172,8 +1164,8 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
 
 
             // we're done, unless the user chose to implement the code in VB.NET...
-            if (language == ImplementationLanguages.VbNet)
-                PostFixVbCode(fileName);
+            if (values.ImplementationLanguage == ImplementationLanguages.VbNet)
+                PostFixVbCode(fileName + '.' + codeProvider.FileExtension);
         }
 
         private static string GetPrivateMemberName(string name)
@@ -1192,7 +1184,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
         #region postFixVbCode - does a postfix to move the "Inherits <classname>" to the interfaces
 
         /// <summary>
-        ///     this method alters the generated sourcecode (VB.NET) in order to remove the Inerits &lt;classname&gt;
+        ///     this method alters the generated sourcecode (VB.NET) in order to remove the Inherits &lt;classname&gt;
         ///     and move the class to the Implements row (the VB.NET) <see cref="C:ICodeGenerator" /> copies the first
         ///     defined BaseType to the Inherits line, while we need it to be on the Implements line, as we don't
         ///     inherit from any classes

@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Windows.Forms;
 using System.Text.RegularExpressions;
 using System.Runtime.InteropServices;
+using MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators;
 using Microsoft.BizTalk.Wizard;
 
 namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard

@@ -79,6 +79,13 @@
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
     </ProjectReference>
+    <ProjectReference Include="..\PipelineComponentVBTemplate\PipelineComponentVBTemplate.vbproj">
+      <Project>{6FD926F2-C537-489A-B3D2-85F9F74C0330}</Project>
+      <Name>PipelineComponentVBTemplate</Name>
+      <VSIXSubPath>ProjectTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
     <ProjectReference Include="..\PipelineComponentWizard\PipelineComponentWizard.csproj">
       <Project>{628ba2b0-d5d3-4bcc-925e-c1ef60b76021}</Project>
       <Name>PipelineComponentWizard</Name>

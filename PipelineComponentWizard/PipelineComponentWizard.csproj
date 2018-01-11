@@ -82,7 +82,6 @@
     <Compile Include="IWizardControl.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="WizardValues.cs" />
     <Compile Include="WzPageDesignerProperties.cs">
       <SubType>UserControl</SubType>
     </Compile>

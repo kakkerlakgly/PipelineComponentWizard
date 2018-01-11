@@ -65,7 +65,9 @@
     <Compile Include="ComponentType.cs" />
     <Compile Include="DesignerVariableType.cs" />
     <Compile Include="ImplementationLanguages.cs" />
+    <Compile Include="PipelineType.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="WizardValues.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="pipelinecomponentwizard.snk" />

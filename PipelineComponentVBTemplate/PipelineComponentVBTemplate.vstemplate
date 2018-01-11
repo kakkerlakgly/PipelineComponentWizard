@@ -1,0 +1,33 @@
+﻿<VSTemplate Version="3.0.0" Type="Project" xmlns="http://schemas.microsoft.com/developer/vstemplate/2005" xmlns:sdk="http://schemas.microsoft.com/developer/vstemplate-sdkextension/2010">
+  <TemplateData>
+    <Name>PipelineComponentWizard</Name>
+    <Description>PipelineComponentVBTemplate</Description>
+    <Icon>PipelineComponentVBTemplate.ico</Icon>
+    <ProjectType>VisualBasic</ProjectType>
+    <TemplateID>c1c85bff-b1d8-4b51-ae14-ed7c273cd14f</TemplateID>
+    <SortOrder>1000</SortOrder>
+    <NumberOfParentCategoriesToRollUp>1</NumberOfParentCategoriesToRollUp>
+    <CreateNewFolder>true</CreateNewFolder>
+    <DefaultName>PipelineComponentWizard</DefaultName>
+    <ProvideDefaultName>true</ProvideDefaultName>
+    <RequiredFrameworkVersion>2.0</RequiredFrameworkVersion>
+  </TemplateData>
+  <TemplateContent>
+    <Project File="ProjectTemplate.vbproj" ReplaceParameters="true">
+      <ProjectItem ReplaceParameters="true" TargetFileName="Properties\AssemblyInfo.vb">AssemblyInfo.vb</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="$pipelineComponentFileName$.resx">PipelineComponent.resx</ProjectItem>
+      <ProjectItem ReplaceParameters="true" OpenInEditor="true" TargetFileName="$pipelineComponentFileName$.vb">PipelineComponent.vb</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="My Project\AssemblyInfo.vb">AssemblyInfo.vb</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName="My Project\Application.myapp">MyApplication.myapp</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="My Project\Application.Designer.vb">MyApplication.Designer.vb</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName="My Project\Resources.resx">Resources.resx</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="My Project\Resources.Designer.vb">Resources.Designer.vb</ProjectItem>
+      <ProjectItem ReplaceParameters="false" TargetFileName="My Project\Settings.settings">Settings.settings</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="My Project\Settings.Designer.vb">Settings.Designer.vb</ProjectItem>
+    </Project>
+  </TemplateContent>
+  <WizardExtension>
+    <Assembly>PipelineComponentVSIXProject, Version=1.0.0.0, Culture=neutral, PublicKeyToken=ae0059ef58b388b1</Assembly>
+    <FullClassName>PipelineComponentVSIXProject.PipelineComponentWizard</FullClassName>
+  </WizardExtension>
+</VSTemplate>
