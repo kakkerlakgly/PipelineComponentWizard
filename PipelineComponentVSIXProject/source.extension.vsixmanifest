@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="PipelineComponentVSIXProject.bdba8b26-511a-41f3-a219-d349102df588" Version="1.0" Language="en-US" Publisher="Kristian Rastrup" />
-        <DisplayName>PipelineComponentVSIXProject</DisplayName>
-        <Description>Empty VSIX Project.</Description>
+        <Identity Id="PipelineComponentWizard.bdba8b26-511a-41f3-a219-d349102df588" Version="1.0" Language="en-US" Publisher="Kristian Rastrup" />
+        <DisplayName>Pipeline Component Wizard</DisplayName>
+        <Description xml:space="preserve">A project meant to ease to development of pipeline components used within a BizTalk Server environment. Supports both C# and VB.NET</Description>
+        <MoreInfo>https://github.com/kakkerlakgly/PipelineComponentWizard</MoreInfo>
+        <ReleaseNotes>index.html</ReleaseNotes>
+        <Icon>BizTalk.ico</Icon>
     </Metadata>
     <Installation>
         <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[14.0, 15.0]" />
