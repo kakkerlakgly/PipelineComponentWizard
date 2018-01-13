@@ -90,22 +90,24 @@ namespace PipelineComponentVSIXProject
                     }
                 }
 
-                var wizardForm = new PipeLineComponentWizardForm();
-                if (wizardForm.ShowDialog() == DialogResult.OK)
+                using (var wizardForm = new PipeLineComponentWizardForm())
                 {
-                    //Retrieve the wizard data
-                    _wizardResults = wizardForm.WizardResults;
-                    //_TransmitHandlerProperties = WizardForm.TransmitHandlerProperties;
-                    _designerProperties = wizardForm.DesignerProperties;
+                    if (wizardForm.ShowDialog() == DialogResult.OK)
+                    {
+                        //Retrieve the wizard data
+                        _wizardResults = wizardForm.WizardResult;
+                        //_TransmitHandlerProperties = WizardForm.TransmitHandlerProperties;
+                        _designerProperties = wizardForm.DesignerProperties;
 
-                    replacementsDictionary.Add("$pipelineComponentFileName$", _wizardResults.ClassName);
+                        replacementsDictionary.Add("$pipelineComponentFileName$", _wizardResults.ClassName);
 
-                    replacementsDictionary.Add("$SchemaListUsed$",
-                        _designerProperties.Values.Any(DesignerVariableType.IsSchemaList).ToString());
-                }
-                else
-                {
-                    replacementsDictionary.Add("$pipelineComponentFileName$", "Class1");
+                        replacementsDictionary.Add("$SchemaListUsed$",
+                            _designerProperties.Values.Any(DesignerVariableType.IsSchemaList).ToString());
+                    }
+                    else
+                    {
+                        replacementsDictionary.Add("$pipelineComponentFileName$", "Class1");
+                    }
                 }
             }
             catch (Exception ex)

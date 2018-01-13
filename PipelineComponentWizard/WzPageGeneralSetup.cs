@@ -12,7 +12,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
     [ComVisible(false)]
     public partial class WzPageGeneralSetup : WizardInteriorPage, IWizardControl
     {
-        private readonly WizardValues _wizardValues;
+        public WizardValues WizardValues;
         private readonly PipelineType[] _pipelineTypes = {
             PipelineType.Receive,
             PipelineType.Send,
@@ -26,10 +26,9 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
         private const string TransportRegEx = @"^[_a-zA-Z][_a-zA-Z0-9]*$";
         private const string NamespaceRegEx = @"(?i)^([a-z].?)*$";
 
-        public WzPageGeneralSetup(WizardValues wizardValues)
+        public WzPageGeneralSetup()
         {
-            _wizardValues = wizardValues;
-            
+           
             // This call is required by the Windows Form Designer.
             InitializeComponent();
 
@@ -58,13 +57,13 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
         {
             try
             {
-                _wizardValues.ClassName = txtClassName.Text;
+                WizardValues.ClassName = txtClassName.Text;
 
-                _wizardValues.Namespace = txtNameSpace.Text;
-                _wizardValues.PipelineType = (PipelineType) cboPipelineType.SelectedItem;
-                _wizardValues.ComponentStage = (ComponentType) cboComponentStage.SelectedItem;
-                _wizardValues.ImplementationLanguage = (ImplementationLanguages) cboImplementationLanguage.SelectedItem;
-                _wizardValues.ImplementIProbeMessage = chkImplementIProbeMessage.Checked;
+                WizardValues.Namespace = txtNameSpace.Text;
+                WizardValues.PipelineType = (PipelineType) cboPipelineType.SelectedItem;
+                WizardValues.ComponentStage = (ComponentType) cboComponentStage.SelectedItem;
+                WizardValues.ImplementationLanguage = (ImplementationLanguages) cboImplementationLanguage.SelectedItem;
+                WizardValues.ImplementIProbeMessage = chkImplementIProbeMessage.Checked;
             }
             catch (Exception err)
             {

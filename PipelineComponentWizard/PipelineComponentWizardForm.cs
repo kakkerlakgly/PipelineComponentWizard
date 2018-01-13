@@ -43,6 +43,9 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
             WzPageDesignerProperties1.AddDesignerPropertyEvent += AddDesignerProperty;
 
             ButtonHelp.Enabled = false;
+
+            wzPageGeneralSetup1.WizardValues = WizardResult;
+            WzPageGeneralProperties1.WizardValues = WizardResult;
         }
 
         private void buttonNext_Click(object sender, EventArgs e)
@@ -149,6 +152,6 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 
         public IDictionary<string, Type> DesignerProperties { get; } = new Dictionary<string, Type>();
 
-        public WizardValues WizardResults { get; } = new WizardValues();
+        public WizardValues WizardResult { get; } = new WizardValues();
     }
 }

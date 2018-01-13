@@ -33,7 +33,11 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
             InitializeComponent();
 
             labelNavigation.Links.Clear();
-            labelNavigation.Links.Add(0, labelNavigation.Text.Length - 1, "http://blogs.msdn.com/martijnh/");
+            labelNavigation.Links.Add(0, 53, "http://blogs.msdn.com/martijnh/");
+            labelNavigation.Links.Add(95, 15, "https://twitter.com/mrashwinprabhu");
+            labelNavigation.Links.Add(117, 19, "https://gallery.technet.microsoft.com/BizTalk-Server-2016Visual-33c23537"); 
+            labelNavigation.Links.Add(181, 16, "https://twitter.com/kristianrastrup");
+            labelNavigation.Links.Add(203, 12, "https://github.com/kakkerlakgly/PipelineComponentWizard");
         }
 
         /// <summary>
@@ -105,11 +109,8 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
             // set the visited state for the clicked link
             labelNavigation.Links[labelNavigation.Links.IndexOf(e.Link)].Visited = true;
 
-            // get the target of the link
-            string target = e.Link.LinkData as string;
-
             // spawn a *new* browser process to view the link
-            Process.Start(new ProcessStartInfo(GetDefaultBrowser(), target));
+            Process.Start(e.Link.LinkData.ToString());
         }
 
         /// <summary>

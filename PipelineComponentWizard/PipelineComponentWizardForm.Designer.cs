@@ -32,8 +32,8 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(PipeLineComponentWizardForm));
-            this.wzPageGeneralSetup1 = new MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard.WzPageGeneralSetup(WizardResults);
-            this.WzPageGeneralProperties1 = new MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard.WzPageGeneralProperties(WizardResults);
+            this.wzPageGeneralSetup1 = new MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard.WzPageGeneralSetup();
+            this.WzPageGeneralProperties1 = new MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard.WzPageGeneralProperties();
             this.WzPageDesignerProperties1 = new MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard.WzPageDesignerProperties();
             this.wzPageWelcome1 = new MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard.WzPageWelcome();
             this.wzPageSummary1 = new MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard.WzPageSummary();

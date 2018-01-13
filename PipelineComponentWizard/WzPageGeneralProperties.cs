@@ -12,14 +12,13 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
     [ComVisible(false)]
     public partial class WzPageGeneralProperties : WizardInteriorPage, IWizardControl
     {
-        private readonly WizardValues _wizardValues;
+        public WizardValues WizardValues;
 
         private const string ComponentVersionRegEx = @"[0-9]+\.[0-9]+$";
         private const string ComponentNameRegEx = @"(?i)^[a-z]+[0-9a-z]*$";
 
-        public WzPageGeneralProperties(WizardValues wizardValues)
+        public WzPageGeneralProperties()
         {
-            _wizardValues = wizardValues;
             // This call is required by the Windows Form Designer.
             InitializeComponent();
         }
@@ -35,10 +34,10 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 
         private void WzPageGeneralProperties_Leave(object sender, EventArgs e)
         {
-            _wizardValues.ComponentName = txtComponentName.Text;
-            _wizardValues.ComponentDescription = txtComponentDescription.Text;
-            _wizardValues.ComponentIcon = ComponentIcon.Image;
-            _wizardValues.ComponentVersion = txtComponentVersion.Text;
+            WizardValues.ComponentName = txtComponentName.Text;
+            WizardValues.ComponentDescription = txtComponentDescription.Text;
+            WizardValues.ComponentIcon = ComponentIcon.Image;
+            WizardValues.ComponentVersion = txtComponentVersion.Text;
         }
 
         private void ComponentIcon_DoubleClick(object sender, EventArgs e)
@@ -46,7 +45,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
                 ComponentIcon.Image = Image.FromFile(openFileDialog1.FileName);
-                _wizardValues.ComponentIcon = ComponentIcon.Image;
+                WizardValues.ComponentIcon = ComponentIcon.Image;
             }
         }
 
@@ -55,7 +54,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
             System.Resources.ResourceManager resources =
                 new System.Resources.ResourceManager(typeof(WzPageGeneralProperties));
             ComponentIcon.Image = (Image) resources.GetObject("ComponentIcon.Image");
-            _wizardValues.ComponentIcon= ComponentIcon.Image;
+            WizardValues.ComponentIcon= ComponentIcon.Image;
         }
 
         private void txtComponentVersion_Validating(object sender, CancelEventArgs e)

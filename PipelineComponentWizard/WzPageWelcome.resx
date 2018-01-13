@@ -130,18 +130,20 @@
     <value>0, 55</value>
   </data>
   <data name="labelNavigation.Location" type="System.Drawing.Point, System.Drawing">
-    <value>174, 314</value>
+    <value>172, 285</value>
   </data>
   <data name="labelNavigation.Size" type="System.Drawing.Size, System.Drawing">
-    <value>339, 20</value>
+    <value>316, 64</value>
   </data>
   <data name="labelNavigation.TabIndex" type="System.Int32, mscorlib">
     <value>0</value>
   </data>
   <data name="labelNavigation.Text" xml:space="preserve">
     <value>© 2005-2017 Martijn Hoogendoorn. All Rights Reserved.
-   For community,updated by Ashwin Prabhu @MRAshwinPrabhu
-   for BizTalk Server 2016</value>
+For community, updated by Ashwin Prabhu @MRAshwinPrabhu 
+for BizTalk Server 2016
+For community, updated by Kristian Rastrup @kristianrastrup 
+as VSIX package</value>
   </data>
   <data name="&gt;&gt;labelNavigation.Name" xml:space="preserve">
     <value>labelNavigation</value>
@@ -159,10 +161,10 @@
     <value>True</value>
   </data>
   <data name="checkBoxSkipWelcome.Location" type="System.Drawing.Point, System.Drawing">
-    <value>174, 278</value>
+    <value>174, 255</value>
   </data>
   <data name="checkBoxSkipWelcome.Size" type="System.Drawing.Size, System.Drawing">
-    <value>240, 19</value>
+    <value>209, 17</value>
   </data>
   <data name="checkBoxSkipWelcome.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
@@ -252,8 +254,7 @@
     <value>3</value>
   </data>
   <data name="labelSubTitle.Text" xml:space="preserve">
-    <value>This wizard will take you through the necessary steps to create a complete, compilable and
-useable pipeline component for use within BizTalk Server 2016.</value>
+    <value>This wizard will take you through the necessary steps to create a complete, compilable and useable pipeline component for use within BizTalk Server 2016.</value>
   </data>
   <data name="&gt;&gt;labelSubTitle.Name" xml:space="preserve">
     <value>labelSubTitle</value>

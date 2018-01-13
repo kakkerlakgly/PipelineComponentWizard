@@ -1,3 +1,4 @@
+using System;
 using System.Drawing;
 
 namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators
@@ -5,6 +6,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators
     /// <summary>
     /// List of constants to find values in the namevaluecollection
     /// </summary>
+    [Serializable]
     public class WizardValues
     {
         /// <summary>
