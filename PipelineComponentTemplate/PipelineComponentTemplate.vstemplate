@@ -15,7 +15,7 @@
   <TemplateContent>
     <Project File="ProjectTemplate.csproj" ReplaceParameters="true">
       <ProjectItem ReplaceParameters="true" TargetFileName="Properties\AssemblyInfo.cs">AssemblyInfo.cs</ProjectItem>
-      <ProjectItem ReplaceParameters="true" TargetFileName="$pipelineComponentFileName$.resx">PipelineComponent.cs</ProjectItem>
+      <ProjectItem ReplaceParameters="true" TargetFileName="$pipelineComponentFileName$.resx">PipelineComponent.resx</ProjectItem>
       <ProjectItem ReplaceParameters="true" OpenInEditor="true" TargetFileName="$pipelineComponentFileName$.cs">PipelineComponent.cs</ProjectItem>
     </Project>
   </TemplateContent>

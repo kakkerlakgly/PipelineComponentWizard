@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Id="PipelineComponentWizard.bdba8b26-511a-41f3-a219-d349102df588" Version="1.0" Language="en-US" Publisher="Kristian Rastrup" />
+        <Identity Id="PipelineComponentWizard.bdba8b26-511a-41f3-a219-d349102df588" Version="1.1" Language="en-US" Publisher="Kristian Rastrup" />
         <DisplayName>Pipeline Component Wizard</DisplayName>
         <Description xml:space="preserve">A project meant to ease to development of pipeline components used within a BizTalk Server environment. Supports both C# and VB.NET</Description>
         <MoreInfo>https://github.com/kakkerlakgly/PipelineComponentWizard</MoreInfo>
@@ -20,8 +20,10 @@
         <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" d:ProjectName="PipelineComponentWizard" Path="|PipelineComponentWizard|" AssemblyName="|PipelineComponentWizard;AssemblyName|" />
         <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" d:ProjectName="CodeGenerators" Path="|CodeGenerators|" AssemblyName="|CodeGenerators;AssemblyName|" />
         <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="Project" d:ProjectName="PipelineComponentVBTemplate" d:TargetPath="|PipelineComponentVBTemplate;TemplateProjectOutputGroup|" Path="ProjectTemplates" d:VsixSubPath="ProjectTemplates" />
+        <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="PipelineComponentItemTemplate" d:TargetPath="|PipelineComponentItemTemplate;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
+        <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" d:ProjectName="PipelineComponentItemVBTemplate" d:TargetPath="|PipelineComponentItemVBTemplate;TemplateProjectOutputGroup|" Path="ItemTemplates" d:VsixSubPath="ItemTemplates" />
     </Assets>
     <Prerequisites>
-        <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[15.0,16.0)" DisplayName="Visual Studio core editor" />
+        <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[15.0.26606.0,16.0]" DisplayName="Visual Studio core editor" />
     </Prerequisites>
 </PackageManifest>

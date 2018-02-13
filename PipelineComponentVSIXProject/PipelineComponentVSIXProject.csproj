@@ -77,6 +77,20 @@
       <IncludeOutputGroupsInVSIX>BuiltProjectOutputGroup%3bBuiltProjectOutputGroupDependencies%3bGetCopyToOutputDirectoryItems%3bSatelliteDllsProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
       <IncludeOutputGroupsInVSIXLocalOnly>DebugSymbolsProjectOutputGroup%3b</IncludeOutputGroupsInVSIXLocalOnly>
     </ProjectReference>
+    <ProjectReference Include="..\PipelineComponentItemTemplate\PipelineComponentItemTemplate.csproj">
+      <Project>{203D5EF2-1E36-43D8-BCC3-6D3902EF9ACB}</Project>
+      <Name>PipelineComponentItemTemplate</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
+    <ProjectReference Include="..\PipelineComponentItemVBTemplate\PipelineComponentItemVBTemplate.vbproj">
+      <Project>{BF52D99C-0048-4A3B-B9DB-23D6493224A2}</Project>
+      <Name>PipelineComponentItemVBTemplate</Name>
+      <VSIXSubPath>ItemTemplates</VSIXSubPath>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <IncludeOutputGroupsInVSIX>TemplateProjectOutputGroup%3b</IncludeOutputGroupsInVSIX>
+    </ProjectReference>
     <ProjectReference Include="..\PipelineComponentTemplate\PipelineComponentTemplate.csproj">
       <Project>{000F6EF2-0AD0-4600-97B4-C149EDBFE00A}</Project>
       <Name>PipelineComponentTemplate</Name>

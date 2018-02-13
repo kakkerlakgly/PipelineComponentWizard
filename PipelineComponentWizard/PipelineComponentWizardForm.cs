@@ -11,6 +11,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
     [ComVisible(false)]
     public partial class PipeLineComponentWizardForm : WizardForm
     {
+        private readonly IDictionary<string, string> _replacementsDictionary;
         //private NameValueCollection _WizardResults = new NameValueCollection();
 
         private readonly IList<IWizardControl> _pageCollection = new List<IWizardControl>();
@@ -20,8 +21,10 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
         /// Constructor. Sets eventhandlers for inherited buttons and 
         /// custom events. Creates the page-collection. 
         /// </summary>
-        public PipeLineComponentWizardForm()
+        /// <param name="replacementsDictionary"></param>
+        public PipeLineComponentWizardForm(IDictionary<string, string> replacementsDictionary)
         {
+            _replacementsDictionary = replacementsDictionary;
             // This call is required by the Windows Form Designer.
             InitializeComponent();
 
@@ -46,6 +49,15 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 
             wzPageGeneralSetup1.WizardValues = WizardResult;
             WzPageGeneralProperties1.WizardValues = WizardResult;
+            wzPageGeneralSetup1.SetNamespace(replacementsDictionary.TryGetValue("$safeprojectname$", out var @namespace)
+                ? @namespace
+                : replacementsDictionary["$rootnamespace$"]);
+
+            if (replacementsDictionary.TryGetValue("$safeitemname$", out var itemname))
+            {
+                wzPageGeneralSetup1.SetClassName(itemname);
+                WzPageGeneralProperties1.SetComponentName(itemname);
+            }
         }
 
         private void buttonNext_Click(object sender, EventArgs e)

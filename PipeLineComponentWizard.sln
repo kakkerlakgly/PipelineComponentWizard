@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.27130.2020
+VisualStudioVersion = 15.0.27130.2026
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PipelineComponentWizard", "PipelineComponentWizard\PipelineComponentWizard.csproj", "{628BA2B0-D5D3-4BCC-925E-C1EF60B76021}"
 EndProject
@@ -11,6 +11,10 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PipelineComponentVSIXProject", "PipelineComponentVSIXProject\PipelineComponentVSIXProject.csproj", "{03461056-1C86-45AF-A806-1B9DE28CCCFA}"
 EndProject
 Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "PipelineComponentVBTemplate", "PipelineComponentVBTemplate\PipelineComponentVBTemplate.vbproj", "{6FD926F2-C537-489A-B3D2-85F9F74C0330}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PipelineComponentItemTemplate", "PipelineComponentItemTemplate\PipelineComponentItemTemplate.csproj", "{203D5EF2-1E36-43D8-BCC3-6D3902EF9ACB}"
+EndProject
+Project("{F184B08F-C81C-45F6-A57F-5ABD9991F28F}") = "PipelineComponentItemVBTemplate", "PipelineComponentItemVBTemplate\PipelineComponentItemVBTemplate.vbproj", "{BF52D99C-0048-4A3B-B9DB-23D6493224A2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,6 +42,14 @@ Global
 		{6FD926F2-C537-489A-B3D2-85F9F74C0330}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6FD926F2-C537-489A-B3D2-85F9F74C0330}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6FD926F2-C537-489A-B3D2-85F9F74C0330}.Release|Any CPU.Build.0 = Release|Any CPU
+		{203D5EF2-1E36-43D8-BCC3-6D3902EF9ACB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{203D5EF2-1E36-43D8-BCC3-6D3902EF9ACB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{203D5EF2-1E36-43D8-BCC3-6D3902EF9ACB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{203D5EF2-1E36-43D8-BCC3-6D3902EF9ACB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BF52D99C-0048-4A3B-B9DB-23D6493224A2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BF52D99C-0048-4A3B-B9DB-23D6493224A2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BF52D99C-0048-4A3B-B9DB-23D6493224A2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BF52D99C-0048-4A3B-B9DB-23D6493224A2}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

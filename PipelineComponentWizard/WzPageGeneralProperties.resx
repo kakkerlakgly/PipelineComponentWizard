@@ -235,7 +235,7 @@
     <value>19</value>
   </data>
   <data name="label3.Text" xml:space="preserve">
-    <value>Component version (e.g. 1.0):</value>
+    <value>Component version</value>
   </data>
   <data name="&gt;&gt;label3.Name" xml:space="preserve">
     <value>label3</value>
@@ -257,6 +257,9 @@
   </data>
   <data name="txtComponentVersion.TabIndex" type="System.Int32, mscorlib">
     <value>1</value>
+  </data>
+  <data name="txtComponentVersion.Text" xml:space="preserve">
+    <value>1.0</value>
   </data>
   <data name="&gt;&gt;txtComponentVersion.Name" xml:space="preserve">
     <value>txtComponentVersion</value>

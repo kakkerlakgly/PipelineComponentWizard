@@ -28,8 +28,8 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
 
         private bool GetAllStates()
         {
-            return (Regex.IsMatch(txtComponentVersion.Text, ComponentVersionRegEx) &&
-                    Regex.IsMatch(txtComponentName.Text, ComponentNameRegEx));
+            return Regex.IsMatch(txtComponentVersion.Text, ComponentVersionRegEx) &&
+                   Regex.IsMatch(txtComponentName.Text, ComponentNameRegEx);
         }
 
         private void WzPageGeneralProperties_Leave(object sender, EventArgs e)
@@ -88,6 +88,11 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
         private void Element_Changed(object sender, EventArgs e)
         {
             EnableNext(GetAllStates());
+        }
+
+        public void SetComponentName(string itemname)
+        {
+            txtComponentName.Text = itemname;
         }
     }
 }

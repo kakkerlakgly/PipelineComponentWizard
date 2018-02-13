@@ -716,10 +716,9 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
 
             // add sample code for the IComponentUI.Validate method
             codeMemberMethod.Statements.Add(new CodeCommentStatement("example implementation:"));
-            codeMemberMethod.Statements.Add(new CodeCommentStatement("ArrayList errorList = new ArrayList();"));
             codeMemberMethod.Statements.Add(
-                new CodeCommentStatement("errorList.Add(\"This is a compiler error\");"));
-            codeMemberMethod.Statements.Add(new CodeCommentStatement("return errorList.GetEnumerator();"));
+                new CodeCommentStatement("yield return \"This is a compiler error\";"));
+            codeMemberMethod.Statements.Add(new CodeCommentStatement("yield break;"));
 
             codeMemberMethod.Statements.Add(new CodeMethodReturnStatement(new CodePrimitiveExpression(null)));
 
@@ -1156,7 +1155,12 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
 
             // create the output file
             // enable writing to the selected output stream
-            using (var sw = new StreamWriter(fileName + '.' + codeProvider.FileExtension))
+            string filenameWithExtension =
+                Path.GetExtension(fileName)
+                    .Equals('.' + codeProvider.FileExtension, StringComparison.InvariantCultureIgnoreCase)
+                    ? fileName
+                    : fileName + '.' + codeProvider.FileExtension;
+            using (var sw = new StreamWriter(filenameWithExtension))
             {
                 // tell the code generator to generate our sourcecode
                 codeProvider.GenerateCodeFromNamespace(codeNamespace, sw, _codeGeneratorOptions);
@@ -1165,7 +1169,7 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.CodeGenerators.CodeDom
 
             // we're done, unless the user chose to implement the code in VB.NET...
             if (values.ImplementationLanguage == ImplementationLanguages.VbNet)
-                PostFixVbCode(fileName + '.' + codeProvider.FileExtension);
+                PostFixVbCode(filenameWithExtension);
         }
 
         private static string GetPrivateMemberName(string name)

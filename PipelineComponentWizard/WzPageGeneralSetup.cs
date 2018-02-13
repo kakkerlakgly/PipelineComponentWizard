@@ -42,6 +42,16 @@ namespace MartijnHoogendoorn.BizTalk.Wizards.PipeLineComponentWizard
             cboPipelineType.SelectedValueChanged += Element_Changed;
         }
 
+        public void SetNamespace(string @namespace)
+        {
+            txtNameSpace.Text = @namespace;
+        }
+
+        public void SetClassName(string className)
+        {
+            txtClassName.Text = className;
+        }
+
         /// <summary>
         /// Returns true if all fields are correctly entered
         /// </summary>

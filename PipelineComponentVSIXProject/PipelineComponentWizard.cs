@@ -15,9 +15,9 @@ namespace PipelineComponentVSIXProject
 {
     public class PipelineComponentWizard : IWizard
     {
+        private bool _shouldAddProjectItem = true;
         private WizardValues _wizardResults;
         private IDictionary<string, Type> _designerProperties;
-        private string _destinationdirectory;
 
         public void BeforeOpeningFile(ProjectItem projectItem)
         {
@@ -25,42 +25,66 @@ namespace PipelineComponentVSIXProject
 
         public void ProjectFinishedGenerating(Project project)
         {
+            string projectPath = Path.GetDirectoryName(project.FileName);
+            var language = project.CodeModel.Language;
             try
             {
                 if (_wizardResults != null)
                 {
                     // add our resource bundle
-                    string resourceBundle = Path.Combine(_destinationdirectory, _wizardResults.ClassName + ".resx");
-                    using (ResXResourceWriter resx = new ResXResourceWriter(resourceBundle))
-                    {
-                        resx.AddResource("COMPONENTNAME", _wizardResults.ComponentName);
-                        resx.AddResource("COMPONENTDESCRIPTION", _wizardResults.ComponentDescription);
-                        resx.AddResource("COMPONENTVERSION", _wizardResults.ComponentVersion);
-                        resx.AddResource("COMPONENTICON", _wizardResults.ComponentIcon);
-                    }
+                    string resourceBundle = Path.Combine(projectPath, _wizardResults.ClassName + ".resx");
+                    CreateResourceFile(resourceBundle);
 
-                    _wizardResults.ImplementationLanguage =
-                        project.CodeModel.Language == CodeModelLanguageConstants.vsCMLanguageCSharp
-                            ? ImplementationLanguages.CSharp
-                            : ImplementationLanguages.VbNet;
-
-                    // create our actual class
-                    string pipelineComponentSourceFile = Path.Combine(_destinationdirectory, _wizardResults.ClassName);
-                    var codeGenerator = new PipelineComponentCodeGenerator();
-                    codeGenerator.GeneratePipelineComponent(
-                        _wizardResults,
-                        pipelineComponentSourceFile,
-                        _designerProperties);
+                    string pipelineComponentSourceFile = Path.Combine(projectPath, _wizardResults.ClassName);
+                    CreateSourceFile(language, pipelineComponentSourceFile);
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString());
+                _shouldAddProjectItem = false;
             }
         }
 
         public void ProjectItemFinishedGenerating(ProjectItem projectItem)
         {
+            var filename = projectItem.FileNames[0];
+            if (Path.GetExtension(filename) == ".resx")
+            {
+                CreateResourceFile(filename);
+            }
+            else
+            {
+                var language = projectItem.FileCodeModel.Language;
+                CreateSourceFile(language, filename);
+            }
+        }
+
+        private void CreateSourceFile(string language, string filename)
+        {
+            _wizardResults.ImplementationLanguage =
+                language == CodeModelLanguageConstants.vsCMLanguageVB
+                    ? ImplementationLanguages.VbNet
+                    : ImplementationLanguages.CSharp;
+
+            // create our actual class
+            string pipelineComponentSourceFile = filename;
+            var codeGenerator = new PipelineComponentCodeGenerator();
+            codeGenerator.GeneratePipelineComponent(
+                _wizardResults,
+                pipelineComponentSourceFile,
+                _designerProperties);
+        }
+
+        private void CreateResourceFile(string filename)
+        {
+            using (ResXResourceWriter resx = new ResXResourceWriter(filename))
+            {
+                resx.AddResource("COMPONENTNAME", _wizardResults.ComponentName);
+                resx.AddResource("COMPONENTDESCRIPTION", _wizardResults.ComponentDescription);
+                resx.AddResource("COMPONENTVERSION", _wizardResults.ComponentVersion);
+                resx.AddResource("COMPONENTICON", _wizardResults.ComponentIcon);
+            }
         }
 
         public void RunFinished()
@@ -72,7 +96,12 @@ namespace PipelineComponentVSIXProject
         {
             try
             {
-                _destinationdirectory = replacementsDictionary["$destinationdirectory$"];
+                replacementsDictionary.Add("$pipelineComponentFileName$", "PipelineComponent");
+                replacementsDictionary.Add("$namespace$",
+                    replacementsDictionary.TryGetValue("$safeprojectname$", out var safeProjectName)
+                        ? safeProjectName
+                        : replacementsDictionary["$rootnamespace$"]);
+
                 string btsinstallpath = Environment.GetEnvironmentVariable("BTSINSTALLPATH");
                 if (!string.IsNullOrEmpty(btsinstallpath))
                 {
@@ -90,7 +119,7 @@ namespace PipelineComponentVSIXProject
                     }
                 }
 
-                using (var wizardForm = new PipeLineComponentWizardForm())
+                using (var wizardForm = new PipeLineComponentWizardForm(replacementsDictionary))
                 {
                     if (wizardForm.ShowDialog() == DialogResult.OK)
                     {
@@ -99,26 +128,24 @@ namespace PipelineComponentVSIXProject
                         //_TransmitHandlerProperties = WizardForm.TransmitHandlerProperties;
                         _designerProperties = wizardForm.DesignerProperties;
 
-                        replacementsDictionary.Add("$pipelineComponentFileName$", _wizardResults.ClassName);
+                        replacementsDictionary["$pipelineComponentFileName$"] = _wizardResults.ClassName;
+                        replacementsDictionary["$namespace$"] = _wizardResults.Namespace;
 
                         replacementsDictionary.Add("$SchemaListUsed$",
                             _designerProperties.Values.Any(DesignerVariableType.IsSchemaList).ToString());
-                    }
-                    else
-                    {
-                        replacementsDictionary.Add("$pipelineComponentFileName$", "Class1");
                     }
                 }
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.ToString());
+                _shouldAddProjectItem = false;
             }
         }
 
         public bool ShouldAddProjectItem(string filePath)
         {
-            return true;
+            return _shouldAddProjectItem;
         }
     }
 }
