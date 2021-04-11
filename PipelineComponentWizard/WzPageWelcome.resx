@@ -141,7 +141,7 @@
   <data name="labelNavigation.Text" xml:space="preserve">
     <value>© 2005-2017 Martijn Hoogendoorn. All Rights Reserved.
 For community, updated by Ashwin Prabhu @MRAshwinPrabhu 
-for BizTalk Server 2019
+for BizTalk Server 2016
 For community, updated by Kristian Rastrup @kristianrastrup 
 as VSIX package</value>
   </data>
@@ -254,7 +254,7 @@ as VSIX package</value>
     <value>3</value>
   </data>
   <data name="labelSubTitle.Text" xml:space="preserve">
-    <value>This wizard will take you through the necessary steps to create a complete, compilable and useable pipeline component for use within BizTalk Server 2019.</value>
+    <value>This wizard will take you through the necessary steps to create a complete, compilable and useable pipeline component for use within BizTalk Server 2020.</value>
   </data>
   <data name="&gt;&gt;labelSubTitle.Name" xml:space="preserve">
     <value>labelSubTitle</value>
