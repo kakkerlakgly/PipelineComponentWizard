@@ -42,11 +42,11 @@
     </Reference>
     <Reference Include="Microsoft.BizTalk.Pipeline, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Program Files (x86)\Microsoft BizTalk Server 2016\Microsoft.BizTalk.Pipeline.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\Microsoft BizTalk Server\Microsoft.BizTalk.Pipeline.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.BizTalk.Pipeline.Components, Version=3.0.1.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\Program Files (x86)\Microsoft BizTalk Server 2016\Pipeline Components\Microsoft.BizTalk.Pipeline.Components.dll</HintPath>
+      <HintPath>C:\Program Files (x86)\Microsoft BizTalk Server\Pipeline Components\Microsoft.BizTalk.Pipeline.Components.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
